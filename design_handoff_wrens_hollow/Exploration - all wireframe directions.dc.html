@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics>
+<meta name="design_doc_mode" content="canvas">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#eceae4;font-family:ui-sans-serif,system-ui,-apple-system,sans-serif;color:#1a1a1a}
+.dv-turn{padding:44px 48px 40px;border-bottom:1px solid rgba(0,0,0,.08);scroll-margin-top:16px}
+.dv-thd{display:flex;align-items:baseline;gap:10px;margin:0 0 8px}
+.dv-tid{font:600 10px ui-monospace,Menlo,monospace;padding:3px 7px;background:#1a1a1a;color:#fff;border-radius:4px;text-decoration:none}
+.dv-tname{font:600 13px/1.2 system-ui,sans-serif;color:#1a1a1a}
+.dv-tsub{font:400 12px/1.5 system-ui,sans-serif;color:rgba(0,0,0,.5);max-width:720px;margin:0 0 24px}
+.dv-opts{display:flex;flex-wrap:wrap;gap:40px;align-items:flex-start}
+.dv-opt{flex:none;display:flex;flex-direction:column;gap:11px;scroll-margin-top:16px}
+.dv-oid{font:600 10.5px ui-monospace,Menlo,monospace;padding:3px 7px;background:rgba(0,0,0,.08);color:#1a1a1a;border-radius:5px;text-decoration:none}
+.dv-olabel{display:flex;align-items:baseline;gap:8px;font:400 11.5px/1.35 system-ui,sans-serif;color:rgba(0,0,0,.55);max-width:460px}
+.dv-opt:target .dv-oid{background:#2a78d6;color:#fff}
+.dv-next{margin:26px 0 0;font:12px/1.6 system-ui,sans-serif;color:rgba(0,0,0,.5);max-width:760px}
+.dv-next a{color:#2a78d6}
+
+/* wireframe primitives */
+.wf{width:460px;background:#fff;border:1px solid rgba(0,0,0,.14);border-radius:9px;box-shadow:0 3px 14px rgba(0,0,0,.09);overflow:hidden}
+.wf-bar{display:flex;align-items:center;gap:6px;padding:9px 12px;background:#f3f1ec;border-bottom:1px solid rgba(0,0,0,.1)}
+.wf-bar i{width:8px;height:8px;border-radius:50%;background:#cfcabf;display:block}
+.wf-bar span{margin-left:8px;font:11px ui-monospace,Menlo,monospace;color:#a49e90}
+.nav{display:flex;align-items:center;justify-content:space-between;padding:13px 18px;border-bottom:1px solid #e6e3db}
+.logo{font:700 12px/1.1 system-ui;letter-spacing:.14em;color:#3a2f36}
+.navl{display:flex;gap:11px;font-size:9.5px;color:#7c7266}
+.sec{padding:22px 22px}
+.eyebrow{font:600 9px/1 ui-monospace,Menlo,monospace;letter-spacing:.16em;text-transform:uppercase;color:#9c6b7d;margin:0 0 8px}
+h2.wh{font:600 19px/1.2 system-ui;margin:0 0 8px;color:#241d22;letter-spacing:-.01em}
+h3.wh{font:600 14px/1.25 system-ui;margin:0 0 5px;color:#2e262b}
+.lead{font:14px/1.5 system-ui;color:#5c5450;margin:0 0 12px}
+.txt{font:11px/1.55 system-ui;color:#8b837c;margin:0 0 6px}
+.line{height:7px;border-radius:4px;background:#e9e6df;margin:5px 0}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:9px 15px;border-radius:6px;background:#7d4f61;color:#fff;font:600 11px system-ui;border:none}
+.btn.o{background:#fff;color:#7d4f61;border:1.5px solid #cbb4bd}
+.btn.dk{background:#2e262b}
+.chip{display:inline-block;padding:4px 9px;border:1px solid #ddd7cd;border-radius:20px;font-size:9.5px;color:#8b837c;background:#faf8f4}
+.img{border:1.5px dashed #cbc4b6;border-radius:7px;background:repeating-linear-gradient(45deg,#f6f4ee,#f6f4ee 7px,#f1eee7 7px,#f1eee7 14px);display:flex;align-items:center;justify-content:center;text-align:center;color:#a8a091;font:600 9px ui-monospace,Menlo,monospace;letter-spacing:.04em;padding:6px}
+.field{flex:1;border:1px solid #d8d2c7;border-radius:6px;padding:9px 11px;font-size:10px;color:#a8a091;background:#faf8f4}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+.row{display:flex;gap:9px;align-items:center}
+.card{border:1px solid #e6e3db;border-radius:8px;padding:12px;background:#fdfcf9}
+.divlabel{font:600 9px ui-monospace,Menlo,monospace;letter-spacing:.12em;text-transform:uppercase;color:#bcb4a6;text-align:center;padding:7px;background:#f7f5f0;border-top:1px solid #edeae2;border-bottom:1px solid #edeae2}
+.foot{background:#2e262b;color:#c9beb0;padding:20px 22px}
+.foot .soc{display:flex;gap:7px;flex-wrap:wrap;margin-top:9px}
+.foot .soc span{padding:5px 9px;border:1px solid rgba(255,255,255,.18);border-radius:5px;font-size:9px}
+.stars{color:#c69a54;font-size:12px;letter-spacing:1px}
+.note{position:relative;font:600 13px/1.2 'Caveat',cursive;color:#2a78d6}
+.ann{display:flex;gap:7px;align-items:flex-start;font:600 13px/1.25 'Caveat',cursive;color:#3f7bce;max-width:230px}
+.ann b{display:inline-flex;flex:none;width:16px;height:16px;border-radius:50%;background:#3f7bce;color:#fff;font:700 9px system-ui;align-items:center;justify-content:center;margin-top:1px}
+.anncol{display:flex;flex-direction:column;gap:13px;width:238px;padding-top:38px}
+.pair{display:flex;gap:20px;align-items:flex-start}
+
+/* sitemap */
+.map{width:520px;background:#fff;border:1px solid rgba(0,0,0,.14);border-radius:9px;box-shadow:0 3px 14px rgba(0,0,0,.09);padding:24px 26px}
+.node{border:1.5px solid #cbb4bd;border-radius:7px;padding:8px 12px;font:600 11px system-ui;color:#3a2f36;background:#fbf7f8;display:inline-block}
+.node.home{border-color:#7d4f61;background:#7d4f61;color:#fff}
+.node.sub{border-color:#ddd7cd;background:#faf8f4;color:#6b625c;font-weight:500;font-size:10px}
+.node.leaf{border-style:dashed;font-weight:500;font-size:9.5px;color:#8b837c;padding:6px 10px}
+.branch{border-left:2px solid #e2dcd0;margin-left:14px;padding-left:16px;display:flex;flex-direction:column;gap:9px;margin-top:9px}
+.mrow{display:flex;flex-wrap:wrap;gap:7px;align-items:center}
+.mtag{font:600 8px ui-monospace,Menlo,monospace;letter-spacing:.08em;color:#9c6b7d;text-transform:uppercase}
+.wlogo{width:96px;height:30px;flex:none;border:1.5px dashed #cbb4bd;border-radius:6px;background:repeating-linear-gradient(45deg,#faf6f8,#faf6f8 6px,#f4edf0 6px,#f4edf0 12px);display:flex;align-items:center;justify-content:center;font:600 8px ui-monospace,Menlo,monospace;letter-spacing:.1em;color:#9c6b7d}
+.wlogo.dk{border-color:rgba(255,255,255,.4);background:none;color:#d9b3c1}
+.navl span{cursor:pointer}
+</style>
+</helmet>
+
+<section class="dv-turn" id="t5">
+<div class="dv-thd"><a class="dv-tid" href="#t5">5</a><span class="dv-tname">Full navigable wireframe — homepage + all inner pages</span></div>
+<p class="dv-tsub"><a class="dv-oid" href="#3a">3a</a> homepage combined with the <a class="dv-oid" href="#4a">4a</a>–<a class="dv-oid" href="#4d">4d</a> inner pages into one clickable site. Click the nav or the buttons to move between pages. Logo now shown as a placeholder graphic in the nav (drop the real script logo in here).</p>
+<div class="dv-opts">
+<div class="dv-opt" id="5a">
+<div class="dv-olabel"><a class="dv-oid" href="#5a">5a</a><b style="color:#241d22">The full site — interactive</b>. Nav links + CTAs are live.</div>
+<div class="wf" style="width:520px">
+<div class="wf-bar"><i></i><i></i><i></i><span>{{ url }}</span></div>
+<div class="nav">
+<div class="row" style="gap:10px"><div class="wlogo" style="width:34px;height:34px;border-radius:50%">AW</div><div style="display:flex;flex-direction:column;gap:2px"><span class="logo">THE WREN'S HOLLOW</span><span style="font:400 7.5px/1 system-ui;letter-spacing:.14em;text-transform:uppercase;color:#b3a99e">Ali Wren · Author</span></div></div>
+<div class="navl" style="gap:16px;align-items:center;font-size:10px;letter-spacing:.02em"><span onClick="{{ goSeries }}" style="{{ navBooks }}">Books</span><span onClick="{{ goAbout }}" style="{{ navAbout }}">About</span><span onClick="{{ goEvents }}" style="{{ navEvents }}">Events</span><span onClick="{{ goSeries }}" style="color:#7d4f61;font-weight:600;cursor:pointer">Read Free</span><span onClick="{{ goShop }}" style="cursor:pointer;font-size:12px">🛒</span></div>
+</div>
+
+<sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}">
+<div>
+<div class="sec" style="background:#f6eff1">
+<div class="row" style="align-items:center;gap:16px">
+<div>
+<p class="eyebrow">The Veiled Prophecy · Book 0</p>
+<h2 class="wh">She doesn't know who to trust.</h2>
+<p class="txt">Begin the fantasy series with <b>Veilfall</b>, the free prequel readers can't put down.</p>
+<div class="row"><span class="btn" onClick="{{ goSeries }}">Start Reading Free →</span></div>
+<p class="mtag" style="margin-top:10px">★★★★★ · 200+ reviews · free forever</p>
+</div>
+<div class="img" style="width:120px;height:172px;flex:none;box-shadow:0 8px 18px rgba(60,40,50,.22)">VEILFALL<br>COVER</div>
+</div>
+</div>
+<div class="sec" style="background:#2e262b">
+<p class="eyebrow" style="color:#d9b3c1">Join the Hollow</p>
+<h3 class="wh" style="color:#fff">Get bonus chapters + first look at new releases</h3>
+<div class="row" style="margin-top:10px"><span class="field">your@email.com</span><span class="btn">Subscribe</span></div>
+</div>
+<div class="sec">
+<p class="eyebrow">Explore the books</p>
+<h2 class="wh">Two worlds, one storyteller</h2>
+<div class="card" style="margin-bottom:10px">
+<div class="row" style="align-items:flex-start"><div class="img" style="width:66px;height:92px;flex:none">COVER</div><div><p class="mtag" style="color:#9c6b7d">Fantasy · lead series</p><h3 class="wh">The Veiled Prophecy</h3><p class="txt">Veilfall · Book 1 coming soon. Epic, romantic, high-stakes.</p><span class="btn o" style="padding:6px 11px" onClick="{{ goSeries }}">Enter the story</span></div></div>
+</div>
+<div class="card">
+<div class="row" style="align-items:flex-start"><div class="img" style="width:66px;height:92px;flex:none">COVER</div><div><p class="mtag" style="color:#9c6b7d">Contemporary romance</p><h3 class="wh">Whiskey Tango Foxtrot</h3><p class="txt">Whiskey &amp; Secrets · Whiskey &amp; Lies. Read the first chapters free.</p><span class="btn o" style="padding:6px 11px" onClick="{{ goSeries }}">Read free chapters</span></div></div>
+</div>
+</div>
+<div class="divlabel">★ Reader reviews</div>
+<div class="sec"><div class="grid2">
+<div class="card"><p class="stars">★★★★★</p><p class="txt">"Couldn't put it down — the tension is unreal."</p><p class="mtag">— Goodreads</p></div>
+<div class="card"><p class="stars">★★★★★</p><p class="txt">"Fierce women and swoony romance. More please!"</p><p class="mtag">— Amazon</p></div>
+</div></div>
+<div class="sec" style="background:#faf6f2">
+<div class="row" style="align-items:flex-start"><div class="img" style="width:88px;height:100px;flex:none">AUTHOR PHOTO</div><div><p class="eyebrow">Behind the pen</p><h3 class="wh">Hi, I'm Ali Wren</h3><p class="txt">Indie author from Minnesota writing romance &amp; fantasy full of emotion, danger, and unforgettable connections.</p><span class="btn o" style="padding:6px 11px" onClick="{{ goAbout }}">Read more</span></div></div>
+</div>
+<div class="sec" style="border-top:1px dashed #e6e3db">
+<p class="eyebrow">On the horizon</p><h3 class="wh">Currently writing…</h3><p class="txt">Sneak peek at the next book + a progress bar for the WIP.</p><div class="line" style="width:62%;background:#c9a9b5"></div>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ isSeries }}">
+<div>
+<div class="sec" style="background:#2b2530;text-align:center;padding:26px">
+<p class="eyebrow" style="color:#d9b3c1">Fantasy series · Kingdom of Sylvaeris</p>
+<h2 class="wh" style="color:#fff;font-size:21px">The Veiled Prophecy</h2>
+<p class="txt" style="color:#b7aca3;max-width:340px;margin:0 auto">A world of secrets, prophecy, and dangerous love. Start free, then follow the saga.</p>
+</div>
+<div class="sec"><p class="txt" style="color:#5c5450">Epic romantasy where fierce women hold the fate of a kingdom — and their hearts — in the balance. Here's where to begin.</p></div>
+<div class="sec" style="border-top:1px dashed #e6e3db">
+<p class="eyebrow">Reading order</p>
+<div class="card" style="margin-bottom:10px;background:#f6eff1;border-color:#e4d3da"><div class="row" style="align-items:flex-start"><div class="img" style="width:60px;height:86px;flex:none">VEILFALL</div><div><p class="mtag" style="color:#9c6b7d">Book 0 · Prequel · FREE</p><h3 class="wh">Veilfall</h3><p class="txt">"She doesn't know who to trust…"</p><span class="btn" style="padding:6px 11px">Start reading free →</span></div></div></div>
+<div class="card"><div class="row" style="align-items:flex-start"><div class="img" style="width:60px;height:86px;flex:none">BK 1</div><div><p class="mtag">Book 1 · Coming soon</p><h3 class="wh">Title TBA</h3><p class="txt">Preorder + release-day alert.</p><span class="btn o" style="padding:6px 11px">Notify me</span></div></div></div>
+</div>
+<div class="sec" style="background:#faf6f2"><div class="grid2"><div class="card"><p class="stars">★★★★★</p><p class="txt">"The world-building is gorgeous."</p></div><div class="card"><p class="stars">★★★★★</p><p class="txt">"Give me book one already!"</p></div></div></div>
+<div class="sec" style="background:#2e262b"><h3 class="wh" style="color:#fff">Be first to read Book 1</h3><div class="row" style="margin-top:10px"><span class="field">your@email.com</span><span class="btn">Notify me</span></div></div>
+</div>
+</sc-if>
+
+<sc-if value="{{ isShop }}">
+<div>
+<div class="sec" style="background:#f6eff1"><p class="eyebrow">Books &amp; More</p><h2 class="wh">Signed copies, straight from Ali</h2><p class="txt">Order direct for signed paperbacks &amp; bookish extras — shipped from Minnesota.</p></div>
+<div class="sec">
+<div class="row" style="gap:7px;margin-bottom:12px"><span class="chip" style="background:#7d4f61;color:#fff;border-color:#7d4f61">All</span><span class="chip">Paperbacks</span><span class="chip">Signed</span><span class="chip">Merch</span></div>
+<div class="grid2">
+<div class="card"><div class="img" style="height:110px;margin-bottom:8px">COVER</div><h3 class="wh" style="font-size:12px">Whiskey &amp; Secrets</h3><p class="mtag">Signed paperback</p><div class="row" style="justify-content:space-between;margin-top:7px"><span style="font:700 12px system-ui;color:#3a2f36">$18.00</span><span class="btn" style="padding:6px 11px">Add to cart</span></div></div>
+<div class="card" style="opacity:.72"><div class="img" style="height:110px;margin-bottom:8px">COMING SOON</div><h3 class="wh" style="font-size:12px">Veilfall — paperback</h3><p class="mtag">Preorder</p><div class="row" style="justify-content:space-between;margin-top:7px"><span style="font:700 12px system-ui;color:#3a2f36">$—</span><span class="btn o" style="padding:6px 11px">Notify me</span></div></div>
+</div>
+<p class="txt" style="text-align:center;margin-top:14px;color:#a8a091">More titles &amp; merch on the way — grid scales as the catalog grows.</p>
+</div>
+<div class="sec" style="background:#faf6f2;text-align:center"><p class="txt">Prefer your e-reader? <b style="color:#7d4f61">Find every title on Amazon →</b></p></div>
+</div>
+</sc-if>
+
+<sc-if value="{{ isAbout }}">
+<div>
+<div class="sec" style="background:#f3ece7"><div class="row" style="align-items:center;gap:14px"><div class="img" style="width:120px;height:140px;flex:none">AUTHOR PORTRAIT</div><div><p class="eyebrow">Behind the pen</p><h2 class="wh">Hi, I'm Ali Wren</h2><p class="txt">Indie author · Minnesota · romance &amp; fantasy.</p></div></div></div>
+<div class="sec">
+<p class="txt" style="color:#5c5450">I write romance and fantasy filled with emotion, danger, and unforgettable connections.</p>
+<p class="txt" style="color:#5c5450">My stories are inspired by real-world experiences, human behavior, and the idea that love can be both powerful and complicated.</p>
+</div>
+<div class="sec" style="border-top:1px dashed #e6e3db"><p class="eyebrow">A few things about me</p><div class="grid2"><div class="card"><p class="txt">📍 Based in Minnesota</p></div><div class="card"><p class="txt">✍️ Two series in progress</p></div><div class="card"><p class="txt">☕ Fueled by coffee</p></div><div class="card"><p class="txt">💌 Loves hearing from readers</p></div></div></div>
+<div class="sec" style="background:#2e262b"><p class="eyebrow" style="color:#d9b3c1">Stay in touch</p><h3 class="wh" style="color:#fff">Letters from the Hollow</h3><div class="row" style="margin-top:10px"><span class="field">your@email.com</span><span class="btn">Join</span></div></div>
+</div>
+</sc-if>
+
+<sc-if value="{{ isEvents }}">
+<div>
+<div class="sec" style="background:#f6eff1"><p class="eyebrow">Events &amp; appearances</p><h2 class="wh">Come say hi</h2><p class="txt">Signings, book fairs &amp; author events — where to find me next.</p></div>
+<div class="sec">
+<div class="card" style="margin-bottom:10px"><div class="row" style="align-items:flex-start;gap:12px"><div style="flex:none;text-align:center;border:1px solid #e4d3da;border-radius:7px;padding:8px 11px;background:#f6eff1"><div style="font:700 16px system-ui;color:#7d4f61">14</div><div class="mtag">AUG</div></div><div><h3 class="wh">Book Fair for Grown-Ups</h3><p class="txt">📍 Venue, City · 10am–4pm</p><span class="btn o" style="padding:6px 11px">Details &amp; RSVP</span></div></div></div>
+<div class="card"><div class="row" style="align-items:flex-start;gap:12px"><div style="flex:none;text-align:center;border:1px solid #e6e3db;border-radius:7px;padding:8px 11px;background:#faf8f4"><div style="font:700 16px system-ui;color:#8b837c">TBA</div></div><div><h3 class="wh">More dates coming</h3><p class="txt">New appearances added throughout the year.</p></div></div></div>
+</div>
+<div class="sec" style="background:#faf6f2;border-top:1px dashed #e6e3db"><p class="eyebrow">On the horizon</p><h3 class="wh">What's next from Ali</h3><p class="txt">Upcoming releases + WIP progress.</p><div class="line" style="width:62%;background:#c9a9b5"></div></div>
+<div class="sec" style="background:#2e262b"><h3 class="wh" style="color:#fff">Never miss an event or release</h3><div class="row" style="margin-top:10px"><span class="field">your@email.com</span><span class="btn">Subscribe</span></div></div>
+</div>
+</sc-if>
+
+<div class="foot"><div class="wlogo dk">LOGO</div><p class="txt" style="color:#9a8f84;margin-top:8px">Fierce love. Brilliant women. Stories with heart.</p><div class="soc"><span>Facebook</span><span>Instagram</span><span>TikTok</span><span>Goodreads</span><span>Amazon</span></div></div>
+</div>
+</div>
+</div>
+<p class="dv-next">Try next: "drop the real script logo into the nav placeholder" · "start turning <a class="dv-oid" href="#5a">5a</a> into a hi-fi design" · "add a sticky newsletter bar to every page"</p>
+</section>
+
+<section class="dv-turn" id="t4">
+<div class="dv-thd"><a class="dv-tid" href="#t4">4</a><span class="dv-tname">Inner pages — series, shop, about, events</span></div>
+<p class="dv-tsub">Same nav, type and funnel logic as <a class="dv-oid" href="#3a">3a</a>. Free-read CTA and newsletter recur so every page keeps working toward the two goals.</p>
+<div class="dv-opts">
+
+<!-- 4a Series -->
+<div class="dv-opt" id="4a">
+<div class="dv-olabel"><a class="dv-oid" href="#4a">4a</a><b style="color:#241d22">Series page</b> — The Veiled Prophecy. Template reused for Whiskey Tango Foxtrot.</div>
+<div class="wf">
+<div class="wf-bar"><i></i><i></i><i></i><span>aliwrenauthor.com/the-veiled-prophecy</span></div>
+<div class="nav"><div class="row" style="gap:10px"><div class="wlogo" style="width:34px;height:34px;border-radius:50%">AW</div><div style="display:flex;flex-direction:column;gap:2px"><span class="logo">THE WREN'S HOLLOW</span><span style="font:400 7.5px/1 system-ui;letter-spacing:.14em;text-transform:uppercase;color:#b3a99e">Ali Wren · Author</span></div></div><div class="navl" style="gap:16px;align-items:center;font-size:10px;letter-spacing:.02em"><span>Books</span><span>About</span><span>Events</span><span style="color:#7d4f61;font-weight:600">Read Free</span><span style="font-size:12px">🛒</span></div></div>
+<div class="sec" style="background:#2b2530;text-align:center;padding:26px">
+<p class="eyebrow" style="color:#d9b3c1">Fantasy series · Kingdom of Sylvaeris</p>
+<h2 class="wh" style="color:#fff;font-size:21px">The Veiled Prophecy</h2>
+<p class="txt" style="color:#b7aca3;max-width:320px;margin:0 auto">A world of secrets, prophecy, and dangerous love. Start free, then follow the saga.</p>
+</div>
+<div class="sec">
+<p class="txt" style="color:#5c5450">Epic romantasy where fierce women hold the fate of a kingdom — and their hearts — in the balance. Here's where to begin.</p>
+</div>
+<div class="sec" style="border-top:1px dashed #e6e3db">
+<p class="eyebrow">Reading order</p>
+<div class="card" style="margin-bottom:10px;background:#f6eff1;border-color:#e4d3da"><div class="row" style="align-items:flex-start"><div class="img" style="width:60px;height:86px;flex:none">VEILFALL</div><div><p class="mtag" style="color:#9c6b7d">Book 0 · Prequel · FREE</p><h3 class="wh">Veilfall</h3><p class="txt">"She doesn't know who to trust…"</p><span class="btn" style="padding:6px 11px">Start reading free →</span></div></div></div>
+<div class="card"><div class="row" style="align-items:flex-start"><div class="img" style="width:60px;height:86px;flex:none">BK 1</div><div><p class="mtag">Book 1 · Coming soon</p><h3 class="wh">Title TBA</h3><p class="txt">Preorder + release-day alert.</p><span class="btn o" style="padding:6px 11px">Notify me</span></div></div></div>
+</div>
+<div class="sec" style="background:#faf6f2"><div class="grid2"><div class="card"><p class="stars">★★★★★</p><p class="txt">"The world-building is gorgeous."</p></div><div class="card"><p class="stars">★★★★★</p><p class="txt">"Give me book one already!"</p></div></div></div>
+<div class="sec" style="background:#2e262b"><h3 class="wh" style="color:#fff">Be first to read Book 1</h3><div class="row" style="margin-top:10px"><span class="field">your@email.com</span><span class="btn">Notify me</span></div></div>
+<div class="foot"><div class="logo" style="color:#fff">THE WREN'S HOLLOW</div><div class="soc"><span>Facebook</span><span>Instagram</span><span>TikTok</span><span>Goodreads</span><span>Amazon</span></div></div>
+</div>
+</div>
+
+<!-- 4b Shop -->
+<div class="dv-opt" id="4b">
+<div class="dv-olabel"><a class="dv-oid" href="#4b">4b</a><b style="color:#241d22">Shop — Books &amp; More</b>. Built to grow gracefully from one title.</div>
+<div class="wf">
+<div class="wf-bar"><i></i><i></i><i></i><span>aliwrenauthor.com/shop</span></div>
+<div class="nav"><div class="row" style="gap:10px"><div class="wlogo" style="width:34px;height:34px;border-radius:50%">AW</div><div style="display:flex;flex-direction:column;gap:2px"><span class="logo">THE WREN'S HOLLOW</span><span style="font:400 7.5px/1 system-ui;letter-spacing:.14em;text-transform:uppercase;color:#b3a99e">Ali Wren · Author</span></div></div><div class="navl" style="gap:16px;align-items:center;font-size:10px;letter-spacing:.02em"><span>Books</span><span>About</span><span>Events</span><span style="color:#7d4f61;font-weight:600">Read Free</span><span style="font-size:12px">🛒</span></div></div>
+<div class="sec" style="background:#f6eff1"><p class="eyebrow">Books &amp; More</p><h2 class="wh">Signed copies, straight from Ali</h2><p class="txt">Order direct for signed paperbacks &amp; bookish extras — shipped from Minnesota.</p></div>
+<div class="sec">
+<div class="row" style="gap:7px;margin-bottom:12px"><span class="chip" style="background:#7d4f61;color:#fff;border-color:#7d4f61">All</span><span class="chip">Paperbacks</span><span class="chip">Signed</span><span class="chip">Merch</span></div>
+<div class="grid2">
+<div class="card"><div class="img" style="height:110px;margin-bottom:8px">COVER</div><h3 class="wh" style="font-size:12px">Whiskey &amp; Secrets</h3><p class="mtag">Signed paperback</p><div class="row" style="justify-content:space-between;margin-top:7px"><span style="font:700 12px system-ui;color:#3a2f36">$18.00</span><span class="btn" style="padding:6px 11px">Add to cart</span></div></div>
+<div class="card" style="opacity:.72"><div class="img" style="height:110px;margin-bottom:8px">COMING SOON</div><h3 class="wh" style="font-size:12px">Veilfall — paperback</h3><p class="mtag">Preorder</p><div class="row" style="justify-content:space-between;margin-top:7px"><span style="font:700 12px system-ui;color:#3a2f36">$—</span><span class="btn o" style="padding:6px 11px">Notify me</span></div></div>
+</div>
+<p class="txt" style="text-align:center;margin-top:14px;color:#a8a091">More titles &amp; merch on the way — grid scales as the catalog grows.</p>
+</div>
+<div class="sec" style="background:#faf6f2;text-align:center"><p class="txt">Prefer your e-reader? <b style="color:#7d4f61">Find every title on Amazon →</b></p></div>
+<div class="foot"><div class="logo" style="color:#fff">THE WREN'S HOLLOW</div><div class="soc"><span>Facebook</span><span>Instagram</span><span>TikTok</span><span>Goodreads</span><span>Amazon</span></div></div>
+</div>
+</div>
+
+<!-- 4c About -->
+<div class="dv-opt" id="4c">
+<div class="dv-olabel"><a class="dv-oid" href="#4c">4c</a><b style="color:#241d22">Behind the Pen</b> — the about page, warm &amp; personal.</div>
+<div class="wf">
+<div class="wf-bar"><i></i><i></i><i></i><span>aliwrenauthor.com/about</span></div>
+<div class="nav"><div class="row" style="gap:10px"><div class="wlogo" style="width:34px;height:34px;border-radius:50%">AW</div><div style="display:flex;flex-direction:column;gap:2px"><span class="logo">THE WREN'S HOLLOW</span><span style="font:400 7.5px/1 system-ui;letter-spacing:.14em;text-transform:uppercase;color:#b3a99e">Ali Wren · Author</span></div></div><div class="navl" style="gap:16px;align-items:center;font-size:10px;letter-spacing:.02em"><span>Books</span><span>About</span><span>Events</span><span style="color:#7d4f61;font-weight:600">Read Free</span><span style="font-size:12px">🛒</span></div></div>
+<div class="sec" style="background:#f3ece7"><div class="row" style="align-items:center;gap:14px"><div class="img" style="width:120px;height:140px;flex:none">AUTHOR PORTRAIT</div><div><p class="eyebrow">Behind the pen</p><h2 class="wh">Hi, I'm Ali Wren</h2><p class="txt">Indie author · Minnesota · romance &amp; fantasy.</p></div></div></div>
+<div class="sec">
+<p class="txt" style="color:#5c5450">I write romance and fantasy filled with emotion, danger, and unforgettable connections.</p>
+<p class="txt" style="color:#5c5450">My stories are inspired by real-world experiences, human behavior, and the idea that love can be both powerful and complicated.</p>
+</div>
+<div class="sec" style="border-top:1px dashed #e6e3db"><p class="eyebrow">A few things about me</p><div class="grid2"><div class="card"><p class="txt">📍 Based in Minnesota</p></div><div class="card"><p class="txt">✍️ Two series in progress</p></div><div class="card"><p class="txt">☕ Fueled by coffee</p></div><div class="card"><p class="txt">💌 Loves hearing from readers</p></div></div></div>
+<div class="sec" style="background:#2e262b"><p class="eyebrow" style="color:#d9b3c1">Stay in touch</p><h3 class="wh" style="color:#fff">Letters from the Hollow</h3><div class="row" style="margin-top:10px"><span class="field">your@email.com</span><span class="btn">Join</span></div></div>
+<div class="sec" style="text-align:center"><p class="eyebrow">Find me online</p><div class="row" style="justify-content:center;gap:7px;flex-wrap:wrap"><span class="chip">Instagram</span><span class="chip">TikTok</span><span class="chip">Facebook</span><span class="chip">Goodreads</span></div></div>
+<div class="foot"><div class="logo" style="color:#fff">THE WREN'S HOLLOW</div><div class="soc"><span>Facebook</span><span>Instagram</span><span>TikTok</span><span>Goodreads</span><span>Amazon</span></div></div>
+</div>
+</div>
+
+<!-- 4d Events -->
+<div class="dv-opt" id="4d">
+<div class="dv-olabel"><a class="dv-oid" href="#4d">4d</a><b style="color:#241d22">Events &amp; Appearances</b> — plus On the Horizon teaser.</div>
+<div class="wf">
+<div class="wf-bar"><i></i><i></i><i></i><span>aliwrenauthor.com/events-appearances</span></div>
+<div class="nav"><div class="row" style="gap:10px"><div class="wlogo" style="width:34px;height:34px;border-radius:50%">AW</div><div style="display:flex;flex-direction:column;gap:2px"><span class="logo">THE WREN'S HOLLOW</span><span style="font:400 7.5px/1 system-ui;letter-spacing:.14em;text-transform:uppercase;color:#b3a99e">Ali Wren · Author</span></div></div><div class="navl" style="gap:16px;align-items:center;font-size:10px;letter-spacing:.02em"><span>Books</span><span>About</span><span>Events</span><span style="color:#7d4f61;font-weight:600">Read Free</span><span style="font-size:12px">🛒</span></div></div>
+<div class="sec" style="background:#f6eff1"><p class="eyebrow">Events &amp; appearances</p><h2 class="wh">Come say hi</h2><p class="txt">Signings, book fairs &amp; author events — where to find me next.</p></div>
+<div class="sec">
+<div class="card" style="margin-bottom:10px"><div class="row" style="align-items:flex-start;gap:12px"><div style="flex:none;text-align:center;border:1px solid #e4d3da;border-radius:7px;padding:8px 11px;background:#f6eff1"><div style="font:700 16px system-ui;color:#7d4f61">14</div><div class="mtag">AUG</div></div><div><h3 class="wh">Book Fair for Grown-Ups</h3><p class="txt">📍 Venue, City · 10am–4pm</p><span class="btn o" style="padding:6px 11px">Details &amp; RSVP</span></div></div></div>
+<div class="card"><div class="row" style="align-items:flex-start;gap:12px"><div style="flex:none;text-align:center;border:1px solid #e6e3db;border-radius:7px;padding:8px 11px;background:#faf8f4"><div style="font:700 16px system-ui;color:#8b837c">TBA</div></div><div><h3 class="wh">More dates coming</h3><p class="txt">New appearances added throughout the year.</p></div></div></div>
+</div>
+<div class="sec" style="background:#faf6f2;border-top:1px dashed #e6e3db"><p class="eyebrow">On the horizon</p><h3 class="wh">What's next from Ali</h3><p class="txt">Upcoming releases + WIP progress.</p><div class="line" style="width:62%;background:#c9a9b5"></div></div>
+<div class="sec" style="background:#2e262b"><h3 class="wh" style="color:#fff">Never miss an event or release</h3><div class="row" style="margin-top:10px"><span class="field">your@email.com</span><span class="btn">Subscribe</span></div></div>
+<div class="foot"><div class="logo" style="color:#fff">THE WREN'S HOLLOW</div><div class="soc"><span>Facebook</span><span>Instagram</span><span>TikTok</span><span>Goodreads</span><span>Amazon</span></div></div>
+</div>
+</div>
+
+</div>
+<p class="dv-next">Try next: "start turning <a class="dv-oid" href="#3a">3a</a> into a hi-fi design" · "add a dedicated free-chapters reading page" · "adjust the shop to sell only via Amazon"</p>
+</section>
+
+<section class="dv-turn" id="t3">
+<div class="dv-thd"><a class="dv-tid" href="#t3">3</a><span class="dv-tname">Full homepage — <a class="dv-oid" href="#1a">1a</a> funnel with the <a class="dv-oid" href="#2b">2b</a> hero</span></div>
+<p class="dv-tsub">The Reader's Path structure, now with the cover-beside-copy hero you picked.</p>
+<div class="dv-opts">
+<div class="dv-opt" id="3a">
+<div class="dv-olabel"><a class="dv-oid" href="#3a">3a</a><b style="color:#241d22">Homepage — ready to design</b></div>
+<div class="wf">
+<div class="wf-bar"><i></i><i></i><i></i><span>aliwrenauthor.com</span></div>
+<div class="nav"><div class="row" style="gap:10px"><div class="wlogo" style="width:34px;height:34px;border-radius:50%">AW</div><div style="display:flex;flex-direction:column;gap:2px"><span class="logo">THE WREN'S HOLLOW</span><span style="font:400 7.5px/1 system-ui;letter-spacing:.14em;text-transform:uppercase;color:#b3a99e">Ali Wren · Author</span></div></div><div class="navl" style="gap:16px;align-items:center;font-size:10px;letter-spacing:.02em"><span>Books</span><span>About</span><span>Events</span><span style="color:#7d4f61;font-weight:600">Read Free</span><span style="font-size:12px">🛒</span></div></div>
+
+<div class="sec" style="background:#f6eff1">
+<div class="row" style="align-items:center;gap:16px">
+<div>
+<p class="eyebrow">The Veiled Prophecy · Book 0</p>
+<h2 class="wh">She doesn't know who to trust.</h2>
+<p class="txt">Begin the fantasy series with <b>Veilfall</b>, the free prequel readers can't put down.</p>
+<div class="row"><span class="btn">Start Reading Free →</span></div>
+<p class="mtag" style="margin-top:10px">★★★★★ · 200+ reviews · free forever</p>
+</div>
+<div class="img" style="width:120px;height:172px;flex:none;box-shadow:0 8px 18px rgba(60,40,50,.22)">VEILFALL<br>COVER</div>
+</div>
+</div>
+
+<div class="sec" style="background:#2e262b">
+<p class="eyebrow" style="color:#d9b3c1">Join the Hollow</p>
+<h3 class="wh" style="color:#fff">Get bonus chapters + first look at new releases</h3>
+<div class="row" style="margin-top:10px"><span class="field">your@email.com</span><span class="btn">Subscribe</span></div>
+</div>
+
+<div class="sec">
+<p class="eyebrow">Explore the books</p>
+<h2 class="wh">Two worlds, one storyteller</h2>
+<div class="card" style="margin-bottom:10px">
+<div class="row" style="align-items:flex-start"><div class="img" style="width:66px;height:92px;flex:none">COVER</div><div><p class="mtag" style="color:#9c6b7d">Fantasy · lead series</p><h3 class="wh">The Veiled Prophecy</h3><p class="txt">Veilfall · Book 1 coming soon. Epic, romantic, high-stakes.</p><span class="btn o" style="padding:6px 11px">Enter the story</span></div></div>
+</div>
+<div class="card">
+<div class="row" style="align-items:flex-start"><div class="img" style="width:66px;height:92px;flex:none">COVER</div><div><p class="mtag" style="color:#9c6b7d">Contemporary romance</p><h3 class="wh">Whiskey Tango Foxtrot</h3><p class="txt">Whiskey &amp; Secrets · Whiskey &amp; Lies. Read the first chapters free.</p><span class="btn o" style="padding:6px 11px">Read free chapters</span></div></div>
+</div>
+</div>
+
+<div class="divlabel">★ Reader reviews</div>
+<div class="sec">
+<div class="grid2">
+<div class="card"><p class="stars">★★★★★</p><p class="txt">"Couldn't put it down — the tension is unreal."</p><p class="mtag">— Goodreads</p></div>
+<div class="card"><p class="stars">★★★★★</p><p class="txt">"Fierce women and swoony romance. More please!"</p><p class="mtag">— Amazon</p></div>
+</div>
+</div>
+
+<div class="sec" style="background:#faf6f2">
+<div class="row" style="align-items:flex-start"><div class="img" style="width:88px;height:100px;flex:none">AUTHOR PHOTO</div><div><p class="eyebrow">Behind the pen</p><h3 class="wh">Hi, I'm Ali Wren</h3><p class="txt">Indie author from Minnesota writing romance &amp; fantasy full of emotion, danger, and unforgettable connections.</p><span class="btn o" style="padding:6px 11px">Read more</span></div></div>
+</div>
+
+<div class="sec" style="border-top:1px dashed #e6e3db">
+<p class="eyebrow">On the horizon</p>
+<h3 class="wh">Currently writing…</h3>
+<p class="txt">Sneak peek at the next book + a progress bar for the WIP.</p>
+<div class="line" style="width:62%;background:#c9a9b5"></div>
+</div>
+
+<div class="foot"><div class="logo" style="color:#fff">THE WREN'S HOLLOW</div><p class="txt" style="color:#9a8f84;margin-top:8px">Fierce love. Brilliant women. Stories with heart.</p><div class="soc"><span>Facebook</span><span>Instagram</span><span>TikTok</span><span>Goodreads</span><span>Amazon</span></div></div>
+</div>
+</div>
+</div>
+<p class="dv-next">Try next: "flesh out the inner pages (series, shop, about, events)" · "swap the free-forever review line for a real quote" · "add a signed-copies shop teaser above the footer"</p>
+</section>
+
+<section class="dv-turn" id="t2">
+<div class="dv-thd"><a class="dv-tid" href="#t2">2</a><span class="dv-tname">Hero variations for <a class="dv-oid" href="#1a">1a</a> — The Reader's Path</span></div>
+<p class="dv-tsub">Three ways to open the page. Same funnel logic as <a class="dv-oid" href="#1a">1a</a> (free read = hero), different framing. Nav + hero only so you can compare openings side by side.</p>
+<div class="dv-opts">
+
+<!-- 2a -->
+<div class="dv-opt" id="2a">
+<div class="dv-olabel"><a class="dv-oid" href="#2a">2a</a><b style="color:#241d22">Full-bleed cover</b> — cinematic cover art fills the hero, text overlaid. Most immersive; sells the world visually.</div>
+<div class="wf">
+<div class="wf-bar"><i></i><i></i><i></i><span>aliwrenauthor.com</span></div>
+<div class="nav"><div class="row" style="gap:10px"><div class="wlogo" style="width:34px;height:34px;border-radius:50%">AW</div><div style="display:flex;flex-direction:column;gap:2px"><span class="logo">THE WREN'S HOLLOW</span><span style="font:400 7.5px/1 system-ui;letter-spacing:.14em;text-transform:uppercase;color:#b3a99e">Ali Wren · Author</span></div></div><div class="navl" style="gap:16px;align-items:center;font-size:10px;letter-spacing:.02em"><span>Books</span><span>About</span><span>Events</span><span style="color:#7d4f61;font-weight:600">Read Free</span><span style="font-size:12px">🛒</span></div></div>
+<div class="img" style="height:260px;border-radius:0;border-left:none;border-right:none;border-top:none;align-items:flex-end;justify-content:flex-start;text-align:left;position:relative">
+<div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(30,24,28,.82),rgba(30,24,28,.15) 55%,transparent)"></div>
+<div style="position:relative;padding:20px">
+<p class="eyebrow" style="color:#e2c0cd">The Veiled Prophecy · Book 0</p>
+<h2 class="wh" style="color:#fff;font-size:20px;max-width:300px">She doesn't know who to trust — and the truth might destroy everything.</h2>
+<div class="row" style="margin-top:12px"><span class="btn">Start Reading Free →</span><span class="btn o" style="background:transparent;color:#fff;border-color:rgba(255,255,255,.5)">Meet the series</span></div>
+</div>
+<span style="position:absolute;top:10px;right:12px">FULL-BLEED HERO ART — Veilfall</span>
+</div>
+</div>
+</div>
+
+<!-- 2b -->
+<div class="dv-opt" id="2b">
+<div class="dv-olabel"><a class="dv-oid" href="#2b">2b</a><b style="color:#241d22">Cover beside copy</b> — the original 1a layout, refined: standing book cover on the right, headline + CTA on the left. Clear and product-forward.</div>
+<div class="wf">
+<div class="wf-bar"><i></i><i></i><i></i><span>aliwrenauthor.com</span></div>
+<div class="nav"><div class="row" style="gap:10px"><div class="wlogo" style="width:34px;height:34px;border-radius:50%">AW</div><div style="display:flex;flex-direction:column;gap:2px"><span class="logo">THE WREN'S HOLLOW</span><span style="font:400 7.5px/1 system-ui;letter-spacing:.14em;text-transform:uppercase;color:#b3a99e">Ali Wren · Author</span></div></div><div class="navl" style="gap:16px;align-items:center;font-size:10px;letter-spacing:.02em"><span>Books</span><span>About</span><span>Events</span><span style="color:#7d4f61;font-weight:600">Read Free</span><span style="font-size:12px">🛒</span></div></div>
+<div class="sec" style="background:#f6eff1">
+<div class="row" style="align-items:center;gap:16px">
+<div>
+<p class="eyebrow">The Veiled Prophecy · Book 0</p>
+<h2 class="wh">She doesn't know who to trust.</h2>
+<p class="txt">Begin the fantasy series with <b>Veilfall</b>, the free prequel readers can't put down.</p>
+<div class="row"><span class="btn">Start Reading Free →</span></div>
+<p class="mtag" style="margin-top:10px">★★★★★ · 200+ reviews · free forever</p>
+</div>
+<div class="img" style="width:120px;height:172px;flex:none;box-shadow:0 8px 18px rgba(60,40,50,.22)">VEILFALL<br>COVER</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- 2c -->
+<div class="dv-opt" id="2c">
+<div class="dv-olabel"><a class="dv-oid" href="#2c">2c</a><b style="color:#241d22">Words-first quote</b> — no cover up top, just a striking line from the book on a moody band. Literary, intriguing; art appears lower.</div>
+<div class="wf">
+<div class="wf-bar"><i></i><i></i><i></i><span>aliwrenauthor.com</span></div>
+<div class="nav"><div class="row" style="gap:10px"><div class="wlogo" style="width:34px;height:34px;border-radius:50%">AW</div><div style="display:flex;flex-direction:column;gap:2px"><span class="logo">THE WREN'S HOLLOW</span><span style="font:400 7.5px/1 system-ui;letter-spacing:.14em;text-transform:uppercase;color:#b3a99e">Ali Wren · Author</span></div></div><div class="navl" style="gap:16px;align-items:center;font-size:10px;letter-spacing:.02em"><span>Books</span><span>About</span><span>Events</span><span style="color:#7d4f61;font-weight:600">Read Free</span><span style="font-size:12px">🛒</span></div></div>
+<div class="sec" style="background:#2b2530;text-align:center;padding:34px 26px">
+<p class="eyebrow" style="color:#d9b3c1">Now free to read</p>
+<h2 class="wh" style="color:#fff;font-size:21px;max-width:340px;margin:0 auto 6px">"Trust no one. Not even the voice inside the veil."</h2>
+<p class="txt" style="color:#b7aca3">— Veilfall, The Veiled Prophecy</p>
+<div class="row" style="justify-content:center;margin-top:14px"><span class="btn">Start Reading Free →</span><span class="btn o" style="background:transparent;color:#fff;border-color:rgba(255,255,255,.4)">Why readers love it</span></div>
+</div>
+<div class="sec"><div class="row" style="gap:9px;justify-content:center"><span class="chip">📖 Fantasy</span><span class="chip">💗 Romantasy</span><span class="chip">⚔️ High stakes</span></div></div>
+</div>
+</div>
+
+</div>
+<p class="dv-next">Try next: "go with <a class="dv-oid" href="#2a">2a</a> and rebuild the full <a class="dv-oid" href="#1a">1a</a> page around it" · "make <a class="dv-oid" href="#2b">2b</a> the hero but add the quote from <a class="dv-oid" href="#2c">2c</a>" · "flesh out <a class="dv-oid" href="#1a">1a</a> into inner pages"</p>
+</section>
+
+<section class="dv-turn" id="t1">
+<div class="dv-thd"><a class="dv-tid" href="#t1">1</a><span class="dv-tname">Homepage directions + site architecture — The Wren's Hollow</span></div>
+<p class="dv-tsub">Three distinct homepage structures plus a sitemap. All lead with the free read as the primary CTA, keep a prominent newsletter, feature one series first with the second below, and add reviews + a "currently writing" teaser. Blue handwriting = layout rationale.</p>
+<div class="dv-opts">
+
+<!-- ============ 1a ============ -->
+<div class="dv-opt" id="1a">
+<div class="dv-olabel"><a class="dv-oid" href="#1a">1a</a><b style="color:#241d22">The Reader's Path</b> — one clear funnel: hook with the free read, capture the email, then explore. Newsletter sits high.</div>
+<div class="pair">
+<div class="wf">
+<div class="wf-bar"><i></i><i></i><i></i><span>aliwrenauthor.com</span></div>
+<div class="nav"><div class="row" style="gap:10px"><div class="wlogo" style="width:34px;height:34px;border-radius:50%">AW</div><div style="display:flex;flex-direction:column;gap:2px"><span class="logo">THE WREN'S HOLLOW</span><span style="font:400 7.5px/1 system-ui;letter-spacing:.14em;text-transform:uppercase;color:#b3a99e">Ali Wren · Author</span></div></div><div class="navl" style="gap:16px;align-items:center;font-size:10px;letter-spacing:.02em"><span>Books</span><span>About</span><span>Events</span><span style="color:#7d4f61;font-weight:600">Read Free</span><span style="font-size:12px">🛒</span></div></div>
+
+<div class="sec" style="background:#f6eff1">
+<p class="eyebrow">The Veiled Prophecy · Book 0</p>
+<h2 class="wh">She doesn't know who to trust — and the truth might destroy everything.</h2>
+<p class="lead">Step into Sylvaeris with <b>Veilfall</b>, the free prequel to the fantasy series readers can't put down.</p>
+<div class="row"><span class="btn">Start Reading Free →</span><span class="btn o">Meet the series</span></div>
+<div class="img" style="height:120px;margin-top:14px">HERO ART — Veilfall cover / atmospheric fantasy scene</div>
+</div>
+
+<div class="sec" style="background:#2e262b">
+<p class="eyebrow" style="color:#d9b3c1">Join the Hollow</p>
+<h3 class="wh" style="color:#fff">Get bonus chapters + first look at new releases</h3>
+<div class="row" style="margin-top:10px"><span class="field">your@email.com</span><span class="btn">Subscribe</span></div>
+</div>
+
+<div class="sec">
+<p class="eyebrow">Explore the books</p>
+<h2 class="wh">Two worlds, one storyteller</h2>
+<div class="card" style="margin-bottom:10px">
+<div class="row" style="align-items:flex-start"><div class="img" style="width:66px;height:92px;flex:none">COVER</div><div><p class="mtag" style="color:#9c6b7d">Fantasy · lead series</p><h3 class="wh">The Veiled Prophecy</h3><p class="txt">Veilfall · Book 1 coming soon. Epic, romantic, high-stakes.</p><span class="btn o" style="padding:6px 11px">Enter the story</span></div></div>
+</div>
+<div class="card">
+<div class="row" style="align-items:flex-start"><div class="img" style="width:66px;height:92px;flex:none">COVER</div><div><p class="mtag" style="color:#9c6b7d">Contemporary romance</p><h3 class="wh">Whiskey Tango Foxtrot</h3><p class="txt">Whiskey &amp; Secrets · Whiskey &amp; Lies. Read the first chapters free.</p><span class="btn o" style="padding:6px 11px">Read free chapters</span></div></div>
+</div>
+</div>
+
+<div class="divlabel">★ Reader reviews</div>
+<div class="sec">
+<div class="grid2">
+<div class="card"><p class="stars">★★★★★</p><p class="txt">"Couldn't put it down — the tension is unreal."</p><p class="mtag">— Goodreads</p></div>
+<div class="card"><p class="stars">★★★★★</p><p class="txt">"Fierce women and swoony romance. More please!"</p><p class="mtag">— Amazon</p></div>
+</div>
+</div>
+
+<div class="sec" style="background:#faf6f2">
+<div class="row" style="align-items:flex-start"><div class="img" style="width:88px;height:100px;flex:none">AUTHOR PHOTO</div><div><p class="eyebrow">Behind the pen</p><h3 class="wh">Hi, I'm Ali Wren</h3><p class="txt">Indie author from Minnesota writing romance &amp; fantasy full of emotion, danger, and unforgettable connections.</p><span class="btn o" style="padding:6px 11px">Read more</span></div></div>
+</div>
+
+<div class="sec" style="border-top:1px dashed #e6e3db">
+<p class="eyebrow">On the horizon</p>
+<h3 class="wh">Currently writing…</h3>
+<p class="txt">Sneak peek at the next book + a progress bar for the WIP.</p>
+<div class="line" style="width:62%;background:#c9a9b5"></div>
+</div>
+
+<div class="foot"><div class="logo" style="color:#fff">THE WREN'S HOLLOW</div><p class="txt" style="color:#9a8f84;margin-top:8px">Fierce love. Brilliant women. Stories with heart.</p><div class="soc"><span>Facebook</span><span>Instagram</span><span>TikTok</span><span>Goodreads</span><span>Amazon</span></div></div>
+</div>
+<div class="anncol">
+<div class="ann"><b>1</b><span>Free read is the hero — the #1 job of the page.</span></div>
+<div class="ann"><b>2</b><span>Newsletter capture right after the hook, dark band so it pops.</span></div>
+<div class="ann"><b>3</b><span>Fantasy leads, romance directly below — equal cards, clear labels.</span></div>
+<div class="ann"><b>4</b><span>Social proof before the ask to buy / commit.</span></div>
+<div class="ann"><b>5</b><span>Personal + "currently writing" builds the long-term relationship.</span></div>
+</div>
+</div>
+</div>
+
+<!-- ============ 1b ============ -->
+<div class="dv-opt" id="1b">
+<div class="dv-olabel"><a class="dv-oid" href="#1b">1b</a><b style="color:#241d22">Pick Your Lane</b> — split hero lets romance vs. fantasy readers self-sort in one tap, then reunites for newsletter + about.</div>
+<div class="pair">
+<div class="wf">
+<div class="wf-bar"><i></i><i></i><i></i><span>aliwrenauthor.com</span></div>
+<div class="nav"><div class="logo">THE WREN'S HOLLOW</div><div class="navl"><span>Read Free</span><span>Series</span><span>About</span><span>Shop 🛒</span></div></div>
+
+<div class="sec" style="text-align:center;background:#f6eff1">
+<h2 class="wh" style="font-size:20px">Fierce love. Brilliant women.<br>Stories with heart.</h2>
+<p class="lead" style="margin:0 auto">Which world do you want to fall into?</p>
+</div>
+<div class="grid2" style="gap:0">
+<div class="sec" style="background:#2b2530;color:#fff;text-align:center">
+<div class="img" style="height:96px;margin-bottom:10px;background:none;border-color:rgba(255,255,255,.25);color:#b9a7b3">FANTASY MOOD ART</div>
+<p class="eyebrow" style="color:#d9b3c1">Fantasy</p><h3 class="wh" style="color:#fff">The Veiled Prophecy</h3><p class="txt" style="color:#b7aca3">Start Veilfall free →</p><span class="btn">Enter Sylvaeris</span></div>
+<div class="sec" style="background:#efe2d8;text-align:center">
+<div class="img" style="height:96px;margin-bottom:10px">ROMANCE MOOD ART</div>
+<p class="eyebrow">Romance</p><h3 class="wh">Whiskey Tango Foxtrot</h3><p class="txt">Read the first chapters free →</p><span class="btn dk">Start reading</span></div>
+</div>
+
+<div class="sec" style="background:#2e262b">
+<h3 class="wh" style="color:#fff;text-align:center">One newsletter, both worlds — bonus chapters inside</h3>
+<div class="row" style="margin-top:10px"><span class="field">your@email.com</span><span class="btn">Subscribe</span></div>
+</div>
+
+<div class="sec">
+<p class="eyebrow">Free to read right now</p>
+<div class="grid3">
+<div class="card" style="text-align:center"><div class="img" style="height:64px;margin-bottom:6px">COVER</div><p class="mtag">Veilfall</p></div>
+<div class="card" style="text-align:center"><div class="img" style="height:64px;margin-bottom:6px">COVER</div><p class="mtag">Whiskey &amp; Secrets</p></div>
+<div class="card" style="text-align:center"><div class="img" style="height:64px;margin-bottom:6px">COVER</div><p class="mtag">Bonus chapters</p></div>
+</div>
+</div>
+
+<div class="divlabel">★ What readers say</div>
+<div class="sec"><div class="card"><p class="stars">★★★★★</p><p class="txt">"Ali writes the kind of characters you miss when the book ends."</p><p class="mtag">— Reader review</p></div></div>
+
+<div class="sec" style="background:#faf6f2"><div class="row" style="align-items:flex-start"><div class="img" style="width:80px;height:92px;flex:none">AUTHOR</div><div><p class="eyebrow">Behind the pen</p><p class="txt">Indie author from Minnesota. Romance &amp; fantasy with emotion, danger &amp; heart.</p><span class="btn o" style="padding:6px 11px">About Ali</span></div></div></div>
+
+<div class="foot"><div class="logo" style="color:#fff">THE WREN'S HOLLOW</div><div class="soc"><span>Facebook</span><span>Instagram</span><span>TikTok</span><span>Goodreads</span><span>Amazon</span></div></div>
+</div>
+<div class="anncol">
+<div class="ann"><b>1</b><span>Split hero solves the two-genre problem instantly — reader chooses.</span></div>
+<div class="ann"><b>2</b><span>Fantasy still gets the darker, "lead" visual weight.</span></div>
+<div class="ann"><b>3</b><span>After sorting, one shared newsletter unites both audiences.</span></div>
+<div class="ann"><b>4</b><span>"Free to read now" row surfaces every free entry point together.</span></div>
+</div>
+</div>
+</div>
+
+<!-- ============ 1c ============ -->
+<div class="dv-opt" id="1c">
+<div class="dv-olabel"><a class="dv-oid" href="#1c">1c</a><b style="color:#241d22">Cozy Author Hub</b> — warm, personal, story-led. Leads with Ali herself; free read + newsletter woven through a relaxed vertical scroll.</div>
+<div class="pair">
+<div class="wf">
+<div class="wf-bar"><i></i><i></i><i></i><span>aliwrenauthor.com</span></div>
+<div class="nav"><div class="logo">the wren's hollow</div><div class="navl"><span>Home</span><span>Books</span><span>Read Free</span><span>About</span><span>Events</span><span>Shop 🛒</span></div></div>
+
+<div class="sec" style="background:#f3ece7">
+<div class="row" style="align-items:center;gap:14px"><div class="img" style="width:120px;height:130px;flex:none">AUTHOR PORTRAIT</div><div><p class="eyebrow">Welcome to the Hollow</p><h2 class="wh">Come for the story, stay for the feels.</h2><p class="txt">Romance &amp; fantasy from indie author Ali Wren.</p><span class="btn">Start with a free read →</span></div></div>
+</div>
+
+<div class="sec">
+<p class="eyebrow">Free this week</p>
+<div class="card" style="background:#f6eff1;border-color:#e4d3da"><div class="row" style="align-items:flex-start"><div class="img" style="width:60px;height:86px;flex:none">COVER</div><div><h3 class="wh">Veilfall — the free prequel</h3><p class="txt">"She doesn't know who to trust…" Begin the fantasy series here.</p><span class="btn" style="padding:6px 11px">Read now</span></div></div></div>
+</div>
+
+<div class="sec" style="border-top:1px dashed #e6e3db">
+<p class="eyebrow">The bookshelf</p>
+<h3 class="wh">The Veiled Prophecy <span class="chip">Fantasy · lead</span></h3>
+<div class="grid3" style="margin:8px 0 14px"><div class="img" style="height:80px">BK1</div><div class="img" style="height:80px">BK2</div><div class="img" style="height:80px">SOON</div></div>
+<h3 class="wh">Whiskey Tango Foxtrot <span class="chip">Romance</span></h3>
+<div class="grid3" style="margin-top:8px"><div class="img" style="height:80px">Secrets</div><div class="img" style="height:80px">Lies</div><div class="img" style="height:80px">Bonus</div></div>
+</div>
+
+<div class="sec" style="background:#2e262b">
+<p class="eyebrow" style="color:#d9b3c1">Letters from the Hollow</p>
+<h3 class="wh" style="color:#fff">A cozy newsletter — bonus scenes, life &amp; new releases</h3>
+<div class="row" style="margin-top:10px"><span class="field">your@email.com</span><span class="btn">Join</span></div>
+</div>
+
+<div class="divlabel">★ Loved by readers</div>
+<div class="sec"><div class="grid2"><div class="card"><p class="stars">★★★★★</p><p class="txt">"Warm, tense, unputdownable."</p></div><div class="card"><p class="stars">★★★★★</p><p class="txt">"I felt like I knew these people."</p></div></div></div>
+
+<div class="sec" style="background:#faf6f2">
+<p class="eyebrow">In the writing room</p>
+<h3 class="wh">What I'm working on now</h3>
+<p class="txt">Behind-the-scenes teaser + WIP progress.</p>
+<div class="line" style="width:48%;background:#c9a9b5"></div>
+<div class="row" style="margin-top:12px;gap:8px"><span class="chip">📅 Upcoming events</span><span class="chip">🛒 Signed copies in shop</span></div>
+</div>
+
+<div class="foot"><div class="logo" style="color:#fff">the wren's hollow</div><p class="txt" style="color:#9a8f84;margin-top:6px">Fierce love. Brilliant women. Stories with heart.</p><div class="soc"><span>Facebook</span><span>Instagram</span><span>TikTok</span><span>Goodreads</span><span>Amazon</span></div></div>
+</div>
+<div class="anncol">
+<div class="ann"><b>1</b><span>Leads with Ali's face + voice — best for a personal indie brand.</span></div>
+<div class="ann"><b>2</b><span>"Free this week" keeps the free read prominent without a hard hero.</span></div>
+<div class="ann"><b>3</b><span>Whole bookshelf visible at once; fantasy tagged as the lead.</span></div>
+<div class="ann"><b>4</b><span>Newsletter framed as warm "letters" — fits the cozy tone.</span></div>
+<div class="ann"><b>5</b><span>Writing room + events + shop bundled as a friendly footer zone.</span></div>
+</div>
+</div>
+</div>
+
+<!-- ============ 1d sitemap ============ -->
+<div class="dv-opt" id="1d">
+<div class="dv-olabel"><a class="dv-oid" href="#1d">1d</a><b style="color:#241d22">Site architecture</b> — how all the main pages connect, whichever homepage you pick.</div>
+<div class="map">
+<div style="text-align:center;margin-bottom:6px"><span class="node home">🏠 Home / Landing</span></div>
+<div class="branch">
+<div class="mrow"><span class="node">Behind the Pen <span class="mtag">About</span></span></div>
+
+<div class="mrow"><span class="node">The Veiled Prophecy <span class="mtag">Fantasy · lead</span></span></div>
+<div class="branch" style="border-color:#e4d3da">
+<div class="mrow"><span class="node sub">Kingdom of Sylvaeris — series overview</span></div>
+<div class="mrow"><span class="node leaf">Enter the Story: Veilfall (free)</span></div>
+</div>
+
+<div class="mrow"><span class="node">Whiskey Tango Foxtrot <span class="mtag">Romance</span></span></div>
+<div class="branch" style="border-color:#e4d3da">
+<div class="mrow"><span class="node leaf">Read Whiskey &amp; Secrets — first chapters</span></div>
+<div class="mrow"><span class="node leaf">Read Whiskey &amp; Lies free</span></div>
+<div class="mrow"><span class="node leaf">Bonus Chapters — Whiskey &amp; Lies</span></div>
+</div>
+
+<div class="mrow"><span class="node">Books &amp; More <span class="mtag">Shop / cart</span></span></div>
+<div class="mrow"><span class="node">On the Horizon <span class="mtag">Upcoming</span></span></div>
+<div class="mrow"><span class="node">Events &amp; Appearances</span></div>
+<div class="mrow"><span class="node" style="border-color:#7d4f61;color:#7d4f61">Newsletter signup <span class="mtag">global</span></span></div>
+</div>
+<p class="txt" style="margin-top:16px;color:#a8a091">Dashed = free-to-read entry points (primary conversion). Newsletter appears on every page as a persistent band + footer.</p>
+</div>
+</div>
+
+</div>
+<p class="dv-next">Try next: "flesh out <a class="dv-oid" href="#1a">1a</a> into a full inner-page set (series page, shop, about)" · "make <a class="dv-oid" href="#1b">1b</a> warmer / less dark" · "combine the split hero from <a class="dv-oid" href="#1b">1b</a> with the cozy about from <a class="dv-oid" href="#1c">1c</a>" · "new directions"</p>
+</section>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { page: 'home' };
+  renderVals() {
+    const p = this.state.page;
+    const act = (n) => p === n ? { color: '#7d4f61', fontWeight: 600, cursor: 'pointer' } : { cursor: 'pointer' };
+    const urls = {
+      home: 'aliwrenauthor.com',
+      series: 'aliwrenauthor.com/the-veiled-prophecy',
+      shop: 'aliwrenauthor.com/shop',
+      about: 'aliwrenauthor.com/about',
+      events: 'aliwrenauthor.com/events-appearances',
+    };
+    const go = (n) => () => this.setState({ page: n });
+    return {
+      isHome: p === 'home', isSeries: p === 'series', isShop: p === 'shop', isAbout: p === 'about', isEvents: p === 'events',
+      url: urls[p],
+      navBooks: act('series'), navAbout: act('about'), navEvents: act('events'), navShop: act('shop'),
+      goHome: go('home'), goSeries: go('series'), goShop: go('shop'), goAbout: go('about'), goEvents: go('events'),
+    };
+  }
+}
+</script>
+</body>
+</html>

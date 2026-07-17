@@ -1,0 +1,7 @@
+services:
+  web:
+    build: ./site
+    ports:
+      - "8090:80"
+    volumes:
+      - ./site:/usr/share/nginx/html:ro
