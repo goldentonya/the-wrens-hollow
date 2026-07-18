@@ -209,7 +209,7 @@ h1, h2, h3 { margin: 0; font-family: var(--font-display); color: var(--text-head
 .sec--dark h2, .sec--dark h3, .sec--dark2 h2, .sec--dark2 h3 { color: #fff; }
 .sec--dark p, .sec--dark2 p { color: var(--text-on-dark); }
 
-h2.h-lg { font-size: clamp(28px, 4vw, 40px); line-height: 1.15; letter-spacing: -.01em; }
+.h-lg { font-size: clamp(28px, 4vw, 40px); line-height: 1.15; letter-spacing: -.01em; }
 h3.h-md { font-size: 22px; line-height: 1.25; }
 .lede { font-size: 16px; line-height: 1.6; color: var(--text-body); max-width: 480px; }
 .sec--dark .lede, .sec--dark2 .lede { color: #b7aca3; }
@@ -291,6 +291,30 @@ h3.h-md { font-size: 22px; line-height: 1.25; }
 @media (max-width: 480px) { .newsletter-form { flex-direction: column; } }
 .form-status { margin-top: 12px; font-size: 13px; color: var(--plum-soft); min-height: 1em; }
 .sec:not(.sec--dark):not(.sec--dark2) .form-status { color: var(--plum); }
+.form-note { margin-top: 8px; font-size: 12px; color: var(--text-muted); }
+.sec--dark .form-note, .sec--dark2 .form-note { color: var(--text-on-dark-muted); }
+
+/* ============================================================
+   Opt-in form (lead-magnet pages, e.g. free-chapters signup)
+   ============================================================ */
+.optin-form { margin-top: 24px; }
+.optin-row { margin-bottom: 20px; }
+.optin-label { display: block; font: 700 13px 'Mulish', sans-serif; color: var(--text-heading); margin-bottom: 8px; }
+.optin-label .req { color: var(--plum); }
+.optin-row__fields { display: flex; gap: 12px; }
+.optin-field { flex: 1; }
+.optin-form .field { width: 100%; border: 1px solid var(--field-border); border-radius: 6px; padding: 13px 14px; font-size: 14px; background: var(--field-bg); color: var(--text-heading); }
+.optin-sublabel { display: block; font-size: 12px; color: var(--text-muted); margin-top: 4px; }
+@media (max-width: 480px) { .optin-row__fields { flex-direction: column; gap: 20px; } }
+.optin-form textarea.field { min-height: 140px; resize: vertical; line-height: 1.5; }
+
+/* ============================================================
+   Contact section (About page "Let's stay connected")
+   ============================================================ */
+.contact-grid { gap: 48px; align-items: start; }
+@media (max-width: 700px) { .contact-grid { gap: 36px; } }
+.soc--light a { color: var(--plum-deep); border-color: var(--card-border); }
+.soc--light a:hover { border-color: var(--plum); color: var(--plum); }
 
 /* ============================================================
    Cards / grids
@@ -323,6 +347,120 @@ h3.h-md { font-size: 22px; line-height: 1.25; }
 .progress-track { height: 8px; border-radius: 4px; background: #e9e6df; margin-top: 14px; overflow: hidden; }
 .sec--dark .progress-track, .sec--dark2 .progress-track { background: rgba(255,255,255,.12); }
 .progress-fill { height: 100%; border-radius: 4px; background: var(--plum-soft); }
+
+/* ============================================================
+   Timeline (e.g. About page "My Journey") — alternating milestone cards
+   ============================================================ */
+.timeline { position: relative; margin-top: 56px; }
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 8px;
+  bottom: 8px;
+  width: 3px;
+  background: linear-gradient(var(--plum-soft), var(--card-border) 85%);
+  transform: translateX(-50%);
+}
+.timeline__item {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 64px;
+  margin-bottom: 64px;
+}
+.timeline__item:last-child { margin-bottom: 0; }
+.timeline__node {
+  position: absolute;
+  left: 50%;
+  top: 6px;
+  transform: translateX(-50%);
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--plum);
+  border: 5px solid var(--tint-cream);
+  box-shadow: 0 0 0 2px var(--plum-soft);
+  z-index: 2;
+}
+.timeline__card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 14px;
+  padding: 28px 30px;
+  box-shadow: 0 10px 28px rgba(60, 40, 50, .07);
+}
+.timeline__date {
+  font: 700 34px var(--font-display);
+  color: var(--plum);
+  line-height: 1;
+  margin: 0 0 12px;
+}
+.timeline__content .txt:last-child { margin-bottom: 0; }
+.timeline__content .txt + .txt { margin-top: 10px; }
+
+.timeline__item:nth-child(odd) .timeline__card { grid-column: 1; text-align: right; }
+.timeline__item:nth-child(odd) .timeline__spacer { grid-column: 2; }
+.timeline__item:nth-child(even) .timeline__spacer { grid-column: 1; }
+.timeline__item:nth-child(even) .timeline__card { grid-column: 2; text-align: left; }
+
+@media (max-width: 760px) {
+  .timeline::before { left: 10px; }
+  .timeline__item, .timeline__item:nth-child(even) { grid-template-columns: 1fr; column-gap: 0; margin-bottom: 40px; padding-left: 40px; }
+  .timeline__item .timeline__spacer { display: none; }
+  .timeline__item:nth-child(odd) .timeline__card,
+  .timeline__item:nth-child(even) .timeline__card { grid-column: 1; text-align: left; }
+  .timeline__node { left: 10px; top: 4px; }
+  .timeline__date { font-size: 26px; }
+  .timeline__card { padding: 22px 22px; }
+}
+
+/* ============================================================
+   Pull quote
+   ============================================================ */
+.pull-quote {
+  border-left: 3px solid var(--plum-soft);
+  padding-left: 22px;
+  margin: 30px 0;
+  font: 600 21px/1.5 var(--font-display);
+  color: var(--plum-deep);
+  font-style: italic;
+}
+
+/* ============================================================
+   Facts strip (horizontal chips)
+   ============================================================ */
+.facts-strip { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 22px; }
+.facts-strip .chip-fact {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border-radius: 20px;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  font-size: 13px;
+  color: var(--text-body);
+  white-space: nowrap;
+}
+
+/* ============================================================
+   About sidebar layout (aside + flowing content)
+   ============================================================ */
+.about-columns { display: grid; grid-template-columns: 280px 1fr; gap: 52px; align-items: start; }
+@media (max-width: 780px) { .about-columns { grid-template-columns: 1fr; } }
+.about-columns__aside { position: sticky; top: 24px; display: flex; flex-direction: column; gap: 20px; }
+@media (max-width: 780px) { .about-columns__aside { position: static; } }
+.aside-card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 12px; padding: 22px; }
+.aside-card h3 {
+  font: 700 12px 'Mulish', sans-serif;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--plum-tag);
+  margin-bottom: 14px;
+}
+.aside-card__facts { display: flex; flex-direction: column; gap: 10px; font-size: 14px; color: var(--text-body); }
+.aside-card__facts span.ico { margin-right: 8px; }
 
 /* ============================================================
    About teaser / bio row
@@ -398,3 +536,30 @@ h3.h-md { font-size: 22px; line-height: 1.25; }
 }
 .soc a:hover { border-color: var(--plum-soft); color: var(--plum-soft); }
 .footer-mark { width: 34px; height: 34px; border-radius: 50%; background: transparent; border: 1.5px solid rgba(255,255,255,.4); color: var(--plum-soft); display: flex; align-items: center; justify-content: center; font: 700 11px var(--font-display); flex: none; }
+
+/* Icon-button variant (e.g. About page "Follow along") */
+.soc--icons a {
+  width: 38px;
+  height: 38px;
+  padding: 0;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--card-border);
+  color: var(--plum-deep);
+}
+.soc--icons a:hover { background: var(--plum); border-color: var(--plum); color: #fff; }
+.soc--icons svg { width: 18px; height: 18px; fill: currentColor; }
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}

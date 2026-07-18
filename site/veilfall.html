@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Events &amp; Appearances — The Wren's Hollow</title>
-<meta name="description" content="Signings, book fairs, and author events — where to find Ali Wren next.">
+<title>Enter the Story: Veilfall — The Wren's Hollow</title>
+<meta name="description" content="She thought she was human. The fae realm knows better. Get the free first chapters of Veilfall, delivered to your inbox.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Mulish:wght@400;600;700;800&display=swap" rel="stylesheet">
@@ -29,7 +29,7 @@
       <a class="nav__link" href="index.html">Home</a>
       <a class="nav__link" href="shop.html">Books</a>
       <a class="nav__link" href="about.html">About</a>
-      <a class="nav__link is-active" href="events-appearances.html">Events</a>
+      <a class="nav__link" href="events-appearances.html">Events</a>
       <a class="nav__link nav__link--cta" href="the-veiled-prophecy.html">Read Free</a>
       <a class="nav__link nav__cart" href="shop.html" aria-label="Cart">🛒<span class="nav__cart-count" id="cartCount">0</span></a>
     </nav>
@@ -38,56 +38,42 @@
 
 <main id="main">
 
+  <section class="sec--dark2 series-header">
+    <div class="wrap" style="max-width:560px;">
+      <p class="eyebrow eyebrow--on-dark">Free prequel · Kingdom of Sylvaeris</p>
+      <h1 class="h-lg" style="color:#fff;">Enter the Story: Veilfall</h1>
+    </div>
+  </section>
+
   <section class="sec sec--pink">
-    <div class="wrap">
-      <p class="eyebrow">Events &amp; appearances</p>
-      <h1 class="h-lg">Come say hi</h1>
-      <p class="lede" style="margin-top:12px;">Signings, book fairs &amp; author events — where to find me next.</p>
-    </div>
-  </section>
-
-  <section class="sec">
-    <div class="wrap">
-      <div class="card event-card">
-        <div class="event-date">
-          <div class="event-date__day">14</div>
-          <div class="event-date__mon">AUG</div>
-        </div>
-        <div>
-          <h3>Book Fair for Grown-Ups</h3>
-          <p class="txt">📍 Venue, City · 10am–4pm</p>
-          <a class="btn btn--outline btn--sm" href="#">Details &amp; RSVP</a>
-        </div>
+    <div class="wrap hero">
+      <div class="wh-fade">
+        <h2 class="h-md">Want the free chapters? Enter your email below:</h2>
+        <form class="optin-form" id="optinForm">
+          <div class="optin-row">
+            <label class="optin-label" for="optinFirst">Name <span class="req">*</span></label>
+            <div class="optin-row__fields">
+              <div class="optin-field">
+                <input class="field" id="optinFirst" name="firstName" type="text" required autocomplete="given-name">
+                <span class="optin-sublabel">First</span>
+              </div>
+              <div class="optin-field">
+                <input class="field" id="optinLast" name="lastName" type="text" autocomplete="family-name">
+                <span class="optin-sublabel">Last</span>
+              </div>
+            </div>
+          </div>
+          <div class="optin-row">
+            <label class="optin-label" for="optinEmail">Email <span class="req">*</span></label>
+            <input class="field" id="optinEmail" name="email" type="email" required autocomplete="email">
+          </div>
+          <button class="btn" type="submit">Submit</button>
+        </form>
+        <p class="form-status" id="optinStatus"></p>
       </div>
-      <div class="card event-card">
-        <div class="event-date event-date--tba">
-          <div class="event-date__mon" style="color:var(--text-muted);">TBA</div>
-        </div>
-        <div>
-          <h3>More dates coming</h3>
-          <p class="txt">New appearances added throughout the year.</p>
-        </div>
+      <div class="hero__cover wh-fade" style="--delay:.1s">
+        <div class="ph-box"><img src="images/covers/veilfall.jpg" alt="Veilfall book cover" style="width:220px;height:320px;object-fit:cover;box-shadow:0 18px 40px rgba(60,40,50,.28);border-radius:4px;"></div>
       </div>
-    </div>
-  </section>
-
-  <section class="sec sec--cream sec--dashed-top">
-    <div class="wrap" style="max-width:520px;">
-      <p class="eyebrow">On the horizon</p>
-      <h3 class="h-md">What's next from Ali</h3>
-      <p class="txt">Upcoming releases + WIP progress.</p>
-      <div class="progress-track"><div class="progress-fill" style="width:62%"></div></div>
-    </div>
-  </section>
-
-  <section class="sec sec--tight sec--cream2">
-    <div class="wrap sec--center">
-      <h2 class="h-md" style="color:var(--plum-deep);">Never miss an event or release</h2>
-      <form class="newsletter-form" id="newsletterForm" style="margin-left:auto;margin-right:auto;">
-        <input class="field" type="email" placeholder="your@email.com" required aria-label="Email address">
-        <button class="btn" type="submit">Subscribe</button>
-      </form>
-      <p class="form-status" id="newsletterStatus"></p>
     </div>
   </section>
 

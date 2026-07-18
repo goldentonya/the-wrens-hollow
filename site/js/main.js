@@ -46,6 +46,32 @@
     });
   }
 
+  /* ---------- Opt-in form (free-chapters lead magnet, e.g. Veilfall) ---------- */
+  var optinForm = document.getElementById('optinForm');
+  var optinStatus = document.getElementById('optinStatus');
+
+  if (optinForm) {
+    optinForm.addEventListener('submit', function (e) {
+      e.preventDefault();
+      // TODO: wire to the real mailing-list provider (e.g. Mailchimp/ConvertKit).
+      optinStatus.textContent = 'Thanks! Check your inbox for the free chapters.';
+      optinForm.reset();
+    });
+  }
+
+  /* ---------- Contact form (About page) ---------- */
+  var contactForm = document.getElementById('contactForm');
+  var contactStatus = document.getElementById('contactStatus');
+
+  if (contactForm) {
+    contactForm.addEventListener('submit', function (e) {
+      e.preventDefault();
+      // TODO: wire to the real form backend / inbox (e.g. Formspree, mailto relay).
+      contactStatus.textContent = 'Thanks for reaching out! I\'ll get back to you soon.';
+      contactForm.reset();
+    });
+  }
+
   /* ---------- "Notify me" buttons (series / shop) ---------- */
   document.querySelectorAll('[data-notify]').forEach(function (btn) {
     btn.addEventListener('click', function () {
