@@ -6,20 +6,32 @@ The wireframes were **structure/copy only**; this rebuild adds a real visual des
 (serif + sans typography, plum/romance-fantasy palette) on top of that blueprint,
 per the handoff's suggested direction.
 
+The handoff's real target platform is **WordPress + WooCommerce** (the live site
+reuses WooCommerce for the shop/cart), so that's what runs now:
+
+- `wordpress/` — the real WordPress + WooCommerce build, with a custom theme that
+  reproduces the design and a working cart/checkout.
+- `site/` — the original static HTML/CSS/JS build. It's no longer served by Docker
+  (the WordPress build replaced it), but it's kept as a reference and as the source
+  of the real image assets (the WordPress theme reads images from `site/images/`).
+
 ## Structure
 
-- `site/` — the rebuilt site (`index.html` + 5 pages, `css/`, `js/`, `images/`)
+- `wordpress/wp-content/themes/wrens-hollow/` — the custom WordPress theme (all pages + the shop)
+- `wordpress/wp-cli/` — one-shot setup scripts that configure WordPress/WooCommerce automatically
+- `site/` — the original static site (`index.html` + pages, `css/`, `js/`, `images/`) — reference only, not served
 - `design_handoff_wrens_hollow/` — original design handoff (wireframe HTML, README) kept for reference
-- `docker-compose.yml` — local dev server (nginx)
+- `docker-compose.yml` — local dev services: WordPress, MySQL, and a one-shot `wpcli` bootstrap service
 
 ## Pages
 
-- `index.html` — Home / Landing
-- `the-veiled-prophecy.html` — Series: The Veiled Prophecy (fantasy)
-- `whiskey-tango-foxtrot.html` — Series: Whiskey Tango Foxtrot (contemporary romance)
-- `shop.html` — Books & More (shop)
-- `about.html` — About — Behind the Pen
-- `events-appearances.html` — Events & Appearances
+- Home / Landing
+- The Veiled Prophecy (fantasy series)
+- Whiskey Tango Foxtrot (contemporary romance series)
+- Books (shop) — with real add-to-cart, cart, and checkout
+- About — Behind the Pen
+- Events & Appearances
+- One page per book: Veilfall, Veilbound, Whiskey & Secrets, Whiskey & Lies
 
 ## Running locally (Docker)
 
@@ -27,13 +39,41 @@ per the handoff's suggested direction.
 docker compose up
 ```
 
-Then open http://localhost:8090. Files are volume-mounted, so edits in `site/` show up on refresh — no rebuild needed.
+This starts the **WordPress + WooCommerce store** at http://localhost:8080.
+
+- wp-admin: http://localhost:8080/wp-admin — user `admin`, password `admin`
+- The `wpcli` service runs once on startup and is idempotent: it installs WordPress, activates the `wrens-hollow` theme, installs + activates WooCommerce, creates the one real product (**Whiskey & Secrets**, $18 signed paperback), enables **Cash on delivery** and **Direct bank transfer** as payment methods, and adds a flat-rate shipping zone. No manual wp-admin setup needed. Check its logs with `docker compose logs wpcli` if the store looks unconfigured.
+- Theme code lives in `wordpress/wp-content/themes/wrens-hollow/` and is volume-mounted, so edits show up on refresh (no rebuild needed). WordPress core itself is *not* checked into this repo — it's downloaded into a Docker volume on first run.
 
 To stop:
 
 ```
 docker compose down
 ```
+
+(Add `-v` to also wipe the WordPress/MySQL database volumes and start fresh next time.)
+
+### Testing the cart/checkout flow
+
+1. Go to http://localhost:8080/shop/ (the "Books" nav link) or the Whiskey & Secrets book page.
+2. Click **Add to cart**; the 🛒 count in the nav updates.
+3. Open the cart (nav 🛒 icon), adjust quantity, confirm totals recalculate.
+4. Proceed to checkout, fill in shipping details, choose **Cash on delivery** or **Direct bank transfer**, and place the order.
+5. Confirm the order appears under WooCommerce → Orders in wp-admin.
+
+### Payment gateways
+
+Only WooCommerce's built-in offline gateways (Cash on delivery, Direct bank transfer)
+are enabled, since there's no merchant account configured yet — checkout is fully
+functional end-to-end without one. To take real payments later, install a gateway
+plugin (e.g. WooCommerce Stripe Payment Gateway or PayPal) and enable it under
+WooCommerce → Settings → Payments; no theme changes are required.
+
+### Deploying to the real site
+
+`wordpress/wp-content/themes/wrens-hollow/` is a portable, self-contained WordPress
+theme — zip that folder and install it on the real aliwrenauthor.com WordPress site
+(which already has WooCommerce) whenever ready. Nothing else in this repo needs to move.
 
 ## Images
 
@@ -47,17 +87,16 @@ up automatically):
 - `site/images/photos/` — `ali-wren.jpg`, `ali-wren-portrait.jpg`
 - `site/images/products/` — `whiskey-and-secrets-signed.jpg`, `veilfall-paperback.jpg`, `hollow-tote.jpg`
 
-A missing/broken image renders as a labeled gray placeholder so the layout stays intact.
+The WordPress theme reads from this same `site/images/` folder (volume-mounted in),
+so dropping real files in updates the live store. A missing/broken image renders
+as a labeled gray placeholder so the layout stays intact.
 
 ## Not yet wired up (placeholder behavior)
 
-Per the handoff, several pieces are meant to connect to real systems later:
-
 - **Newsletter / notify-me forms** — currently show a local success message only;
   need wiring to the real mailing-list provider.
-- **Shop cart** — "Add to cart" just increments a local counter; the handoff calls
-  for WooCommerce if the final build target is WordPress.
-- **Notify me (upcoming titles)** — same as newsletter, needs a real backend.
+- **Real payment processor** — checkout uses WooCommerce's offline gateways (Cash
+  on delivery / bank transfer) for now; see "Payment gateways" above for adding Stripe/PayPal.
 
 ## Tweakable options
 
