@@ -380,3 +380,46 @@ if ( ! get_option( 'wh_seeded_series_reviews' ) ) {
 } elseif ( class_exists( 'WP_CLI' ) ) {
 	WP_CLI::log( '[seed] Series reviews already seeded — skipping.' );
 }
+
+/** Import the existing theme cover files into the Media Library and set them as
+ * each book's Featured Image ("Book cover"), so that box isn't empty. Once. */
+if ( ! get_option( 'wh_seeded_book_covers' ) && function_exists( 'wh_book' ) ) {
+	require_once ABSPATH . 'wp-admin/includes/image.php';
+	$cover_keys = array( 'veilfall', 'whiskey-and-secrets', 'whiskey-and-lies' );
+	$ccount     = 0;
+	foreach ( $cover_keys as $key ) {
+		$book = wh_book( $key );
+		if ( ! $book || has_post_thumbnail( $book->ID ) ) {
+			continue;
+		}
+		$file = get_template_directory() . '/images/covers/' . $key . '.jpg';
+		if ( ! file_exists( $file ) ) {
+			continue;
+		}
+		$upload = wp_upload_bits( $key . '.jpg', null, file_get_contents( $file ) );
+		if ( ! empty( $upload['error'] ) ) {
+			continue;
+		}
+		$attach_id = wp_insert_attachment(
+			array(
+				'post_mime_type' => $upload['type'],
+				'post_title'     => get_the_title( $book ) . ' cover',
+				'post_status'    => 'inherit',
+			),
+			$upload['file'],
+			$book->ID
+		);
+		if ( ! $attach_id || is_wp_error( $attach_id ) ) {
+			continue;
+		}
+		wp_update_attachment_metadata( $attach_id, wp_generate_attachment_metadata( $attach_id, $upload['file'] ) );
+		set_post_thumbnail( $book->ID, $attach_id );
+		$ccount++;
+	}
+	update_option( 'wh_seeded_book_covers', 1 );
+	if ( class_exists( 'WP_CLI' ) ) {
+		WP_CLI::log( "[seed] Attached {$ccount} book covers." );
+	}
+} elseif ( class_exists( 'WP_CLI' ) ) {
+	WP_CLI::log( '[seed] Book covers already attached — skipping.' );
+}

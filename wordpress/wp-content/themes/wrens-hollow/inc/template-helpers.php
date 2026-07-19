@@ -174,20 +174,14 @@ function wh_book( $key ) {
 }
 
 /**
- * Cover image URL for a book: the ACF cover_image field, else the theme cover
- * asset at /images/covers/{book_key}.jpg.
+ * Cover image URL for a book: the Featured Image ("Book cover" box), else the
+ * theme cover asset at /images/covers/{book_key}.jpg.
  */
 function wh_book_cover( $book ) {
-	if ( function_exists( 'get_field' ) ) {
-		$img = get_field( 'cover_image', $book->ID );
-		if ( is_array( $img ) && ! empty( $img['url'] ) ) {
-			return $img['url'];
-		}
-		if ( is_numeric( $img ) ) {
-			return wp_get_attachment_image_url( $img, 'full' );
-		}
-		if ( is_string( $img ) && '' !== $img ) {
-			return $img;
+	if ( has_post_thumbnail( $book ) ) {
+		$url = get_the_post_thumbnail_url( $book, 'full' );
+		if ( $url ) {
+			return $url;
 		}
 	}
 	$key = get_post_meta( $book->ID, 'book_key', true );

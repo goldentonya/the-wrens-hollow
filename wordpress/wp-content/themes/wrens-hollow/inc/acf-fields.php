@@ -195,12 +195,20 @@ function wrens_hollow_register_acf_fields() {
 			'key'      => 'group_wh_book',
 			'title'    => 'Book details',
 			'fields'   => array(
+
+				// ---- Tab: Basics ----
+				array(
+					'key'       => 'field_wh_book_tab_basics',
+					'label'     => 'Basics',
+					'type'      => 'tab',
+					'placement' => 'top',
+				),
 				array(
 					'key'          => 'field_wh_book_key',
 					'label'        => 'Page key (slug)',
 					'name'         => 'book_key',
 					'type'         => 'text',
-					'instructions' => 'The slug of this book\'s detail page, e.g. "veilfall". Used to link the library card to the book page and to find the fallback cover image.',
+					'instructions' => 'The slug of this book\'s page, e.g. "veilfall". This links the book to its page and its cover. For a brand-new book, set this to match the new page\'s URL slug.',
 					'required'     => 1,
 				),
 				array(
@@ -224,38 +232,68 @@ function wrens_hollow_register_acf_fields() {
 					'instructions'  => 'Order within the series (1, 2, 3…).',
 					'default_value' => 1,
 				),
+
+				// ---- Tab: Books-page card ----
+				array(
+					'key'       => 'field_wh_book_tab_card',
+					'label'     => 'Books-page card',
+					'type'      => 'tab',
+					'placement' => 'top',
+				),
+				array(
+					'key'     => 'field_wh_book_msg_card',
+					'label'   => '',
+					'name'    => '',
+					'type'    => 'message',
+					'message' => 'These fields appear on the main **Books** library page — the small card for this book. (The cover image comes from the “Book cover” box on the right.)',
+				),
 				array(
 					'key'          => 'field_wh_book_grid_tag',
-					'label'        => 'Library card tag',
+					'label'        => 'Card tag',
 					'name'         => 'grid_tag',
 					'type'         => 'text',
 					'instructions' => 'Small label on the Books-page card, e.g. "Book 1 · Available now" or "Book 2 · Coming soon".',
 				),
 				array(
 					'key'          => 'field_wh_book_grid_blurb',
-					'label'        => 'Library card blurb',
+					'label'        => 'Card blurb',
 					'name'         => 'grid_blurb',
 					'type'         => 'textarea',
 					'instructions' => 'Short description shown on the Books-page card.',
 					'rows'         => 3,
 				),
+
+				// ---- Tab: This book's own page ----
+				array(
+					'key'       => 'field_wh_book_tab_page',
+					'label'     => "This book's own page",
+					'type'      => 'tab',
+					'placement' => 'top',
+				),
+				array(
+					'key'     => 'field_wh_book_msg_page',
+					'label'   => '',
+					'name'    => '',
+					'type'    => 'message',
+					'message' => 'These fields appear on this book’s **own page** (e.g. /veilfall/). The title comes from the “Title” box at the top; the cover comes from the “Book cover” box on the right.',
+				),
 				array(
 					'key'          => 'field_wh_book_hero_tag',
-					'label'        => 'Detail page — hero tag',
+					'label'        => 'Hero tag',
 					'name'         => 'hero_tag',
 					'type'         => 'text',
-					'instructions' => 'Small label at the top of the book\'s own page hero, e.g. "Book 1 · Available now".',
+					'instructions' => 'Small label at the top of the hero, e.g. "Book 1 · Available now".',
 				),
 				array(
 					'key'          => 'field_wh_book_hero_lede',
-					'label'        => 'Detail page — header tagline',
+					'label'        => 'Header tagline',
 					'name'         => 'hero_lede',
 					'type'         => 'text',
 					'instructions' => 'One-line tagline under the title in the dark header, e.g. "Some secrets are worth the hangover.".',
 				),
 				array(
 					'key'          => 'field_wh_book_hero_blurb',
-					'label'        => 'Detail page — hero paragraph',
+					'label'        => 'Hero paragraph',
 					'name'         => 'hero_blurb',
 					'type'         => 'textarea',
 					'instructions' => 'The paragraph beside the cover in the pink hero section.',
@@ -263,21 +301,12 @@ function wrens_hollow_register_acf_fields() {
 				),
 				array(
 					'key'          => 'field_wh_book_about_body',
-					'label'        => 'Detail page — About the book',
+					'label'        => 'About the book',
 					'name'         => 'about_body',
 					'type'         => 'wysiwyg',
 					'instructions' => 'The full "About the book" description. You can use bold, italics, and links here.',
 					'media_upload' => 0,
 					'tabs'         => 'all',
-				),
-				array(
-					'key'          => 'field_wh_book_cover',
-					'label'        => 'Cover image',
-					'name'         => 'cover_image',
-					'type'         => 'image',
-					'instructions' => 'Book cover. If left empty, the theme falls back to /images/covers/{page key}.jpg.',
-					'return_format'=> 'array',
-					'preview_size' => 'medium',
 				),
 			),
 			'location' => array(
