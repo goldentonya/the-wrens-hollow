@@ -92,6 +92,17 @@ function wrens_hollow_register_acf_fields() {
 					'instructions' => 'Where the review came from, e.g. "Goodreads", "Amazon", "@reads.with.casey, TikTok". Shown after the em dash.',
 					'required'     => 0,
 				),
+				array(
+					'key'           => 'field_wh_review_book',
+					'label'         => "Show on this book's page (optional)",
+					'name'          => 'review_book',
+					'type'          => 'post_object',
+					'instructions'  => 'Leave empty to show this review in the homepage carousel. Choose a book to show it on that book\'s page instead.',
+					'post_type'     => array( 'wh_book' ),
+					'return_format' => 'id',
+					'allow_null'    => 1,
+					'ui'            => 1,
+				),
 			),
 			'location' => array(
 				array(

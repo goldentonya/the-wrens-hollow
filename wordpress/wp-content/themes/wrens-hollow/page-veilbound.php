@@ -83,7 +83,14 @@ $wh_book_id = $wh_book ? $wh_book->ID : false;
 <section class="sec sec--cream sec--dashed-top">
   <div class="wrap sec--center">
     <p class="eyebrow" style="margin-bottom:12px;">What readers are saying</p>
+    <?php $wh_book_reviews = $wh_book_id ? wh_reviews_for_book( $wh_book_id ) : array(); ?>
+    <?php if ( $wh_book_reviews ) : ?>
+    <div class="grid-2">
+      <?php foreach ( $wh_book_reviews as $wh_review ) { wh_render_review_card( $wh_review ); } ?>
+    </div>
+    <?php else : ?>
     <p class="txt" style="max-width:440px;margin:0 auto;">Reviews will show up here once Veilbound is out in the world — check back after release!</p>
+    <?php endif; ?>
   </div>
 </section>
 

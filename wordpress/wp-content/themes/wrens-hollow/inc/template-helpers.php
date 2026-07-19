@@ -222,8 +222,38 @@ function wh_render_book_showcase( $book ) {
 
 /**
  * Published Review posts, in menu order then oldest-first (stable carousel order).
+ * Reviews assigned to a specific book (review_book) are excluded — those show on
+ * that book's page instead, via wh_reviews_for_book().
  */
 function wh_reviews() {
+	$posts = get_posts(
+		array(
+			'post_type'      => 'wh_review',
+			'posts_per_page' => -1,
+			'post_status'    => 'publish',
+			'orderby'        => array(
+				'menu_order' => 'ASC',
+				'date'       => 'ASC',
+			),
+		)
+	);
+	return array_values(
+		array_filter(
+			$posts,
+			function ( $p ) {
+				return ! get_post_meta( $p->ID, 'review_book', true );
+			}
+		)
+	);
+}
+
+/**
+ * Published Review posts assigned to a given book (by book post ID).
+ */
+function wh_reviews_for_book( $book_id ) {
+	if ( ! $book_id ) {
+		return array();
+	}
 	return get_posts(
 		array(
 			'post_type'      => 'wh_review',
@@ -233,6 +263,8 @@ function wh_reviews() {
 				'menu_order' => 'ASC',
 				'date'       => 'ASC',
 			),
+			'meta_key'       => 'review_book',
+			'meta_value'     => $book_id,
 		)
 	);
 }

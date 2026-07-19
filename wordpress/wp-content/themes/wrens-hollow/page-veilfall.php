@@ -91,18 +91,14 @@ $wh_book_id = $wh_book ? $wh_book->ID : false;
 <section class="sec sec--cream sec--dashed-top">
   <div class="wrap">
     <p class="eyebrow" style="text-align:center;margin-bottom:28px;">What readers are saying</p>
+    <?php $wh_book_reviews = $wh_book_id ? wh_reviews_for_book( $wh_book_id ) : array(); ?>
+    <?php if ( $wh_book_reviews ) : ?>
     <div class="grid-2">
-      <div class="card review-card">
-        <p class="stars">★★★★★</p>
-        <p class="txt">The world-building is gorgeous.</p>
-        <p class="source">— Reader review</p>
-      </div>
-      <div class="card review-card">
-        <p class="stars">★★★★★</p>
-        <p class="txt">Give me book one already!</p>
-        <p class="source">— Reader review</p>
-      </div>
+      <?php foreach ( $wh_book_reviews as $wh_review ) { wh_render_review_card( $wh_review ); } ?>
     </div>
+    <?php else : ?>
+    <p class="txt" style="max-width:440px;margin:0 auto;text-align:center;">Reviews will show up here soon — check back!</p>
+    <?php endif; ?>
   </div>
 </section>
 

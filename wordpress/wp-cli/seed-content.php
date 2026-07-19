@@ -258,3 +258,48 @@ HTML,
 } elseif ( class_exists( 'WP_CLI' ) ) {
 	WP_CLI::log( '[seed] Books already seeded — skipping.' );
 }
+
+/** Seed the per-book reviews once (assigned to a book via review_book). */
+if ( ! get_option( 'wh_seeded_book_reviews' ) && function_exists( 'wh_book' ) ) {
+	$book_reviews = array(
+		'veilfall'            => array(
+			array( 'quote' => 'The world-building is gorgeous.', 'source' => 'Reader review' ),
+			array( 'quote' => 'Give me book one already!', 'source' => 'Reader review' ),
+		),
+		'whiskey-and-secrets' => array(
+			array( 'quote' => 'Sharp, funny, and it wrecked me in the best way.', 'source' => 'Reader review' ),
+			array( 'quote' => 'I need Book 3 immediately.', 'source' => 'Reader review' ),
+		),
+	);
+
+	$brcount = 0;
+	foreach ( $book_reviews as $book_key => $revs ) {
+		$book = wh_book( $book_key );
+		if ( ! $book ) {
+			continue;
+		}
+		foreach ( $revs as $i => $rv ) {
+			$post_id = wp_insert_post(
+				array(
+					'post_type'   => 'wh_review',
+					'post_title'  => $rv['quote'],
+					'post_status' => 'publish',
+					'menu_order'  => $i,
+				)
+			);
+			if ( $post_id && ! is_wp_error( $post_id ) ) {
+				update_field( 'review_source', $rv['source'], $post_id );
+				update_field( 'review_book', $book->ID, $post_id );
+				$brcount++;
+			}
+		}
+	}
+
+	update_option( 'wh_seeded_book_reviews', 1 );
+
+	if ( class_exists( 'WP_CLI' ) ) {
+		WP_CLI::log( "[seed] Created {$brcount} book reviews." );
+	}
+} elseif ( class_exists( 'WP_CLI' ) ) {
+	WP_CLI::log( '[seed] Book reviews already seeded — skipping.' );
+}
