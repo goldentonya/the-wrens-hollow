@@ -118,6 +118,109 @@ function wh_events( $which = 'past' ) {
 }
 
 /**
+ * Human-readable label for a book series slug.
+ */
+function wh_series_label( $slug ) {
+	$map = array(
+		'whiskey-tango-foxtrot' => 'Whiskey Tango Foxtrot',
+		'veiled-prophecy'       => 'The Veiled Prophecy',
+	);
+	return isset( $map[ $slug ] ) ? $map[ $slug ] : '';
+}
+
+/**
+ * Published Book posts, optionally filtered to one series, ordered by book
+ * number. Sorted in PHP so a book missing its number still appears (sorts last).
+ */
+function wh_books( $series = null ) {
+	$posts = get_posts(
+		array(
+			'post_type'      => 'wh_book',
+			'posts_per_page' => -1,
+			'post_status'    => 'publish',
+		)
+	);
+	if ( $series ) {
+		$posts = array_filter(
+			$posts,
+			function ( $p ) use ( $series ) {
+				return $series === get_post_meta( $p->ID, 'series', true );
+			}
+		);
+	}
+	usort(
+		$posts,
+		function ( $a, $b ) {
+			return (int) get_post_meta( $a->ID, 'book_number', true ) <=> (int) get_post_meta( $b->ID, 'book_number', true );
+		}
+	);
+	return array_values( $posts );
+}
+
+/**
+ * Single Book post by its page key (slug), or null.
+ */
+function wh_book( $key ) {
+	$posts = get_posts(
+		array(
+			'post_type'      => 'wh_book',
+			'posts_per_page' => 1,
+			'post_status'    => 'publish',
+			'meta_key'       => 'book_key',
+			'meta_value'     => $key,
+		)
+	);
+	return $posts ? $posts[0] : null;
+}
+
+/**
+ * Cover image URL for a book: the ACF cover_image field, else the theme cover
+ * asset at /images/covers/{book_key}.jpg.
+ */
+function wh_book_cover( $book ) {
+	if ( function_exists( 'get_field' ) ) {
+		$img = get_field( 'cover_image', $book->ID );
+		if ( is_array( $img ) && ! empty( $img['url'] ) ) {
+			return $img['url'];
+		}
+		if ( is_numeric( $img ) ) {
+			return wp_get_attachment_image_url( $img, 'full' );
+		}
+		if ( is_string( $img ) && '' !== $img ) {
+			return $img;
+		}
+	}
+	$key = get_post_meta( $book->ID, 'book_key', true );
+	return get_template_directory_uri() . '/images/covers/' . $key . '.jpg';
+}
+
+/**
+ * Render one Books-page library card, matching the existing .book-showcase markup.
+ */
+function wh_render_book_showcase( $book ) {
+	$key   = get_post_meta( $book->ID, 'book_key', true );
+	$tag   = wh_field( 'grid_tag', '', $book->ID );
+	$blurb = wh_field( 'grid_blurb', '', $book->ID );
+	$cover = wh_book_cover( $book );
+	$url   = home_url( '/' . $key . '/' );
+	?>
+	<div class="card book-showcase">
+	  <div class="ph-box"><img src="<?php echo esc_url( $cover ); ?>" alt="<?php echo esc_attr( get_the_title( $book ) ); ?> book cover" style="width:100%;height:100%;object-fit:cover;border-radius:6px;"></div>
+	  <div class="book-showcase__body">
+	    <?php if ( $tag ) : ?>
+	      <p class="book-card__tag"><?php echo esc_html( $tag ); ?></p>
+	    <?php endif; ?>
+	    <h3><?php echo esc_html( get_the_title( $book ) ); ?></h3>
+	    <?php if ( $blurb ) : ?>
+	      <p class="txt"><?php echo esc_html( $blurb ); ?></p>
+	    <?php endif; ?>
+	    <a class="btn" href="<?php echo esc_url( $url ); ?>">View this book →</a>
+	  </div>
+	</div>
+	<?php
+}
+
+/**
  * Published Review posts, in menu order then oldest-first (stable carousel order).
  */
 function wh_reviews() {

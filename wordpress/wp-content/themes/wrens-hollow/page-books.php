@@ -27,24 +27,7 @@ get_header();
     <p class="txt" style="max-width:600px;margin-bottom:24px;">Sharp banter, real heartbreak, and women who don't back down.</p>
 
     <div class="book-list">
-      <div class="card book-showcase">
-        <div class="ph-box"><img src="<?php echo esc_url( get_template_directory_uri() . '/images/covers/whiskey-and-secrets.jpg' ); ?>" alt="Whiskey &amp; Secrets book cover" style="width:100%;height:100%;object-fit:cover;border-radius:6px;"></div>
-        <div class="book-showcase__body">
-          <p class="book-card__tag">Book 1 · Available now</p>
-          <h3>Whiskey &amp; Secrets</h3>
-          <p class="txt">Some secrets are worth the hangover. Fierce, funny, unforgettable contemporary romance — sharp banter, real heartbreak, and a heroine who doesn't back down.</p>
-          <a class="btn" href="<?php echo esc_url( home_url( '/whiskey-and-secrets/' ) ); ?>">View this book →</a>
-        </div>
-      </div>
-      <div class="card book-showcase">
-        <div class="ph-box"><img src="<?php echo esc_url( get_template_directory_uri() . '/images/covers/whiskey-and-lies.jpg' ); ?>" alt="Whiskey &amp; Lies book cover" style="width:100%;height:100%;object-fit:cover;border-radius:6px;"></div>
-        <div class="book-showcase__body">
-          <p class="book-card__tag">Book 2 · Available now</p>
-          <h3>Whiskey &amp; Lies</h3>
-          <p class="txt">Every relationship has a few secrets. Hers might be unforgivable. Includes bonus chapters for readers who finish the book.</p>
-          <a class="btn" href="<?php echo esc_url( home_url( '/whiskey-and-lies/' ) ); ?>">View this book →</a>
-        </div>
-      </div>
+      <?php foreach ( wh_books( 'whiskey-tango-foxtrot' ) as $wh_book_post ) { wh_render_book_showcase( $wh_book_post ); } ?>
     </div>
   </div>
 </section>
@@ -58,24 +41,7 @@ get_header();
     <p class="txt" style="max-width:600px;margin-bottom:24px;">A world of secrets, prophecy, and dangerous love.</p>
 
     <div class="book-list">
-      <div class="card book-showcase">
-        <div class="ph-box"><img src="<?php echo esc_url( get_template_directory_uri() . '/images/covers/veilfall.jpg' ); ?>" alt="Veilfall book cover" style="width:100%;height:100%;object-fit:cover;object-position:top;border-radius:6px;"></div>
-        <div class="book-showcase__body">
-          <p class="book-card__tag">Book 1 · Free</p>
-          <h3>Veilfall</h3>
-          <p class="txt">She thought she was human. The fae realm knows better. Start Veralyn's story with this dark fae fantasy romance.</p>
-          <a class="btn" href="<?php echo esc_url( home_url( '/veilfall/' ) ); ?>">View this book →</a>
-        </div>
-      </div>
-      <div class="card book-showcase">
-        <div class="ph-box"><img src="<?php echo esc_url( get_template_directory_uri() . '/images/covers/veilbound.jpg' ); ?>" alt="Veilbound book cover" style="width:100%;height:100%;object-fit:cover;border-radius:6px;"></div>
-        <div class="book-showcase__body">
-          <p class="book-card__tag">Book 2 · Coming soon</p>
-          <h3>Veilbound</h3>
-          <p class="txt">The next chapter in the Kingdom of Sylvaeris saga — the fate of the kingdom, and her heart, hangs in the balance.</p>
-          <a class="btn" href="<?php echo esc_url( home_url( '/veilbound/' ) ); ?>">View this book →</a>
-        </div>
-      </div>
+      <?php foreach ( wh_books( 'veiled-prophecy' ) as $wh_book_post ) { wh_render_book_showcase( $wh_book_post ); } ?>
     </div>
   </div>
 </section>

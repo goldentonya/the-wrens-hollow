@@ -141,3 +141,120 @@ if ( ! get_option( 'wh_seeded_reviews' ) ) {
 } elseif ( class_exists( 'WP_CLI' ) ) {
 	WP_CLI::log( '[seed] Reviews already seeded — skipping.' );
 }
+
+/** Seed Books once (library grid + detail-page copy). */
+if ( ! get_option( 'wh_seeded_books' ) ) {
+	$books = array(
+		array(
+			'title'      => 'Veilfall',
+			'key'        => 'veilfall',
+			'series'     => 'veiled-prophecy',
+			'number'     => 1,
+			'grid_tag'   => 'Book 1 · Free',
+			'grid_blurb' => "She thought she was human. The fae realm knows better. Start Veralyn's story with this dark fae fantasy romance.",
+			'hero_tag'   => 'Book 1 · Available now',
+			'hero_lede'  => 'Step into the Kingdom of Sylvaeris.',
+			'hero_blurb' => "She was hidden in the human realm to stay safe. But magic has a way of finding what was never meant to be forgotten. Start Veralyn's story with this dark fae fantasy romance.",
+			'about'      => <<<'HTML'
+<p>She was hidden in the human realm to stay safe. But magic has a way of finding what was never meant to be forgotten.</p>
+<p>Veralyn spent her whole life believing she was ordinary, until the night everything changed. When her parents are killed, the truth shatters through her carefully built world: she's not human. She's fae. And not just any fae, she's bound to a prophecy that could alter the future of the entire realm. Forced to return to Sylvaeris she attends Auravale Academy.</p>
+<p>Auravale Academy is a school for the elite and powerful. Vera must confront a world she was never meant to leave… and powers she doesn't yet understand.</p>
+<p>Caelum Thornevale, Prince of the realm and heir to the throne, is used to having control. But when he crosses paths with Vera everything changes.</p>
+<p>As her magic awakens, so do old enemies and forgotten secrets. In a kingdom on the brink of war, fate is not a choice.</p>
+<p><em>But love might be.</em></p>
+<p><a href="/shop/#veilfall">Find the Paperback available here!</a></p>
+<p>The Ebook is available on Kindle Unlimited!</p>
+HTML,
+		),
+		array(
+			'title'      => 'Veilbound',
+			'key'        => 'veilbound',
+			'series'     => 'veiled-prophecy',
+			'number'     => 2,
+			'grid_tag'   => 'Book 2 · Coming soon',
+			'grid_blurb' => 'The next chapter in the Kingdom of Sylvaeris saga — the fate of the kingdom, and her heart, hangs in the balance.',
+			'hero_tag'   => 'Book 2 · Coming soon',
+			'hero_lede'  => 'The fate of the kingdom — and her heart — hangs in the balance.',
+			'hero_blurb' => 'The next chapter in the Kingdom of Sylvaeris saga, picking up where Veilfall leaves off.',
+			'about'      => <<<'HTML'
+<p>In Veilfall, Veralyn's world shattered when her parents were murdered and she was forced to return to the fae realm she never knew was hers. Hidden in the human world to protect her from a prophecy foretelling her death, Vera was thrust into Auravale Academy and the dangerous ranks of the Veilbound Order — where enemies watch from the shadows.</p>
+<p>In Veilbound, Vera's magic fully awakens during the Veilfall Festival, revealing gifts tied not only to the fae realm, but to the first Fae Queen herself. As her power deepens, so do the mysteries surrounding her fate, including unexpected connections to a vampire and a wolf shifter she was never meant to meet.</p>
+<p>Caelum Thornevale, Prince of Sylvaeris and heir to all the fae lands, refuses to let Vera face her destiny alone. Bound by a fated mate bond that Vera continues to resist, Caelum fights to protect her—even as she pushes him away to shield him from a future where she may not survive.</p>
+<p>With love that could destroy her and a prophecy counting down her remaining time, Vera must decide whether protecting her heart is worth losing everything else.</p>
+<p><em>Veilbound is a romantic fae fantasy filled with prophecy, ancient magic, fated mates, and a love that refuses to be denied.</em></p>
+<p><strong>Coming Fall 2026!</strong></p>
+HTML,
+		),
+		array(
+			'title'      => 'Whiskey & Secrets',
+			'key'        => 'whiskey-and-secrets',
+			'series'     => 'whiskey-tango-foxtrot',
+			'number'     => 1,
+			'grid_tag'   => 'Book 1 · Available now',
+			'grid_blurb' => "Some secrets are worth the hangover. Fierce, funny, unforgettable contemporary romance — sharp banter, real heartbreak, and a heroine who doesn't back down.",
+			'hero_tag'   => 'Book 1 · Available now',
+			'hero_lede'  => 'Some secrets are worth the hangover.',
+			'hero_blurb' => "Fierce, funny, unforgettable contemporary romance — sharp banter, real heartbreak, and a heroine who doesn't back down. Whiskey & Secrets kicks off the Whiskey Tango Foxtrot series with the kind of love that hits like a shot and lingers like the good stuff.",
+			'about'      => <<<'HTML'
+<p>When biological anthropology grad student Sarah agrees to lead a research expedition in the Amazon Rainforest, she never expected to need military protection — let alone from Wade "Wraith" Blakely, the stoic, enigmatic former Green Beret who's been assigned to keep her team safe.</p>
+<p>Wade is used to dangerous missions, but babysitting scientists wasn't what he signed up for. Until one of them goes missing, and secrets buried deep in the jungle — and in Sarah's past — begin to surface. As the threat around them escalates, so does the undeniable pull between Sarah and Wade. But trusting each other might be their only way out alive.</p>
+<p><a href="/shop/#whiskey-and-secrets">Find the paperback available here →</a></p>
+<p>The ebook will be available on Kindle Unlimited!</p>
+<p><em>Readers are loving Whiskey &amp; Secrets! With an average rating of 4.5 stars on Goodreads, fans are praising its mix of adventure, romance, and suspense.</em></p>
+HTML,
+		),
+		array(
+			'title'      => 'Whiskey & Lies',
+			'key'        => 'whiskey-and-lies',
+			'series'     => 'whiskey-tango-foxtrot',
+			'number'     => 2,
+			'grid_tag'   => 'Book 2 · Available now',
+			'grid_blurb' => 'Every relationship has a few secrets. Hers might be unforgivable. Includes bonus chapters for readers who finish the book.',
+			'hero_tag'   => 'Book 2 · Available now',
+			'hero_lede'  => 'Every relationship has a few secrets. Hers might be unforgivable.',
+			'hero_blurb' => "The Whiskey Tango Foxtrot series continues — more sharp banter, more real heartbreak, and a heroine who still won't back down. Whiskey & Lies includes bonus chapters for readers who finish the book.",
+			'about'      => <<<'HTML'
+<p>Jake 'Glitch' Thompson came home from the military with more scars than he admits—some you can see, and some you can't. Drifting between ghosts of old missions, his old life and a future he's not sure he deserves, the only thing keeping him grounded is the woman who stole his heart.</p>
+<p>Fallon Moore has always been the steady one—sharp, loyal, and burning with a quiet strength that's carried her through hell. She swore she'd never let love make her weak, but Jake seems to be her exception. And when Jake does something to chase her away, the pull between them is impossible to ignore.</p>
+<p>But their second chance doesn't come easy. Shadows from Fallon's past and the people who want to exploit them, close in fast. Jake isn't just fighting for the man he loves; he's fighting for the life they could have together.</p>
+<p>With bullets flying and secrets unraveling, Jake will have to decide if he can fight through her ghosts… and will risk everything to prove that home isn't a place. It's the person you'd burn the world for.</p>
+<p><em>A gripping romance of loyalty, danger, and the kind of love that survives the wreckage.</em></p>
+<p><a href="/shop/#whiskey-and-lies">Find the paperback available here →</a></p>
+<p><strong>Available: May 28, 2026</strong></p>
+<p>The Ebook will be available on Kindle Unlimited!</p>
+HTML,
+		),
+	);
+
+	$bcount = 0;
+	foreach ( $books as $bk ) {
+		$post_id = wp_insert_post(
+			array(
+				'post_type'   => 'wh_book',
+				'post_title'  => $bk['title'],
+				'post_status' => 'publish',
+				'menu_order'  => $bk['number'],
+			)
+		);
+		if ( $post_id && ! is_wp_error( $post_id ) ) {
+			update_field( 'book_key', $bk['key'], $post_id );
+			update_field( 'series', $bk['series'], $post_id );
+			update_field( 'book_number', $bk['number'], $post_id );
+			update_field( 'grid_tag', $bk['grid_tag'], $post_id );
+			update_field( 'grid_blurb', $bk['grid_blurb'], $post_id );
+			update_field( 'hero_tag', $bk['hero_tag'], $post_id );
+			update_field( 'hero_lede', $bk['hero_lede'], $post_id );
+			update_field( 'hero_blurb', $bk['hero_blurb'], $post_id );
+			update_field( 'about_body', $bk['about'], $post_id );
+			$bcount++;
+		}
+	}
+
+	update_option( 'wh_seeded_books', 1 );
+
+	if ( class_exists( 'WP_CLI' ) ) {
+		WP_CLI::log( "[seed] Created {$bcount} books." );
+	}
+} elseif ( class_exists( 'WP_CLI' ) ) {
+	WP_CLI::log( '[seed] Books already seeded — skipping.' );
+}

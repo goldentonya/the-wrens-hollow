@@ -110,5 +110,117 @@ function wrens_hollow_register_acf_fields() {
 			'hide_on_screen' => array( 'the_content' ),
 		)
 	);
+
+	// --- Book fields (attached to the wh_book post type) ---
+	// The post Title is the book title. These fields drive the Books library
+	// grid and the core editable copy on each book's detail page. Bespoke
+	// detail-page sections (buy buttons, opt-in forms, etc.) stay in templates.
+	acf_add_local_field_group(
+		array(
+			'key'      => 'group_wh_book',
+			'title'    => 'Book details',
+			'fields'   => array(
+				array(
+					'key'          => 'field_wh_book_key',
+					'label'        => 'Page key (slug)',
+					'name'         => 'book_key',
+					'type'         => 'text',
+					'instructions' => 'The slug of this book\'s detail page, e.g. "veilfall". Used to link the library card to the book page and to find the fallback cover image.',
+					'required'     => 1,
+				),
+				array(
+					'key'           => 'field_wh_book_series',
+					'label'         => 'Series',
+					'name'          => 'series',
+					'type'          => 'select',
+					'instructions'  => 'Which series this book belongs to (groups it on the Books page).',
+					'choices'       => array(
+						'whiskey-tango-foxtrot' => 'Whiskey Tango Foxtrot',
+						'veiled-prophecy'       => 'The Veiled Prophecy',
+					),
+					'allow_null'    => 1,
+					'return_format' => 'value',
+				),
+				array(
+					'key'           => 'field_wh_book_number',
+					'label'         => 'Book number in series',
+					'name'          => 'book_number',
+					'type'          => 'number',
+					'instructions'  => 'Order within the series (1, 2, 3…).',
+					'default_value' => 1,
+				),
+				array(
+					'key'          => 'field_wh_book_grid_tag',
+					'label'        => 'Library card tag',
+					'name'         => 'grid_tag',
+					'type'         => 'text',
+					'instructions' => 'Small label on the Books-page card, e.g. "Book 1 · Available now" or "Book 2 · Coming soon".',
+				),
+				array(
+					'key'          => 'field_wh_book_grid_blurb',
+					'label'        => 'Library card blurb',
+					'name'         => 'grid_blurb',
+					'type'         => 'textarea',
+					'instructions' => 'Short description shown on the Books-page card.',
+					'rows'         => 3,
+				),
+				array(
+					'key'          => 'field_wh_book_hero_tag',
+					'label'        => 'Detail page — hero tag',
+					'name'         => 'hero_tag',
+					'type'         => 'text',
+					'instructions' => 'Small label at the top of the book\'s own page hero, e.g. "Book 1 · Available now".',
+				),
+				array(
+					'key'          => 'field_wh_book_hero_lede',
+					'label'        => 'Detail page — header tagline',
+					'name'         => 'hero_lede',
+					'type'         => 'text',
+					'instructions' => 'One-line tagline under the title in the dark header, e.g. "Some secrets are worth the hangover.".',
+				),
+				array(
+					'key'          => 'field_wh_book_hero_blurb',
+					'label'        => 'Detail page — hero paragraph',
+					'name'         => 'hero_blurb',
+					'type'         => 'textarea',
+					'instructions' => 'The paragraph beside the cover in the pink hero section.',
+					'rows'         => 4,
+				),
+				array(
+					'key'          => 'field_wh_book_about_body',
+					'label'        => 'Detail page — About the book',
+					'name'         => 'about_body',
+					'type'         => 'wysiwyg',
+					'instructions' => 'The full "About the book" description. You can use bold, italics, and links here.',
+					'media_upload' => 0,
+					'tabs'         => 'all',
+				),
+				array(
+					'key'          => 'field_wh_book_cover',
+					'label'        => 'Cover image',
+					'name'         => 'cover_image',
+					'type'         => 'image',
+					'instructions' => 'Book cover. If left empty, the theme falls back to /images/covers/{page key}.jpg.',
+					'return_format'=> 'array',
+					'preview_size' => 'medium',
+				),
+			),
+			'location' => array(
+				array(
+					array(
+						'param'    => 'post_type',
+						'operator' => '==',
+						'value'    => 'wh_book',
+					),
+				),
+			),
+			'menu_order'     => 0,
+			'position'       => 'normal',
+			'style'          => 'default',
+			'active'         => true,
+			'show_in_rest'   => 1,
+			'hide_on_screen' => array( 'the_content' ),
+		)
+	);
 }
 add_action( 'acf/init', 'wrens_hollow_register_acf_fields' );
