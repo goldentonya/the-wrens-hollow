@@ -10,6 +10,15 @@ $wh_product    = $wh_product_id ? wc_get_product( $wh_product_id ) : false;
 ?>
 
 <section class="sec--dark2 series-header">
+  <?php
+  wh_breadcrumbs(
+  	array(
+  		array( 'label' => 'Books', 'url' => home_url( '/books/' ) ),
+  		array( 'label' => 'Whiskey Tango Foxtrot', 'url' => home_url( '/whiskey-tango-foxtrot/' ) ),
+  		array( 'label' => 'Whiskey & Lies' ),
+  	)
+  );
+  ?>
   <div class="wrap" style="max-width:560px;">
     <p class="eyebrow eyebrow--on-dark">Whiskey Tango Foxtrot · Book 2</p>
     <h1 class="h-lg" style="color:#fff;">Whiskey &amp; Lies</h1>

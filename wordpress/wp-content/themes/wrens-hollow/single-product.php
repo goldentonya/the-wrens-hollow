@@ -50,7 +50,16 @@ while ( have_posts() ) :
 	}
 	?>
 
-	<section class="sec sec--pink">
+	<section class="sec sec--pink" style="position:relative;padding-top:104px;">
+		<?php
+		wh_breadcrumbs(
+			array(
+				array( 'label' => 'Shop', 'url' => function_exists( 'wc_get_page_permalink' ) ? wc_get_page_permalink( 'shop' ) : home_url( '/shop/' ) ),
+				array( 'label' => $wh_title ),
+			),
+			'light'
+		);
+		?>
 		<div class="wrap">
 			<div class="product-single" id="product-<?php the_ID(); ?>">
 

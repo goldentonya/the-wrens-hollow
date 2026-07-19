@@ -37,11 +37,11 @@ $wh_books_active = in_array( $wh_nav_active, array( 'books', 'read-free', 'wtf' 
 <header class="site-header">
   <div class="wrap nav">
     <a class="nav__brand" href="<?php echo esc_url( home_url( '/' ) ); ?>">
-      <span class="nav__mark">AW</span>
-      <span class="nav__word">
-        <span class="nav__title">THE WREN'S HOLLOW</span>
-        <span class="nav__sub">Ali Wren · Author</span>
-      </span>
+      <img class="nav__logo" src="<?php echo esc_url( get_template_directory_uri() . '/images/photos/ali-wren-logo-mark.png' ); ?>" alt="Ali Wren logo" width="700" height="290">
+    </a>
+    <a class="nav__word" href="<?php echo esc_url( home_url( '/' ) ); ?>">
+      <span class="nav__title">THE WREN'S HOLLOW</span>
+      <span class="nav__sub">Ali Wren · Author</span>
     </a>
     <button class="nav__toggle" id="navToggle" aria-expanded="false" aria-controls="navLinks" aria-label="Toggle menu">
       <span></span><span></span><span></span>
@@ -66,11 +66,11 @@ $wh_books_active = in_array( $wh_nav_active, array( 'books', 'read-free', 'wtf' 
           </div>
         </div>
       </div>
-      <a class="<?php echo esc_attr( wh_nav_class( 'shop', $wh_nav_active ) ); ?>" href="<?php echo esc_url( function_exists( 'wc_get_page_permalink' ) ? wc_get_page_permalink( 'shop' ) : home_url( '/shop/' ) ); ?>">Shop</a>
       <a class="<?php echo esc_attr( wh_nav_class( 'about', $wh_nav_active ) ); ?>" href="<?php echo esc_url( home_url( '/about/' ) ); ?>">About</a>
+      <a class="<?php echo esc_attr( wh_nav_class( 'shop', $wh_nav_active ) ); ?>" href="<?php echo esc_url( function_exists( 'wc_get_page_permalink' ) ? wc_get_page_permalink( 'shop' ) : home_url( '/shop/' ) ); ?>">Shop</a>
       <a class="<?php echo esc_attr( wh_nav_class( 'horizon', $wh_nav_active ) ); ?>" href="<?php echo esc_url( home_url( '/on-the-horizon/' ) ); ?>">On the Horizon</a>
       <a class="<?php echo esc_attr( wh_nav_class( 'events', $wh_nav_active ) ); ?>" href="<?php echo esc_url( home_url( '/events-appearances/' ) ); ?>">Events</a>
-      <a class="nav__link nav__cart" href="<?php echo esc_url( $wh_cart_url ); ?>" aria-label="Cart">🛒<span class="nav__cart-count" id="cartCount"><?php echo intval( $wh_cart_count ); ?></span></a>
+      <a class="nav__link nav__cart" href="<?php echo esc_url( $wh_cart_url ); ?>" aria-label="Cart">🛒<span class="nav__cart-count<?php echo $wh_cart_count > 0 ? '' : ' is-empty'; ?>" id="cartCount"><?php echo intval( $wh_cart_count ); ?></span></a>
     </nav>
   </div>
 </header>

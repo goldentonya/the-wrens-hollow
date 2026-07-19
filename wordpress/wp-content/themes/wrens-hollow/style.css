@@ -135,24 +135,18 @@ h1, h2, h3 { margin: 0; font-family: var(--font-display); color: var(--text-head
   border-bottom: 1px solid var(--divider);
 }
 .nav {
-  display: flex;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
   align-items: center;
-  justify-content: space-between;
+  gap: 16px;
   padding: 14px 0;
 }
-.nav__brand { display: flex; align-items: center; gap: 12px; }
-.nav__mark {
-  width: 40px; height: 40px; flex: none;
-  border-radius: 50%;
-  background: var(--plum);
-  color: #fff;
-  display: flex; align-items: center; justify-content: center;
-  font: 700 13px var(--font-display);
-  letter-spacing: .04em;
-}
-.nav__word { display: flex; flex-direction: column; gap: 2px; }
-.nav__title { font: 700 13px/1.1 'Mulish', sans-serif; letter-spacing: .13em; color: var(--text-heading); }
-.nav__sub { font: 400 9px/1 'Mulish', sans-serif; letter-spacing: .13em; text-transform: uppercase; color: var(--text-muted-2); }
+.nav__brand { grid-column: 1; display: flex; align-items: center; }
+.nav__toggle, .nav__links { grid-column: 3; }
+.site-header .nav__logo { height: 42px; width: auto; flex: none; }
+.nav__word { grid-column: 2; justify-self: center; display: flex; flex-direction: column; align-items: center; gap: 2px; text-align: center; }
+.nav__title { font: 700 13px/1.1 'Mulish', sans-serif; letter-spacing: .13em; color: var(--plum-tag); }
+.nav__sub { font: 400 9px/1 'Mulish', sans-serif; letter-spacing: .13em; text-transform: uppercase; color: var(--text-heading); }
 
 .nav__links {
   display: flex;
@@ -172,6 +166,7 @@ h1, h2, h3 { margin: 0; font-family: var(--font-display); color: var(--text-head
   width: 15px; height: 15px;
   display: flex; align-items: center; justify-content: center;
 }
+.nav__cart-count.is-empty { display: none; }
 
 .nav__toggle {
   display: none;
@@ -253,6 +248,58 @@ h1, h2, h3 { margin: 0; font-family: var(--font-display); color: var(--text-head
 }
 
 /* ============================================================
+   Breadcrumbs — a floating chip overlaid on the hero/masthead of
+   subpages, not a full-width strip. Positioned absolutely so it
+   costs zero document height and doesn't push hero content (and
+   the fold) down.
+   ============================================================ */
+.breadcrumbs {
+  position: absolute;
+  top: 18px;
+  left: 0;
+  right: 0;
+  z-index: 5;
+  text-align: left;
+  pointer-events: none;
+}
+.breadcrumbs__list {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  pointer-events: auto;
+  padding: 7px 16px;
+  border-radius: 999px;
+  background: rgba(46, 38, 43, .55);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  font: 700 11px 'Mulish', sans-serif;
+  letter-spacing: .02em;
+}
+.breadcrumbs__list li { display: flex; align-items: center; color: var(--text-on-dark); }
+.breadcrumbs__list li:not(:last-child)::after { content: "/"; color: var(--text-on-dark-muted); margin: 0 7px; font-weight: 400; }
+.breadcrumbs__list a { color: var(--text-on-dark); opacity: .8; }
+.breadcrumbs__list a:hover { opacity: 1; color: #fff; }
+.breadcrumbs__list li[aria-current="page"] { color: #fff; }
+
+/* Light variant — for pale sections (e.g. the product page's pink hero)
+   where the dark pill above doesn't fit the surrounding palette. Mirrors
+   the site's existing .chip filter-pill styling. */
+.breadcrumbs--light .breadcrumbs__list {
+  background: var(--field-bg);
+  border: 1px solid var(--card-border);
+}
+.breadcrumbs--light .breadcrumbs__list li { color: var(--text-muted); }
+.breadcrumbs--light .breadcrumbs__list li:not(:last-child)::after { color: var(--text-muted-2); }
+.breadcrumbs--light .breadcrumbs__list a { color: var(--text-muted); opacity: 1; }
+.breadcrumbs--light .breadcrumbs__list a:hover { color: var(--plum); }
+.breadcrumbs--light .breadcrumbs__list li[aria-current="page"] { color: var(--plum-deep); }
+
+@media (max-width: 760px) {
+  .breadcrumbs { top: 12px; }
+  .breadcrumbs__list { padding: 6px 12px; font-size: 10px; }
+}
+
+/* ============================================================
    Sections / tints
    ============================================================ */
 .sec { padding: 64px 0; }
@@ -309,6 +356,130 @@ h3.h-md { font-size: 22px; line-height: 1.25; }
 
 .trust-line { font: 700 11px ui-monospace, Menlo, monospace; letter-spacing: .05em; color: var(--text-muted); margin-top: 16px; }
 .stars { color: var(--star-gold); font-size: 15px; letter-spacing: 2px; }
+
+/* ============================================================
+   Hero banner (Homepage — full-bleed masthead art flowing into a
+   dark CTA band; the seam is hidden by a gradient fade)
+   ============================================================ */
+.hero-banner {
+  position: relative;
+  background: var(--dark);
+  line-height: 0;
+}
+.hero-banner__img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+.hero-banner__fade {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 130px;
+  background: linear-gradient(to bottom, rgba(46,38,43,0), var(--dark));
+  pointer-events: none;
+}
+.hero-cta {
+  background: var(--dark);
+  color: var(--text-on-dark);
+  padding: 30px 0 60px;
+  text-align: center;
+}
+.hero-cta__title {
+  color: #fff;
+  font-size: clamp(30px, 4.5vw, 46px);
+  line-height: 1.1;
+  letter-spacing: -.01em;
+  margin: 6px 0 0;
+}
+.hero-cta__lede {
+  margin: 14px auto 0;
+  max-width: 520px;
+  color: #b7aca3;
+}
+.hero-cta__lede strong { color: #fff; }
+.hero-cta__actions { margin-top: 24px; }
+.hero-cta__trust { color: var(--star-gold); margin-top: 18px; }
+/* Small gold accent thread pulled from the banner art, kept local to this band */
+.hero-cta .eyebrow--on-dark { color: var(--star-gold); position: relative; padding-bottom: 14px; }
+.hero-cta .eyebrow--on-dark::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  transform: translateX(-50%);
+  width: 36px;
+  height: 2px;
+  background: var(--star-gold);
+}
+@media (max-width: 760px) {
+  .hero-banner__fade { height: 64px; }
+  .hero-cta { padding: 22px 0 44px; }
+}
+
+/* Series masthead — reuses the homepage banner + dark CTA band. Sized off
+   viewport height (rather than width) so the art fills most of the first
+   screen and the title band's eyebrow lands right at the fold, matching
+   the homepage banner's proportions regardless of the series art's aspect
+   ratio (near-square, or portrait for map.jpeg). */
+.hero-banner--series .hero-banner__img {
+  height: clamp(440px, 86vh, 800px);
+  object-fit: cover;
+  object-position: center;
+}
+/* The Veiled Prophecy masthead art has its focal face high in the frame */
+.hero-banner--series .hero-banner__img--prophecy { object-position: center 25%; }
+@media (max-width: 760px) {
+  .hero-banner--series .hero-banner__img { height: clamp(320px, 62vh, 520px); }
+}
+
+/* ============================================================
+   About the Series (series landing pages — moved header copy paired
+   with the series' second piece of art)
+   ============================================================ */
+.series-about { display: grid; grid-template-columns: 1.05fr .95fr; gap: 40px; align-items: center; }
+.series-about__art {
+  width: 100%;
+  aspect-ratio: 3 / 2;
+  object-fit: cover;
+  border-radius: 10px;
+  box-shadow: 0 0 0 6px rgba(217,179,193,.35), 0 10px 30px rgba(106,65,82,.25);
+}
+
+/* Meet the Team (series landing pages — call-sign roster within About the Series) */
+.team-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; margin-top: 32px; }
+.team-card { text-align: center; }
+/* 7 members = rows of 3 / 3 / 1 — center the lone last card in the middle column */
+.team-grid > .team-card:nth-child(7):last-child { grid-column: 2; }
+.team-card__badge {
+  width: 92px;
+  height: 92px;
+  margin: 0 auto 14px;
+  border-radius: 50%;
+  background: var(--tint-pink);
+  box-shadow: inset 0 0 0 1px var(--tint-pink-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform .2s var(--ease-standard), box-shadow .2s var(--ease-standard);
+}
+.team-card__badge img { width: 62%; height: 62%; object-fit: contain; transition: transform .2s var(--ease-standard); }
+.team-card:hover .team-card__badge {
+  transform: translateY(-4px);
+  box-shadow: inset 0 0 0 1px var(--tint-pink-border), 0 10px 22px rgba(106,65,82,.28);
+}
+.team-card:hover .team-card__badge img { transform: scale(1.1); }
+@media (max-width: 760px) {
+  .team-grid { grid-template-columns: repeat(2, 1fr); }
+  .team-grid > .team-card:nth-child(7):last-child { grid-column: auto; }
+}
+@media (max-width: 480px) {
+  .team-grid { grid-template-columns: 1fr; }
+}
+.team-card h3 { font-size: 17px; margin-bottom: 6px; }
+.team-card p.txt { font-size: 14px; }
+@media (max-width: 760px) { .series-about { grid-template-columns: 1fr; } }
 
 /* ============================================================
    Hero
@@ -390,6 +561,11 @@ h3.h-md { font-size: 22px; line-height: 1.25; }
 .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
 @media (max-width: 700px) { .grid-2 { grid-template-columns: 1fr; } }
 
+/* Shop grid (archive-product.php) — 4 products per row */
+.shop-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
+@media (max-width: 980px) { .shop-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 700px) { .shop-grid { grid-template-columns: 1fr; } }
+
 .book-card { display: flex; gap: 16px; align-items: flex-start; margin-bottom: 16px; }
 .book-card:last-child { margin-bottom: 0; }
 .book-card .ph-box { width: 92px; height: 128px; flex: none; box-shadow: 0 0 0 6px rgba(217,179,193,.35), 0 10px 30px rgba(106,65,82,.25); }
@@ -419,6 +595,39 @@ h3.h-md { font-size: 22px; line-height: 1.25; }
 .review-card p.stars { margin: 0 0 10px; }
 .review-card p.txt { font: 600 18px/1.55 var(--font-display); font-style: italic; color: var(--text-heading); margin-bottom: 0; }
 .review-card .source { display: block; margin-top: 16px; font: 700 11px ui-monospace, Menlo, monospace; letter-spacing: .05em; color: var(--text-muted-2); text-transform: uppercase; }
+
+/* ============================================================
+   Reviews carousel (Homepage — Reader reviews)
+   A continuous marquee: the track holds two identical sets of
+   cards back to back and animates left by exactly one set's
+   width, looping seamlessly forever.
+   ============================================================ */
+.reviews-carousel {
+  position: relative;
+  overflow: hidden;
+  padding: 8px 0;
+  -webkit-mask-image: linear-gradient(to right, transparent, black 48px, black calc(100% - 48px), transparent);
+  mask-image: linear-gradient(to right, transparent, black 48px, black calc(100% - 48px), transparent);
+}
+.reviews-carousel__track {
+  display: flex;
+  gap: 18px;
+  width: max-content;
+  animation: reviews-marquee 42s linear infinite;
+}
+.reviews-carousel:hover .reviews-carousel__track,
+.reviews-carousel:focus-within .reviews-carousel__track { animation-play-state: paused; }
+.reviews-carousel__set { display: flex; flex: 0 0 auto; gap: 18px; }
+.reviews-carousel__set .review-card { flex: 0 0 300px; width: 300px; }
+@media (max-width: 480px) { .reviews-carousel__set .review-card { flex-basis: 78vw; width: 78vw; } }
+
+@keyframes reviews-marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .reviews-carousel__track { animation: none; }
+}
 
 /* WIP progress bar */
 .progress-track { height: 8px; border-radius: 4px; background: #e9e6df; margin-top: 14px; overflow: hidden; }
@@ -575,15 +784,60 @@ h3.h-md { font-size: 22px; line-height: 1.25; }
   padding: 0;
   box-shadow: 0 0 0 6px rgba(217,179,193,.35), 0 10px 30px rgba(106,65,82,.25);
 }
-.ph-box--round { border-radius: 50%; }
+/* Smaller variant for the homepage "Behind the pen" teaser (About page uses the full-size .bio-row) */
+.bio-row--sm .ph-box { width: 300px; height: 399px; }
+.bio-teaser-content { max-width: 400px; text-align: left; }
+.bio-teaser-content .pull-quote { margin-left: 0; }
 @media (max-width: 600px) { .bio-row { flex-direction: column; text-align: center; } .bio-greeting { align-items: center; transform: none; } }
 
 .fact-grid .card { display: flex; align-items: center; gap: 10px; font-size: 14px; }
 
 /* ============================================================
+   Series spotlight (Homepage — Explore the books)
+   ============================================================ */
+.series-spotlight-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; margin-top: 40px; }
+@media (max-width: 760px) { .series-spotlight-grid { grid-template-columns: 1fr; } }
+
+.series-spotlight {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 14px;
+  padding: 32px 28px;
+  box-shadow: 0 10px 24px rgba(60,40,50,.06);
+  transition: transform .2s var(--ease-standard), box-shadow .2s var(--ease-standard), border-color .2s var(--ease-standard);
+}
+.series-spotlight:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 18px 40px rgba(60,40,50,.16);
+  border-color: var(--plum-soft);
+}
+.series-spotlight__cover {
+  position: relative;
+  width: 210px;
+  height: 296px;
+  margin-bottom: 22px;
+  box-shadow: 0 0 0 6px rgba(217,179,193,.35), 0 10px 30px rgba(106,65,82,.25);
+}
+.series-spotlight__body h3 { font-size: 24px; margin-bottom: 8px; }
+.series-spotlight__body p.txt { max-width: 300px; margin-left: auto; margin-right: auto; }
+.series-spotlight__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font: 700 13px 'Mulish', sans-serif;
+  color: var(--plum);
+}
+.series-spotlight__link span { display: inline-block; transition: transform .2s var(--ease-standard); }
+.series-spotlight:hover .series-spotlight__link span { transform: translateX(4px); }
+
+/* ============================================================
    Series header
    ============================================================ */
-.series-header { text-align: center; padding: 72px 0; }
+.series-header { position: relative; text-align: center; padding: 72px 0; }
 .series-header .lede { margin: 0 auto; }
 
 /* ============================================================
@@ -595,6 +849,7 @@ h3.h-md { font-size: 22px; line-height: 1.25; }
 .book-showcase__body { flex: 1; }
 .book-showcase__body h3 { font-size: 28px; margin-bottom: 10px; }
 .book-showcase__body p.txt { font-size: 15px; margin-bottom: 20px; }
+.book-showcase--featured { background: var(--tint-pink); border-color: var(--tint-pink-border); }
 @media (max-width: 760px) {
   .book-showcase { flex-direction: column; text-align: center; }
   .book-showcase .ph-box { margin: 0 auto; }
@@ -629,12 +884,42 @@ h3.h-md { font-size: 22px; line-height: 1.25; }
 }
 .chip.is-active { background: var(--plum); color: #fff; }
 
-.product-card .ph-box { width: 210px; height: 296px; margin: 0 auto 16px; box-shadow: 0 0 0 6px rgba(217,179,193,.35), 0 10px 30px rgba(106,65,82,.25); }
-.product-card { opacity: 1; }
+.product-card .ph-box { width: 100%; aspect-ratio: 210 / 296; height: auto; margin: 0; box-shadow: 0 0 0 6px rgba(217,179,193,.35), 0 10px 30px rgba(106,65,82,.25); }
+.product-card { display: flex; flex-direction: column; opacity: 1; }
 .product-card--soon { opacity: .68; }
-.product-card h3 { font-size: 18px; margin-bottom: 4px; }
-.product-card__row { display: flex; justify-content: space-between; align-items: center; margin-top: 14px; }
-.product-card__price { font: 700 17px var(--font-body); color: var(--text-heading); }
+.product-card__body { display: flex; flex-direction: column; }
+.product-card h3 { font-size: 18px; margin-bottom: 6px; }
+.product-card__row { display: flex; flex-direction: column; align-items: flex-start; margin-top: 14px; }
+.product-card__price { display: block; font: 700 17px var(--font-body); color: var(--text-heading); }
+.product-card__row .btn { width: auto; justify-content: center; }
+/* WooCommerce's [add_to_cart] shortcode renders its own <p><a class="button add_to_cart_button">
+   markup outside of any .woocommerce wrapper on this custom shop template, so it misses the
+   theme's usual button styling entirely — restyle it to match the site's buttons here. */
+.product-card__row p.add_to_cart_inline { display: block; width: auto; margin: 0; }
+.product-card__row a.button.add_to_cart_button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: auto;
+  padding: 12px 20px;
+  border-radius: 6px;
+  background: var(--plum);
+  color: #fff !important;
+  font: 700 13px 'Mulish', sans-serif;
+  border: none;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background .2s var(--ease-standard);
+  box-sizing: border-box;
+}
+.product-card__row a.button.add_to_cart_button:hover { background: var(--plum-deep); }
+.product-card__row a.button.add_to_cart_button.added::after { content: ' ✓'; }
+.product-card__row a.added_to_cart {
+  font: 700 12px 'Mulish', sans-serif;
+  color: var(--plum);
+  text-decoration: underline;
+}
 
 /* ============================================================
    Events
@@ -654,6 +939,39 @@ h3.h-md { font-size: 22px; line-height: 1.25; }
 .event-date__day { font: 700 22px var(--font-display); color: var(--plum); }
 .event-date__mon { font: 700 10px ui-monospace, Menlo, monospace; letter-spacing: .08em; color: var(--text-muted); }
 .event-card h3 { font-size: 18px; margin-bottom: 6px; }
+
+/* Homepage events teaser — Upcoming / Past side-by-side, links out to the full page */
+.events-teaser-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; margin-top: 32px; }
+@media (max-width: 700px) { .events-teaser-grid { grid-template-columns: 1fr; gap: 28px; } }
+
+/* ============================================================
+   Horizon card (Homepage — On the horizon teaser, links to the
+   full /on-the-horizon/ roadmap page)
+   ============================================================ */
+.horizon-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 32px; }
+@media (max-width: 760px) { .horizon-grid { grid-template-columns: 1fr; } }
+
+.horizon-card {
+  display: block;
+  padding: 28px 32px;
+  box-shadow: 0 10px 24px rgba(60,40,50,.06);
+  transition: transform .2s var(--ease-standard), box-shadow .2s var(--ease-standard), border-color .2s var(--ease-standard);
+}
+.horizon-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 18px 40px rgba(60,40,50,.14);
+  border-color: var(--plum-soft);
+}
+.horizon-card h3 { font-size: 26px; margin-bottom: 6px; }
+.horizon-card__progress { margin: 18px 0 20px; }
+.horizon-card__progress-label {
+  display: block;
+  margin-top: 10px;
+  font: 700 11px ui-monospace, Menlo, monospace;
+  letter-spacing: .04em;
+  color: var(--text-muted-2);
+}
+.horizon-card:hover .series-spotlight__link span { transform: translateX(4px); }
 
 /* ============================================================
    Roadmap (On the Horizon — upcoming projects timeline)
@@ -696,9 +1014,39 @@ h3.h-md { font-size: 22px; line-height: 1.25; }
 /* ============================================================
    Footer
    ============================================================ */
-.site-footer { background: var(--dark); color: var(--text-on-dark); padding: 48px 0 32px; }
-.footer-top { display: flex; align-items: center; gap: 12px; }
-.footer-tagline { color: var(--text-on-dark-muted); font-size: 14px; margin: 14px 0 20px; max-width: 380px; }
+.site-footer { background: var(--dark); color: var(--text-on-dark); padding: 56px 0 28px; }
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr 1fr;
+  gap: 40px;
+  padding-bottom: 36px;
+  border-bottom: 1px solid rgba(255,255,255,.12);
+}
+@media (max-width: 700px) {
+  .footer-grid { grid-template-columns: 1fr; gap: 32px; }
+}
+
+.footer-brand__link { display: inline-flex; align-items: center; gap: 12px; text-decoration: none; }
+.footer-brand__word { display: flex; flex-direction: column; gap: 3px; }
+.footer-brand__title { font: 700 13px/1.1 'Mulish', sans-serif; letter-spacing: .13em; color: #fff; }
+.footer-brand__sub { font: 400 9px/1 'Mulish', sans-serif; letter-spacing: .13em; text-transform: uppercase; color: var(--text-on-dark-muted); }
+.footer-mark { height: 42px; width: auto; flex: none; }
+.footer-tagline { color: var(--text-on-dark-muted); font-size: 14px; margin: 16px 0 0; max-width: 320px; }
+
+.footer-col__title { font: 700 12px 'Mulish', sans-serif; letter-spacing: .1em; text-transform: uppercase; color: var(--plum-soft); margin: 0 0 16px; }
+
+.footer-links {
+  display: grid;
+  grid-template-columns: repeat(2, auto);
+  grid-template-rows: repeat(3, auto);
+  grid-auto-flow: column;
+  column-gap: 28px;
+  row-gap: 11px;
+}
+.footer-links a { color: var(--text-on-dark); font-size: 14px; text-decoration: none; transition: color .2s var(--ease-standard); }
+.footer-links a:hover { color: var(--plum-soft); }
+
 .soc { display: flex; gap: 10px; flex-wrap: wrap; }
 .soc a {
   padding: 8px 14px;
@@ -709,9 +1057,8 @@ h3.h-md { font-size: 22px; line-height: 1.25; }
   transition: border-color .2s var(--ease-standard), color .2s var(--ease-standard);
 }
 .soc a:hover { border-color: var(--plum-soft); color: var(--plum-soft); }
-.footer-mark { width: 34px; height: 34px; border-radius: 50%; background: transparent; border: 1.5px solid rgba(255,255,255,.4); color: var(--plum-soft); display: flex; align-items: center; justify-content: center; font: 700 11px var(--font-display); flex: none; }
 
-/* Icon-button variant (e.g. About page "Follow along") */
+/* Icon-button variant (e.g. About page "Follow along", site footer) */
 .soc--icons a {
   width: 38px;
   height: 38px;
@@ -725,6 +1072,14 @@ h3.h-md { font-size: 22px; line-height: 1.25; }
 }
 .soc--icons a:hover { background: var(--plum); border-color: var(--plum); color: #fff; }
 .soc--icons svg { width: 18px; height: 18px; fill: currentColor; }
+.soc--dark a { border-color: rgba(255,255,255,.18); color: var(--text-on-dark); }
+.soc--dark a:hover { background: var(--plum); border-color: var(--plum); color: #fff; }
+
+.footer-bottom {
+  padding-top: 20px;
+  font-size: 12px;
+  color: var(--text-on-dark-muted);
+}
 
 .sr-only {
   position: absolute;
@@ -910,10 +1265,10 @@ h3.h-md { font-size: 22px; line-height: 1.25; }
   .related.products ul.products { grid-template-columns: 1fr; }
 }
 
-/* Shop / product archive grid → same 2-up book-showcase feel */
+/* Shop / product archive grid → 4-up */
 .woocommerce ul.products {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(4, 1fr);
   gap: 18px;
   list-style: none;
   margin: 0;
@@ -923,6 +1278,7 @@ h3.h-md { font-size: 22px; line-height: 1.25; }
    items and shove the real cards out of the first column. */
 .woocommerce ul.products::before,
 .woocommerce ul.products::after { content: none; display: none; }
+@media (max-width: 980px) { .woocommerce ul.products { grid-template-columns: repeat(2, 1fr); } }
 @media (max-width: 700px) { .woocommerce ul.products { grid-template-columns: 1fr; } }
 /* Override WooCommerce's default float/percentage-width layout (including its
    more-specific .columns-N rules) so the grid alone controls card sizing. */

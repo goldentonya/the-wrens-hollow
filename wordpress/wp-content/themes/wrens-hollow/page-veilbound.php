@@ -7,6 +7,15 @@ get_header();
 ?>
 
 <section class="sec--dark2 series-header">
+  <?php
+  wh_breadcrumbs(
+  	array(
+  		array( 'label' => 'Books', 'url' => home_url( '/books/' ) ),
+  		array( 'label' => 'The Veiled Prophecy', 'url' => home_url( '/the-veiled-prophecy/' ) ),
+  		array( 'label' => 'Veilbound' ),
+  	)
+  );
+  ?>
   <div class="wrap" style="max-width:560px;">
     <p class="eyebrow eyebrow--on-dark">The Veiled Prophecy · Book 2</p>
     <h1 class="h-lg" style="color:#fff;">Veilbound</h1>

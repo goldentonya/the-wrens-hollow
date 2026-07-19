@@ -24,8 +24,10 @@ function wrens_hollow_assets() {
 		array(),
 		null
 	);
-	wp_enqueue_style( 'wrens-hollow-style', get_stylesheet_uri(), array(), wp_get_theme()->get( 'Version' ) );
-	wp_enqueue_script( 'wrens-hollow-main', get_template_directory_uri() . '/js/main.js', array(), wp_get_theme()->get( 'Version' ), true );
+	// filemtime() (not the static theme header Version) so every edit during
+	// development busts browsers' cached copy of these files automatically.
+	wp_enqueue_style( 'wrens-hollow-style', get_stylesheet_uri(), array(), filemtime( get_stylesheet_directory() . '/style.css' ) );
+	wp_enqueue_script( 'wrens-hollow-main', get_template_directory_uri() . '/js/main.js', array(), filemtime( get_template_directory() . '/js/main.js' ), true );
 
 	// The book detail pages and the Shop page use the [add_to_cart] shortcode on
 	// what WordPress considers ordinary pages, where WooCommerce doesn't enqueue
@@ -44,10 +46,43 @@ add_action( 'wp_enqueue_scripts', 'wrens_hollow_assets' );
  */
 function wrens_hollow_cart_count_fragment( $fragments ) {
 	$count = ( function_exists( 'WC' ) && WC()->cart ) ? WC()->cart->get_cart_contents_count() : 0;
-	$fragments['#cartCount'] = '<span class="nav__cart-count" id="cartCount">' . intval( $count ) . '</span>';
+	$class = 'nav__cart-count' . ( $count > 0 ? '' : ' is-empty' );
+	$fragments['#cartCount'] = '<span class="' . esc_attr( $class ) . '" id="cartCount">' . intval( $count ) . '</span>';
 	return $fragments;
 }
 add_filter( 'woocommerce_add_to_cart_fragments', 'wrens_hollow_cart_count_fragment' );
+
+/**
+ * Renders the breadcrumb trail used at the top of subpages (book pages,
+ * series pages, shop product pages, etc.) so readers can navigate back up
+ * the site hierarchy. Home is prepended automatically; pass the remaining
+ * trail as an array of ['label' => string, 'url' => string|null] — omit
+ * 'url' (or leave it null/empty) on the last, current-page item.
+ *
+ * $variant controls the chip's coloring: 'dark' (default) is a dark
+ * translucent pill for overlaying photo/dark hero sections; 'light' is a
+ * pale pill (matching the site's .chip filter pills) for light sections
+ * like the product page's pink hero, where the dark pill reads as a stray
+ * UI element rather than part of the design.
+ */
+function wh_breadcrumbs( array $trail, $variant = 'dark' ) {
+	$items   = array_merge( array( array( 'label' => 'Home', 'url' => home_url( '/' ) ) ), $trail );
+	$last    = count( $items ) - 1;
+	$class   = 'breadcrumbs' . ( 'light' === $variant ? ' breadcrumbs--light' : '' );
+	$out     = '<nav class="' . esc_attr( $class ) . '" aria-label="Breadcrumb"><div class="wrap"><ol class="breadcrumbs__list">';
+
+	foreach ( $items as $i => $item ) {
+		$is_current = ( $i === $last ) || empty( $item['url'] );
+		$out       .= '<li' . ( $is_current ? ' aria-current="page"' : '' ) . '>';
+		$out       .= $is_current
+			? esc_html( $item['label'] )
+			: '<a href="' . esc_url( $item['url'] ) . '">' . esc_html( $item['label'] ) . '</a>';
+		$out       .= '</li>';
+	}
+
+	$out .= '</ol></div></nav>';
+	echo $out; // phpcs:ignore WordPress.Security.EscapeOutput -- each piece already escaped above.
+}
 
 /**
  * WooCommerce templates in this theme live directly under /woocommerce

@@ -10,6 +10,15 @@ $wh_product    = $wh_product_id ? wc_get_product( $wh_product_id ) : false;
 ?>
 
 <section class="sec--dark2 series-header">
+  <?php
+  wh_breadcrumbs(
+  	array(
+  		array( 'label' => 'Books', 'url' => home_url( '/books/' ) ),
+  		array( 'label' => 'The Veiled Prophecy', 'url' => home_url( '/the-veiled-prophecy/' ) ),
+  		array( 'label' => 'Veilfall' ),
+  	)
+  );
+  ?>
   <div class="wrap" style="max-width:560px;">
     <p class="eyebrow eyebrow--on-dark">The Veiled Prophecy · Book 1</p>
     <h1 class="h-lg" style="color:#fff;">Veilfall</h1>

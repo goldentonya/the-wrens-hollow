@@ -102,6 +102,9 @@
     });
   });
 
+  /* Reviews carousel (Homepage) is a pure CSS marquee — the track animates
+     continuously and pauses on :hover/:focus-within, no JS needed. */
+
   /* Nav dropdown (Books → series flyout) is pure CSS :hover/:focus-within —
      no JS needed. On mobile it's simply always expanded under Books. */
 
