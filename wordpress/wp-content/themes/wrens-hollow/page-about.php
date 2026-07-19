@@ -8,15 +8,15 @@ get_header();
 
 <section class="sec sec--pink">
   <div class="wrap bio-row">
-    <div class="ph-box"><img src="<?php echo esc_url( get_template_directory_uri() . '/images/photos/ali-wren-portrait.jpg' ); ?>" alt="Ali Wren author portrait" style="width:260px;height:346px;object-fit:cover;border-radius:8px;"></div>
+    <div class="ph-box"><?php wh_img( 'about_portrait', 'images/photos/ali-wren-portrait.jpg', 'Ali Wren author portrait', 'style="width:260px;height:346px;object-fit:cover;border-radius:8px;"' ); ?></div>
     <div>
       <p class="eyebrow">Behind the pen</p>
       <p class="bio-greeting">
-        Welcome!
+        <?php wh_the( 'about_greeting', 'Welcome!' ); ?>
         <svg class="bio-greeting__swash" viewBox="0 0 160 14" aria-hidden="true"><path d="M2 9c20-10 40-10 60-2s40 8 60-2 30-5 34 1" /></svg>
       </p>
-      <h1 class="h-lg bio-name">I'm Ali Wren</h1>
-      <p class="txt" style="margin-top:6px;">Indie author · Minnesota · romance &amp; fantasy.</p>
+      <h1 class="h-lg bio-name"><?php wh_the( 'about_name', "I'm Ali Wren" ); ?></h1>
+      <p class="txt" style="margin-top:6px;"><?php wh_the( 'about_tagline', 'Indie author · Minnesota · romance & fantasy.' ); ?></p>
     </div>
   </div>
 </section>
@@ -25,12 +25,24 @@ get_header();
   <div class="wrap about-columns">
     <aside class="about-columns__aside">
       <div class="aside-card">
-        <h3>A few things about me</h3>
+        <h3><?php wh_the( 'facts_heading', 'A few things about me' ); ?></h3>
         <div class="aside-card__facts">
-          <div><span class="ico">📍</span>Based in Minnesota</div>
-          <div><span class="ico">✍️</span>Two series in progress</div>
-          <div><span class="ico">☕</span>Fueled by coffee</div>
-          <div><span class="ico">💌</span>Loves hearing from readers</div>
+          <?php
+          $wh_fact_fallbacks = array(
+            1 => array( '📍', 'Based in Minnesota' ),
+            2 => array( '✍️', 'Two series in progress' ),
+            3 => array( '☕', 'Fueled by coffee' ),
+            4 => array( '💌', 'Loves hearing from readers' ),
+          );
+          for ( $wh_i = 1; $wh_i <= 4; $wh_i++ ) :
+            $wh_icon = wh_field( 'fact_' . $wh_i . '_icon', $wh_fact_fallbacks[ $wh_i ][0] );
+            $wh_text = wh_field( 'fact_' . $wh_i . '_text', $wh_fact_fallbacks[ $wh_i ][1] );
+            if ( '' === $wh_icon && '' === $wh_text ) {
+              continue;
+            }
+            ?>
+            <div><span class="ico"><?php echo esc_html( $wh_icon ); ?></span><?php echo esc_html( $wh_text ); ?></div>
+          <?php endfor; ?>
         </div>
       </div>
       <div class="aside-card">
@@ -60,21 +72,17 @@ get_header();
       </div>
     </aside>
     <div>
-      <p class="txt">I write romance and fantasy filled with emotion, danger, and unforgettable connections.</p>
-      <p class="txt">My stories are inspired by real-world experiences, human behavior, and the idea that love can be both powerful and complicated.</p>
-      <p class="pull-quote">Author, biological anthropologist, and proud mom. I write romantic adventures that blend science, suspense, and heart. Stories where love is hard-won and nothing is ever as simple as it seems. You’ll find strong heroines (often scientists), fiercely loyal heroes, and characters shaped by resilience, survival, and the choices that define them.</p>
-      <p class="txt">My writing is deeply influenced by my background in anthropology and my fascination with human behavior, why we love the way we do, what drives us, and what we’re willing to risk for the people who matter most. Many of my stories are inspired by real-world experiences, from travel and culture to the emotional complexities we carry with us.</p>
-      <p class="txt">Some of my earliest inspiration came from a trip to Brazil, where I fell in love with the landscape, the energy, and the depth of human connection I witnessed there. That experience, combined with my son’s interest in the military and my own love of science, helped shape the stories I tell today—where emotion, danger, and discovery all collide.</p>
-      <p class="txt">When I’m not writing, I’m answering phones at our family plumbing business, running a support brand for families affected by alopecia, or chasing my kids around, usually with a coffee (or water) in hand. Motherhood continues to be one of my biggest inspirations, reminding me daily what strength, love, and resilience truly look like.</p>
-      <p class="txt">Welcome to my corner of the internet—where love is fierce, women are brilliant, and there’s always more to the story.</p>
+      <div class="wh-rte"><?php wh_wysiwyg( 'bio_intro', wh_default( 'field_wh_ab_bio_intro' ) ); ?></div>
+      <p class="pull-quote"><?php wh_the( 'bio_pullquote', wh_default( 'field_wh_ab_bio_pullquote' ) ); ?></p>
+      <div class="wh-rte"><?php wh_wysiwyg( 'bio_more', wh_default( 'field_wh_ab_bio_more' ) ); ?></div>
     </div>
   </div>
 </section>
 
 <section class="sec sec--cream sec--dashed-top">
   <div class="wrap sec--center">
-    <p class="eyebrow">My Journey</p>
-    <h2 class="h-lg">The Road So Far</h2>
+    <p class="eyebrow"><?php wh_the( 'journey_eyebrow', 'My Journey' ); ?></p>
+    <h2 class="h-lg"><?php wh_the( 'journey_heading', 'The Road So Far' ); ?></h2>
   </div>
   <div class="wrap">
     <div class="timeline">
@@ -82,17 +90,17 @@ get_header();
         <div class="timeline__spacer"></div>
         <div class="timeline__node"></div>
         <div class="timeline__card">
-          <p class="timeline__date">May 2024</p>
-          <div class="timeline__content">
-            <p class="txt">Started writing <strong>Whiskey &amp; Secrets</strong>, the first book in the Whiskey Tango Foxtrot series—a romance filled with science, suspense, and a fiercely protective Green Beret.</p>
+          <p class="timeline__date"><?php wh_the( 'tl_1_date', 'May 2024' ); ?></p>
+          <div class="timeline__content wh-rte">
+            <?php wh_wysiwyg( 'tl_1_body', wh_default( 'field_wh_ab_tl1_body' ) ); ?>
           </div>
         </div>
       </div>
       <div class="timeline__item">
         <div class="timeline__card">
-          <p class="timeline__date">June 2025</p>
-          <div class="timeline__content">
-            <p class="txt">Official launch of <strong>Whiskey &amp; Secrets</strong>! The beginning of a series that pairs strong women (often scientists) with the men brave enough to fight beside them.</p>
+          <p class="timeline__date"><?php wh_the( 'tl_2_date', 'June 2025' ); ?></p>
+          <div class="timeline__content wh-rte">
+            <?php wh_wysiwyg( 'tl_2_body', wh_default( 'field_wh_ab_tl2_body' ) ); ?>
           </div>
         </div>
         <div class="timeline__node"></div>
@@ -102,18 +110,17 @@ get_header();
         <div class="timeline__spacer"></div>
         <div class="timeline__node"></div>
         <div class="timeline__card">
-          <p class="timeline__date">November 2025</p>
-          <div class="timeline__content">
-            <p class="txt">Launched <strong>Veilfall</strong>! The start of the Veiled Prophecy series.</p>
+          <p class="timeline__date"><?php wh_the( 'tl_3_date', 'November 2025' ); ?></p>
+          <div class="timeline__content wh-rte">
+            <?php wh_wysiwyg( 'tl_3_body', wh_default( 'field_wh_ab_tl3_body' ) ); ?>
           </div>
         </div>
       </div>
       <div class="timeline__item">
         <div class="timeline__card">
-          <p class="timeline__date">2026</p>
-          <div class="timeline__content">
-            <p class="txt">Currently writing <strong>Whiskey &amp; Lies</strong>, book two in the series—featuring Fallon, a guarded survivor with a fiery spirit, and Jake, the team’s communications expert with secrets of his own. Also writing <strong>Veilbound</strong>, book two in the Veiled Prophecy series.</p>
-            <p class="txt">I took a break from both to start the Northfall Syndicate series. A suspense stalker book centered in Cambridge, MN. This one is very near and dear to my heart and to all those fighting with past traumas.</p>
+          <p class="timeline__date"><?php wh_the( 'tl_4_date', '2026' ); ?></p>
+          <div class="timeline__content wh-rte">
+            <?php wh_wysiwyg( 'tl_4_body', wh_default( 'field_wh_ab_tl4_body' ) ); ?>
           </div>
         </div>
         <div class="timeline__node"></div>
@@ -126,9 +133,9 @@ get_header();
 <section class="sec sec--cream2">
   <div class="wrap grid-2 contact-grid">
     <div>
-      <p class="eyebrow">Join the Hollow</p>
-      <h2 class="h-lg" style="color:var(--plum-deep);">Let's Stay Connected</h2>
-      <p class="txt" style="margin-top:14px;">Love strong heroines, slow-burn romance, and a little bit of danger? Sign up for my newsletter and get bonus chapters plus first look at new releases, behind-the-scenes peeks, character deep-dives, and updates straight to your inbox.</p>
+      <p class="eyebrow"><?php wh_the( 'connect_eyebrow', 'Join the Hollow' ); ?></p>
+      <h2 class="h-lg" style="color:var(--plum-deep);"><?php wh_the( 'connect_heading', "Let's Stay Connected" ); ?></h2>
+      <p class="txt" style="margin-top:14px;"><?php wh_the( 'connect_body', 'Love strong heroines, slow-burn romance, and a little bit of danger? Sign up for my newsletter and get bonus chapters plus first look at new releases, behind-the-scenes peeks, character deep-dives, and updates straight to your inbox.' ); ?></p>
       <form class="newsletter-form" id="newsletterForm">
         <input class="field" type="email" placeholder="your@email.com" required aria-label="Email address">
         <button class="btn" type="submit">Subscribe</button>
@@ -137,9 +144,9 @@ get_header();
       <p class="form-note">Free. No spam. Unsubscribe anytime.</p>
     </div>
     <div>
-      <p class="eyebrow">Say hello</p>
-      <h2 class="h-lg" style="color:var(--plum-deep);">I'd Love to Hear from You!</h2>
-      <p class="txt" style="margin-top:14px;">Whether you're a fellow reader, a book club, a blogger, or just curious about my writing—drop a note below!</p>
+      <p class="eyebrow"><?php wh_the( 'hello_eyebrow', 'Say hello' ); ?></p>
+      <h2 class="h-lg" style="color:var(--plum-deep);"><?php wh_the( 'hello_heading', "I'd Love to Hear from You!" ); ?></h2>
+      <p class="txt" style="margin-top:14px;"><?php wh_the( 'hello_body', "Whether you're a fellow reader, a book club, a blogger, or just curious about my writing—drop a note below!" ); ?></p>
       <form class="optin-form" id="contactForm">
         <div class="optin-row">
           <label class="optin-label" for="contactName">Your name</label>

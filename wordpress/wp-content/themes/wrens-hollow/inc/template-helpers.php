@@ -11,6 +11,22 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
+ * The registered default_value for a field, looked up by its field key. Lets a
+ * template use a field's default as the fallback without duplicating the copy
+ * (ACF returns null for unsaved fields, so a fallback is still needed for the
+ * front end before the page is first saved).
+ */
+function wh_default( $field_key ) {
+	if ( function_exists( 'acf_get_field' ) ) {
+		$f = acf_get_field( $field_key );
+		if ( is_array( $f ) && isset( $f['default_value'] ) ) {
+			return $f['default_value'];
+		}
+	}
+	return '';
+}
+
+/**
  * Raw field value, or the fallback when ACF is inactive or the field is empty.
  */
 function wh_field( $name, $fallback = '', $post_id = false ) {
