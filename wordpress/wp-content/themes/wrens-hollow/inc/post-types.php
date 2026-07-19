@@ -60,6 +60,28 @@ function wrens_hollow_register_post_types() {
 	);
 
 	register_post_type(
+		'wh_project',
+		array(
+			'labels'       => array(
+				'name'          => 'Writing',
+				'singular_name' => 'Project',
+				'menu_name'     => 'Writing',
+				'add_new_item'  => 'Add New Project',
+				'edit_item'     => 'Edit Project',
+				'new_item'      => 'New Project',
+				'all_items'     => 'All Projects (On the Horizon)',
+			),
+			'public'       => false,
+			'show_ui'      => true,
+			'show_in_menu' => true,
+			'show_in_rest' => true,
+			'menu_icon'    => 'dashicons-edit',
+			'menu_position'=> 24,
+			'supports'     => array( 'title', 'page-attributes' ),
+		)
+	);
+
+	register_post_type(
 		'wh_book',
 		array(
 			'labels'       => array(

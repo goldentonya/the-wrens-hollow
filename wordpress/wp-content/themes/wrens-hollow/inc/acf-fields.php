@@ -326,5 +326,73 @@ function wrens_hollow_register_acf_fields() {
 			'hide_on_screen' => array( 'the_content' ),
 		)
 	);
+
+	// --- Project fields (attached to the wh_project post type / On the Horizon) ---
+	acf_add_local_field_group(
+		array(
+			'key'      => 'group_wh_project',
+			'title'    => 'Project details',
+			'fields'   => array(
+				array(
+					'key'           => 'field_wh_project_status',
+					'label'         => 'Status',
+					'name'          => 'project_status',
+					'type'          => 'select',
+					'instructions'  => 'Controls the marker and label on the timeline.',
+					'choices'       => array(
+						'now-available' => 'Now available',
+						'in-progress'   => 'In progress',
+						'planning'      => 'Planning',
+					),
+					'default_value' => 'in-progress',
+					'return_format' => 'value',
+					'allow_null'    => 0,
+				),
+				array(
+					'key'          => 'field_wh_project_subtitle',
+					'label'        => 'Subtitle line',
+					'name'         => 'project_subtitle',
+					'type'         => 'text',
+					'instructions' => 'The small grey line under the title, e.g. "Book 2 · The Veiled Prophecy · Fae Fantasy Romance".',
+				),
+				array(
+					'key'          => 'field_wh_project_body',
+					'label'        => 'Description',
+					'name'         => 'project_body',
+					'type'         => 'wysiwyg',
+					'media_upload' => 0,
+					'tabs'         => 'all',
+				),
+				array(
+					'key'          => 'field_wh_project_link_label',
+					'label'        => 'Button label (optional)',
+					'name'         => 'project_link_label',
+					'type'         => 'text',
+					'instructions' => 'Leave the label and link empty for no button.',
+				),
+				array(
+					'key'          => 'field_wh_project_link_url',
+					'label'        => 'Button link (optional)',
+					'name'         => 'project_link_url',
+					'type'         => 'url',
+				),
+			),
+			'location' => array(
+				array(
+					array(
+						'param'    => 'post_type',
+						'operator' => '==',
+						'value'    => 'wh_project',
+					),
+				),
+			),
+			'menu_order'     => 0,
+			'position'       => 'normal',
+			'style'          => 'default',
+			'active'         => true,
+			'show_in_rest'   => 1,
+			'hide_on_screen' => array( 'the_content' ),
+		)
+	);
 }
 add_action( 'acf/init', 'wrens_hollow_register_acf_fields' );

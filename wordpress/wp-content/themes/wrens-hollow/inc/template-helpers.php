@@ -231,6 +231,60 @@ function wh_render_book_showcase( $book ) {
 }
 
 /**
+ * Published Project posts (On the Horizon), in menu order (the "Order" box).
+ */
+function wh_projects() {
+	return get_posts(
+		array(
+			'post_type'      => 'wh_project',
+			'posts_per_page' => -1,
+			'post_status'    => 'publish',
+			'orderby'        => array(
+				'menu_order' => 'ASC',
+				'date'       => 'ASC',
+			),
+		)
+	);
+}
+
+/**
+ * Render one On-the-Horizon roadmap item, matching the existing .roadmap__item
+ * markup. Status controls the node style and label.
+ */
+function wh_render_project( $post ) {
+	$id       = $post->ID;
+	$status   = wh_field( 'project_status', 'in-progress', $id );
+	$subtitle = wh_field( 'project_subtitle', '', $id );
+	$body     = wh_field( 'project_body', '', $id );
+	$label    = wh_field( 'project_link_label', '', $id );
+	$url      = wh_field( 'project_link_url', '', $id );
+
+	$map = array(
+		'now-available' => array( 'node' => '', 'label' => 'Now available', 'muted' => false ),
+		'in-progress'   => array( 'node' => ' roadmap__node--outline', 'label' => 'In progress', 'muted' => false ),
+		'planning'      => array( 'node' => ' roadmap__node--muted', 'label' => 'Planning', 'muted' => true ),
+	);
+	$s = isset( $map[ $status ] ) ? $map[ $status ] : $map['in-progress'];
+	?>
+	<div class="roadmap__item">
+	  <div class="roadmap__node<?php echo esc_attr( $s['node'] ); ?>"></div>
+	  <div class="roadmap__line"></div>
+	  <div class="roadmap__content">
+	    <p class="roadmap__status"<?php echo $s['muted'] ? ' style="color:var(--text-muted);"' : ''; ?>><?php echo esc_html( $s['label'] ); ?></p>
+	    <h3><?php echo esc_html( get_the_title( $post ) ); ?></h3>
+	    <?php if ( $subtitle ) : ?>
+	      <p class="book-card__tag" style="color:var(--text-muted);"><?php echo esc_html( $subtitle ); ?></p>
+	    <?php endif; ?>
+	    <div class="wh-rte"><?php echo $body; // phpcs:ignore WordPress.Security.EscapeOutput -- WYSIWYG. ?></div>
+	    <?php if ( $label && $url ) : ?>
+	      <a class="btn btn--outline btn--sm" href="<?php echo esc_url( $url ); ?>"><?php echo esc_html( $label ); ?></a>
+	    <?php endif; ?>
+	  </div>
+	</div>
+	<?php
+}
+
+/**
  * All published Review posts, in stable carousel order (menu order, then oldest).
  */
 function wh_all_reviews() {
