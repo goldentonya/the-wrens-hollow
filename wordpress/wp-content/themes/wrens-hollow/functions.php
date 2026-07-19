@@ -16,6 +16,7 @@ require get_template_directory() . '/inc/post-types.php';
 require get_template_directory() . '/inc/acf-fields.php';
 require get_template_directory() . '/inc/acf-page-fields.php';
 require get_template_directory() . '/inc/template-helpers.php';
+require get_template_directory() . '/inc/customizer.php';
 
 function wrens_hollow_setup() {
 	add_theme_support( 'title-tag' );
