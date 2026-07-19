@@ -46,41 +46,7 @@ $wh_wl_id = function_exists( 'wc_get_product_id_by_sku' ) ? wc_get_product_id_by
   <div class="wrap" style="margin-top:56px;">
     <p class="eyebrow" style="text-align:center;">Meet the Team</p>
     <div class="team-grid">
-      <div class="team-card">
-        <div class="team-card__badge"><img src="<?php echo esc_url( get_template_directory_uri() . '/images/team/wraith.png' ); ?>" alt="Wraith emblem"></div>
-        <h3>Wade "Wraith" Blakely</h3>
-        <p class="txt">Team leader. Quiet, deadly, and protective. A force in the field with a guarded heart.</p>
-      </div>
-      <div class="team-card">
-        <div class="team-card__badge"><img src="<?php echo esc_url( get_template_directory_uri() . '/images/team/glitch.png' ); ?>" alt="Glitch emblem"></div>
-        <h3>Jake "Glitch" Thompson</h3>
-        <p class="txt">Communications expert. Brilliant with tech, haunted by his past, loyal to the end.</p>
-      </div>
-      <div class="team-card">
-        <div class="team-card__badge"><img src="<?php echo esc_url( get_template_directory_uri() . '/images/team/reaper.png' ); ?>" alt="Reaper emblem"></div>
-        <h3>Simon "Reaper" Miller</h3>
-        <p class="txt">Second-in-command. Lethal and strategic, but with a sarcastic streak and unmatched loyalty.</p>
-      </div>
-      <div class="team-card">
-        <div class="team-card__badge"><img src="<?php echo esc_url( get_template_directory_uri() . '/images/team/sparta.png' ); ?>" alt="Sparta emblem"></div>
-        <h3>Shawn "Sparta" Jackson</h3>
-        <p class="txt">Operations specialist. Keeps the team focused, carries ancient wisdom, and has a plan for everything.</p>
-      </div>
-      <div class="team-card">
-        <div class="team-card__badge"><img src="<?php echo esc_url( get_template_directory_uri() . '/images/team/magellan.png' ); ?>" alt="Magellan emblem"></div>
-        <h3>Joel "Magellan" Ramirez</h3>
-        <p class="txt">Weapons and logistics. Strength, charm, and a heart as steady as his aim.</p>
-      </div>
-      <div class="team-card">
-        <div class="team-card__badge"><img src="<?php echo esc_url( get_template_directory_uri() . '/images/team/stitches.png' ); ?>" alt="Stitches emblem"></div>
-        <h3>Nick "Stitches" Davies</h3>
-        <p class="txt">Medic. Calm under pressure, a healer who's seen too much.</p>
-      </div>
-      <div class="team-card">
-        <div class="team-card__badge"><img src="<?php echo esc_url( get_template_directory_uri() . '/images/team/ghost.png' ); ?>" alt="Ghost emblem"></div>
-        <h3>Jackson "Ghost" Lewis</h3>
-        <p class="txt">Intel. Silent, calculating, and often underestimated.</p>
-      </div>
+      <?php foreach ( wh_characters() as $wh_character ) { wh_render_character( $wh_character ); } ?>
     </div>
   </div>
 </section>
@@ -92,9 +58,9 @@ $wh_wl_id = function_exists( 'wc_get_product_id_by_sku' ) ? wc_get_product_id_by
     <div class="card book-showcase book-showcase--featured">
       <div class="ph-box"><img src="<?php echo esc_url( get_template_directory_uri() . '/images/covers/whiskey-and-secrets.jpg' ); ?>" alt="Whiskey &amp; Secrets book cover" style="width:100%;height:100%;object-fit:cover;border-radius:6px;"></div>
       <div class="book-showcase__body">
-        <p class="book-card__tag">Book 1 · First chapters free</p>
-        <h3>Whiskey &amp; Secrets</h3>
-        <p class="txt">When biological anthropology grad student Sarah leads a research expedition into the Amazon, she never expects to need military protection — least of all from Wade "Wraith" Blakely, the stoic former Green Beret assigned to keep her team safe. When one of them goes missing, secrets buried in the jungle, and in Sarah's past, start to surface.</p>
+        <p class="book-card__tag"><?php wh_the( 'reading1_tag', 'Book 1 · First chapters free' ); ?></p>
+        <h3><?php wh_the( 'reading1_title', 'Whiskey & Secrets' ); ?></h3>
+        <p class="txt"><?php wh_the( 'reading1_blurb', 'When biological anthropology grad student Sarah leads a research expedition into the Amazon, she never expects to need military protection — least of all from Wade "Wraith" Blakely, the stoic former Green Beret assigned to keep her team safe. When one of them goes missing, secrets buried in the jungle, and in Sarah\'s past, start to surface.' ); ?></p>
         <a class="btn btn--sm" href="<?php echo esc_url( home_url( '/whiskey-and-secrets/' ) ); ?>">Start reading free →</a>
         <a class="btn btn--outline btn--sm" href="<?php echo esc_url( $wh_ws_id ? get_permalink( $wh_ws_id ) : ( function_exists( 'wc_get_page_permalink' ) ? wc_get_page_permalink( 'shop' ) . '#whiskey-and-secrets' : home_url( '/shop/#whiskey-and-secrets' ) ) ); ?>" style="margin-left:8px;">Buy book →</a>
       </div>
@@ -102,9 +68,9 @@ $wh_wl_id = function_exists( 'wc_get_product_id_by_sku' ) ? wc_get_product_id_by
     <div class="card book-showcase">
       <div class="ph-box"><img src="<?php echo esc_url( get_template_directory_uri() . '/images/covers/whiskey-and-lies.jpg' ); ?>" alt="Whiskey &amp; Lies book cover" style="width:100%;height:100%;object-fit:cover;border-radius:6px;"></div>
       <div class="book-showcase__body">
-        <p class="book-card__tag">Book 2 · Free</p>
-        <h3>Whiskey &amp; Lies</h3>
-        <p class="txt">Jake "Glitch" Thompson came home from the military carrying more scars than he admits. Fallon Moore has always been the steady one — until Jake becomes the exception to every rule she swore by. As shadows from Fallon's past close in fast, Jake must decide if he's willing to fight through her ghosts to build the life they could have together.</p>
+        <p class="book-card__tag"><?php wh_the( 'reading2_tag', 'Book 2 · Free' ); ?></p>
+        <h3><?php wh_the( 'reading2_title', 'Whiskey & Lies' ); ?></h3>
+        <p class="txt"><?php wh_the( 'reading2_blurb', "Jake \"Glitch\" Thompson came home from the military carrying more scars than he admits. Fallon Moore has always been the steady one — until Jake becomes the exception to every rule she swore by. As shadows from Fallon's past close in fast, Jake must decide if he's willing to fight through her ghosts to build the life they could have together." ); ?></p>
         <a class="btn btn--sm" href="<?php echo esc_url( home_url( '/whiskey-and-lies/' ) ); ?>">Start reading free →</a>
         <a class="btn btn--outline btn--sm" href="<?php echo esc_url( $wh_wl_id ? get_permalink( $wh_wl_id ) : ( function_exists( 'wc_get_page_permalink' ) ? wc_get_page_permalink( 'shop' ) . '#whiskey-and-lies' : home_url( '/shop/#whiskey-and-lies' ) ) ); ?>" style="margin-left:8px;">Buy book →</a>
       </div>

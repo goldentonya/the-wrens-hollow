@@ -455,5 +455,38 @@ function wrens_hollow_register_acf_fields() {
 			'hide_on_screen' => array( 'the_content' ),
 		)
 	);
+
+	// --- Team member fields (attached to the wh_character post type) ---
+	acf_add_local_field_group(
+		array(
+			'key'      => 'group_wh_character',
+			'title'    => 'Team member',
+			'fields'   => array(
+				array(
+					'key'          => 'field_wh_character_desc',
+					'label'        => 'Description',
+					'name'         => 'character_desc',
+					'type'         => 'textarea',
+					'rows'         => 3,
+					'instructions' => 'The short role/description under the name. The badge image is the "Badge image" box on the right.',
+				),
+			),
+			'location' => array(
+				array(
+					array(
+						'param'    => 'post_type',
+						'operator' => '==',
+						'value'    => 'wh_character',
+					),
+				),
+			),
+			'menu_order'     => 0,
+			'position'       => 'normal',
+			'style'          => 'default',
+			'active'         => true,
+			'show_in_rest'   => 1,
+			'hide_on_screen' => array( 'the_content' ),
+		)
+	);
 }
 add_action( 'acf/init', 'wrens_hollow_register_acf_fields' );

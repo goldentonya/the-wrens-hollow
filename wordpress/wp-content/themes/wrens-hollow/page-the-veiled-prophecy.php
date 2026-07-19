@@ -50,9 +50,9 @@ $wh_vf_id = function_exists( 'wc_get_product_id_by_sku' ) ? wc_get_product_id_by
     <div class="card book-showcase book-showcase--featured">
       <div class="ph-box"><img src="<?php echo esc_url( get_template_directory_uri() . '/images/covers/veilfall.jpg' ); ?>" alt="Veilfall book cover" style="width:100%;height:100%;object-fit:cover;object-position:top;border-radius:6px;"></div>
       <div class="book-showcase__body">
-        <p class="book-card__tag">Book 1 · First chapters free</p>
-        <h3>Veilfall</h3>
-        <p class="txt">She was hidden in the human realm to stay safe. But magic has a way of finding what was never meant to be forgotten. When Veralyn's parents are killed, she learns the truth — she's fae, and bound to a prophecy that could alter the fate of Sylvaeris, forcing her into the dangerous halls of Auravale Academy.</p>
+        <p class="book-card__tag"><?php wh_the( 'reading1_tag', 'Book 1 · First chapters free' ); ?></p>
+        <h3><?php wh_the( 'reading1_title', 'Veilfall' ); ?></h3>
+        <p class="txt"><?php wh_the( 'reading1_blurb', "She was hidden in the human realm to stay safe. But magic has a way of finding what was never meant to be forgotten. When Veralyn's parents are killed, she learns the truth — she's fae, and bound to a prophecy that could alter the fate of Sylvaeris, forcing her into the dangerous halls of Auravale Academy." ); ?></p>
         <a class="btn btn--sm" href="<?php echo esc_url( home_url( '/veilfall/' ) ); ?>">Start reading free →</a>
         <a class="btn btn--outline btn--sm" href="<?php echo esc_url( $wh_vf_id ? get_permalink( $wh_vf_id ) : ( function_exists( 'wc_get_page_permalink' ) ? wc_get_page_permalink( 'shop' ) . '#veilfall' : home_url( '/shop/#veilfall' ) ) ); ?>" style="margin-left:8px;">Buy book →</a>
       </div>
@@ -60,9 +60,9 @@ $wh_vf_id = function_exists( 'wc_get_product_id_by_sku' ) ? wc_get_product_id_by
     <div class="card book-showcase">
       <div class="ph-box"><img src="<?php echo esc_url( get_template_directory_uri() . '/images/covers/veilbound.jpg' ); ?>" alt="Veilbound book cover" style="width:100%;height:100%;object-fit:cover;border-radius:6px;"></div>
       <div class="book-showcase__body">
-        <p class="book-card__tag">Book 2 · Coming soon</p>
-        <h3>Veilbound</h3>
-        <p class="txt">Vera's magic is fully awakening, revealing gifts tied to the first Fae Queen herself — and unexpected connections to a vampire and a wolf shifter she was never meant to meet. With Caelum bound to her by a fated mate bond she keeps resisting, Vera must decide whether protecting her heart is worth losing everything else.</p>
+        <p class="book-card__tag"><?php wh_the( 'reading2_tag', 'Book 2 · Coming soon' ); ?></p>
+        <h3><?php wh_the( 'reading2_title', 'Veilbound' ); ?></h3>
+        <p class="txt"><?php wh_the( 'reading2_blurb', "Vera's magic is fully awakening, revealing gifts tied to the first Fae Queen herself — and unexpected connections to a vampire and a wolf shifter she was never meant to meet. With Caelum bound to her by a fated mate bond she keeps resisting, Vera must decide whether protecting her heart is worth losing everything else." ); ?></p>
         <button class="btn btn--sm" type="button" data-notify="Veilbound">Notify me on release</button>
         <a class="btn btn--outline btn--sm" href="<?php echo esc_url( home_url( '/veilbound/' ) ); ?>" style="margin-left:8px;">Learn more →</a>
       </div>

@@ -60,6 +60,32 @@ function wrens_hollow_register_post_types() {
 	);
 
 	register_post_type(
+		'wh_character',
+		array(
+			'labels'       => array(
+				'name'                  => 'Team',
+				'singular_name'         => 'Team member',
+				'menu_name'             => 'Team',
+				'add_new_item'          => 'Add New Team Member',
+				'edit_item'             => 'Edit Team Member',
+				'new_item'              => 'New Team Member',
+				'all_items'             => 'All Team Members',
+				'featured_image'        => 'Badge image',
+				'set_featured_image'    => 'Set badge image',
+				'remove_featured_image' => 'Remove badge image',
+				'use_featured_image'    => 'Use as badge image',
+			),
+			'public'       => false,
+			'show_ui'      => true,
+			'show_in_menu' => true,
+			'show_in_rest' => true,
+			'menu_icon'    => 'dashicons-groups',
+			'menu_position'=> 25,
+			'supports'     => array( 'title', 'thumbnail', 'page-attributes' ),
+		)
+	);
+
+	register_post_type(
 		'wh_project',
 		array(
 			'labels'       => array(
@@ -116,6 +142,9 @@ add_action( 'init', 'wrens_hollow_register_post_types' );
 function wrens_hollow_enter_title_here( $text, $post ) {
 	if ( isset( $post->post_type ) && 'wh_review' === $post->post_type ) {
 		return 'Review quote — what the reader said';
+	}
+	if ( isset( $post->post_type ) && 'wh_character' === $post->post_type ) {
+		return 'Name & callsign — e.g. Wade "Wraith" Blakely';
 	}
 	return $text;
 }

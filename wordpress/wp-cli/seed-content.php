@@ -566,3 +566,61 @@ if ( ! get_option( 'wh_seeded_home_extras' ) && function_exists( 'wh_book' ) ) {
 } elseif ( class_exists( 'WP_CLI' ) ) {
 	WP_CLI::log( '[seed] Home extras already seeded — skipping.' );
 }
+
+/** Seed the Whiskey Tango Foxtrot team members once, with badge images. */
+if ( ! get_option( 'wh_seeded_team' ) ) {
+	require_once ABSPATH . 'wp-admin/includes/image.php';
+	$team = array(
+		array( 'img' => 'wraith', 'name' => 'Wade "Wraith" Blakely', 'desc' => 'Team leader. Quiet, deadly, and protective. A force in the field with a guarded heart.' ),
+		array( 'img' => 'glitch', 'name' => 'Jake "Glitch" Thompson', 'desc' => 'Communications expert. Brilliant with tech, haunted by his past, loyal to the end.' ),
+		array( 'img' => 'reaper', 'name' => 'Simon "Reaper" Miller', 'desc' => 'Second-in-command. Lethal and strategic, but with a sarcastic streak and unmatched loyalty.' ),
+		array( 'img' => 'sparta', 'name' => 'Shawn "Sparta" Jackson', 'desc' => 'Operations specialist. Keeps the team focused, carries ancient wisdom, and has a plan for everything.' ),
+		array( 'img' => 'magellan', 'name' => 'Joel "Magellan" Ramirez', 'desc' => 'Weapons and logistics. Strength, charm, and a heart as steady as his aim.' ),
+		array( 'img' => 'stitches', 'name' => 'Nick "Stitches" Davies', 'desc' => "Medic. Calm under pressure, a healer who's seen too much." ),
+		array( 'img' => 'ghost', 'name' => 'Jackson "Ghost" Lewis', 'desc' => 'Intel. Silent, calculating, and often underestimated.' ),
+	);
+
+	$tcount = 0;
+	foreach ( $team as $i => $m ) {
+		$post_id = wp_insert_post(
+			array(
+				'post_type'   => 'wh_character',
+				'post_title'  => $m['name'],
+				'post_status' => 'publish',
+				'menu_order'  => $i,
+			)
+		);
+		if ( ! $post_id || is_wp_error( $post_id ) ) {
+			continue;
+		}
+		update_field( 'character_desc', $m['desc'], $post_id );
+
+		$file = get_template_directory() . '/images/team/' . $m['img'] . '.png';
+		if ( file_exists( $file ) ) {
+			$upload = wp_upload_bits( $m['img'] . '.png', null, file_get_contents( $file ) );
+			if ( empty( $upload['error'] ) ) {
+				$attach_id = wp_insert_attachment(
+					array(
+						'post_mime_type' => $upload['type'],
+						'post_title'     => $m['name'] . ' badge',
+						'post_status'    => 'inherit',
+					),
+					$upload['file'],
+					$post_id
+				);
+				if ( $attach_id && ! is_wp_error( $attach_id ) ) {
+					wp_update_attachment_metadata( $attach_id, wp_generate_attachment_metadata( $attach_id, $upload['file'] ) );
+					set_post_thumbnail( $post_id, $attach_id );
+				}
+			}
+		}
+		$tcount++;
+	}
+
+	update_option( 'wh_seeded_team', 1 );
+	if ( class_exists( 'WP_CLI' ) ) {
+		WP_CLI::log( "[seed] Created {$tcount} team members." );
+	}
+} elseif ( class_exists( 'WP_CLI' ) ) {
+	WP_CLI::log( '[seed] Team already seeded — skipping.' );
+}

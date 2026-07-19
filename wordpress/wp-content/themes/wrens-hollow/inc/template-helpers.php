@@ -285,6 +285,41 @@ function wh_render_project( $post ) {
 }
 
 /**
+ * Published Team members (wh_character), in menu order (the "Order" box).
+ */
+function wh_characters() {
+	return get_posts(
+		array(
+			'post_type'      => 'wh_character',
+			'posts_per_page' => -1,
+			'post_status'    => 'publish',
+			'orderby'        => array(
+				'menu_order' => 'ASC',
+				'date'       => 'ASC',
+			),
+		)
+	);
+}
+
+/**
+ * Render one .team-card for a team member (badge = featured image, name = title).
+ */
+function wh_render_character( $post ) {
+	$desc = wh_field( 'character_desc', '', $post->ID );
+	?>
+	<div class="team-card">
+	  <?php if ( has_post_thumbnail( $post->ID ) ) : ?>
+	    <div class="team-card__badge"><img src="<?php echo esc_url( get_the_post_thumbnail_url( $post->ID, 'full' ) ); ?>" alt="<?php echo esc_attr( get_the_title( $post ) ); ?> emblem"></div>
+	  <?php endif; ?>
+	  <h3><?php echo esc_html( get_the_title( $post ) ); ?></h3>
+	  <?php if ( $desc ) : ?>
+	    <p class="txt"><?php echo esc_html( $desc ); ?></p>
+	  <?php endif; ?>
+	</div>
+	<?php
+}
+
+/**
  * Projects flagged to show on the home page ("Currently writing").
  */
 function wh_projects_home() {
