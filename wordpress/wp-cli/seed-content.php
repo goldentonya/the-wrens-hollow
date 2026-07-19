@@ -105,3 +105,39 @@ if ( ! get_option( 'wh_seeded_events' ) ) {
 } elseif ( class_exists( 'WP_CLI' ) ) {
 	WP_CLI::log( '[seed] Events already seeded — skipping.' );
 }
+
+/** Seed Reviews once. Quote = post title, source = review_source field. */
+if ( ! get_option( 'wh_seeded_reviews' ) ) {
+	$reviews = array(
+		array( 'quote' => "Couldn't put it down — the tension is unreal.", 'source' => 'Goodreads' ),
+		array( 'quote' => 'Fierce women and swoony romance. More please!', 'source' => 'Amazon' ),
+		array( 'quote' => "Veilfall is the fae fantasy I didn't know I needed. That ending!", 'source' => 'NetGalley' ),
+		array( 'quote' => 'Whiskey Tango Foxtrot had me laughing one page and crying the next.', 'source' => 'BookBub' ),
+		array( 'quote' => "Ali Wren writes heroines who don't wait to be saved.", 'source' => '@reads.with.casey, TikTok' ),
+		array( 'quote' => 'Whiskey & Secrets had the perfect amount of banter and heartbreak.', 'source' => 'Instagram' ),
+	);
+
+	$rcount = 0;
+	foreach ( $reviews as $i => $rv ) {
+		$post_id = wp_insert_post(
+			array(
+				'post_type'   => 'wh_review',
+				'post_title'  => $rv['quote'],
+				'post_status' => 'publish',
+				'menu_order'  => $i,
+			)
+		);
+		if ( $post_id && ! is_wp_error( $post_id ) ) {
+			update_field( 'review_source', $rv['source'], $post_id );
+			$rcount++;
+		}
+	}
+
+	update_option( 'wh_seeded_reviews', 1 );
+
+	if ( class_exists( 'WP_CLI' ) ) {
+		WP_CLI::log( "[seed] Created {$rcount} reviews." );
+	}
+} elseif ( class_exists( 'WP_CLI' ) ) {
+	WP_CLI::log( '[seed] Reviews already seeded — skipping.' );
+}

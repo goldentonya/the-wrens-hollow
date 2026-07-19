@@ -82,3 +82,15 @@ function wrens_hollow_register_post_types() {
 	);
 }
 add_action( 'init', 'wrens_hollow_register_post_types' );
+
+/**
+ * Relabel the Title box on the Review editor so it's clear the title is the
+ * quote itself (Reviews carry no body — just quote + source).
+ */
+function wrens_hollow_enter_title_here( $text, $post ) {
+	if ( isset( $post->post_type ) && 'wh_review' === $post->post_type ) {
+		return 'Review quote — what the reader said';
+	}
+	return $text;
+}
+add_filter( 'enter_title_here', 'wrens_hollow_enter_title_here', 10, 2 );

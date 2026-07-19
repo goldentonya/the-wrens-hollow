@@ -62,74 +62,19 @@ get_header();
 <section class="sec sec--tight sec--cream sec--dashed-top" id="reviews">
   <div class="wrap sec--center">
     <p class="eyebrow" style="margin-bottom:32px;">What Readers Are Saying</p>
+    <?php $wh_reviews = wh_reviews(); ?>
+    <?php if ( $wh_reviews ) : ?>
     <div class="reviews-carousel">
       <div class="reviews-carousel__track">
         <div class="reviews-carousel__set">
-          <div class="card review-card">
-            <p class="stars">★★★★★</p>
-            <p class="txt">"Couldn't put it down — the tension is unreal."</p>
-            <p class="source">— Goodreads</p>
-          </div>
-          <div class="card review-card">
-            <p class="stars">★★★★★</p>
-            <p class="txt">"Fierce women and swoony romance. More please!"</p>
-            <p class="source">— Amazon</p>
-          </div>
-          <div class="card review-card">
-            <p class="stars">★★★★★</p>
-            <p class="txt">"Veilfall is the fae fantasy I didn't know I needed. That ending!"</p>
-            <p class="source">— NetGalley</p>
-          </div>
-          <div class="card review-card">
-            <p class="stars">★★★★★</p>
-            <p class="txt">"Whiskey Tango Foxtrot had me laughing one page and crying the next."</p>
-            <p class="source">— BookBub</p>
-          </div>
-          <div class="card review-card">
-            <p class="stars">★★★★★</p>
-            <p class="txt">"Ali Wren writes heroines who don't wait to be saved."</p>
-            <p class="source">— @reads.with.casey, TikTok</p>
-          </div>
-          <div class="card review-card">
-            <p class="stars">★★★★★</p>
-            <p class="txt">"Whiskey &amp; Secrets had the perfect amount of banter and heartbreak."</p>
-            <p class="source">— Instagram</p>
-          </div>
+          <?php foreach ( $wh_reviews as $wh_review ) { wh_render_review_card( $wh_review ); } ?>
         </div>
         <div class="reviews-carousel__set" aria-hidden="true">
-          <div class="card review-card">
-            <p class="stars">★★★★★</p>
-            <p class="txt">"Couldn't put it down — the tension is unreal."</p>
-            <p class="source">— Goodreads</p>
-          </div>
-          <div class="card review-card">
-            <p class="stars">★★★★★</p>
-            <p class="txt">"Fierce women and swoony romance. More please!"</p>
-            <p class="source">— Amazon</p>
-          </div>
-          <div class="card review-card">
-            <p class="stars">★★★★★</p>
-            <p class="txt">"Veilfall is the fae fantasy I didn't know I needed. That ending!"</p>
-            <p class="source">— NetGalley</p>
-          </div>
-          <div class="card review-card">
-            <p class="stars">★★★★★</p>
-            <p class="txt">"Whiskey Tango Foxtrot had me laughing one page and crying the next."</p>
-            <p class="source">— BookBub</p>
-          </div>
-          <div class="card review-card">
-            <p class="stars">★★★★★</p>
-            <p class="txt">"Ali Wren writes heroines who don't wait to be saved."</p>
-            <p class="source">— @reads.with.casey, TikTok</p>
-          </div>
-          <div class="card review-card">
-            <p class="stars">★★★★★</p>
-            <p class="txt">"Whiskey &amp; Secrets had the perfect amount of banter and heartbreak."</p>
-            <p class="source">— Instagram</p>
-          </div>
+          <?php foreach ( $wh_reviews as $wh_review ) { wh_render_review_card( $wh_review ); } ?>
         </div>
       </div>
     </div>
+    <?php endif; ?>
   </div>
 </section>
 

@@ -75,5 +75,40 @@ function wrens_hollow_register_acf_fields() {
 			'hide_on_screen'        => array( 'the_content' ),
 		)
 	);
+
+	// --- Review fields (attached to the wh_review post type) ---
+	// The quote itself is the post Title (relabeled in post-types.php); this
+	// group adds only the attribution source.
+	acf_add_local_field_group(
+		array(
+			'key'      => 'group_wh_review',
+			'title'    => 'Review',
+			'fields'   => array(
+				array(
+					'key'          => 'field_wh_review_source',
+					'label'        => 'Source',
+					'name'         => 'review_source',
+					'type'         => 'text',
+					'instructions' => 'Where the review came from, e.g. "Goodreads", "Amazon", "@reads.with.casey, TikTok". Shown after the em dash.',
+					'required'     => 0,
+				),
+			),
+			'location' => array(
+				array(
+					array(
+						'param'    => 'post_type',
+						'operator' => '==',
+						'value'    => 'wh_review',
+					),
+				),
+			),
+			'menu_order'     => 0,
+			'position'       => 'normal',
+			'style'          => 'default',
+			'active'         => true,
+			'show_in_rest'   => 1,
+			'hide_on_screen' => array( 'the_content' ),
+		)
+	);
 }
 add_action( 'acf/init', 'wrens_hollow_register_acf_fields' );

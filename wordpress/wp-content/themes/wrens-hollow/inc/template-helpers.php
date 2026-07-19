@@ -118,6 +118,40 @@ function wh_events( $which = 'past' ) {
 }
 
 /**
+ * Published Review posts, in menu order then oldest-first (stable carousel order).
+ */
+function wh_reviews() {
+	return get_posts(
+		array(
+			'post_type'      => 'wh_review',
+			'posts_per_page' => -1,
+			'post_status'    => 'publish',
+			'orderby'        => array(
+				'menu_order' => 'ASC',
+				'date'       => 'ASC',
+			),
+		)
+	);
+}
+
+/**
+ * Render one review card, matching the existing .review-card markup. The quote
+ * is the post title; the source is the review_source field.
+ */
+function wh_render_review_card( $post ) {
+	$source = wh_field( 'review_source', '', $post->ID );
+	?>
+	<div class="card review-card">
+	  <p class="stars">★★★★★</p>
+	  <p class="txt">"<?php echo esc_html( get_the_title( $post ) ); ?>"</p>
+	  <?php if ( $source ) : ?>
+	    <p class="source">— <?php echo esc_html( $source ); ?></p>
+	  <?php endif; ?>
+	</div>
+	<?php
+}
+
+/**
  * Render a single event card (shared by the Events page and the home teaser),
  * matching the existing .event-card markup exactly.
  */
