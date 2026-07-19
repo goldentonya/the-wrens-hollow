@@ -7,6 +7,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+/**
+ * Editable-content layer: custom post types (Events/Reviews/Books), ACF field
+ * definitions, and the template render helpers that read them (with the current
+ * hardcoded copy as a fallback so nothing goes blank).
+ */
+require get_template_directory() . '/inc/post-types.php';
+require get_template_directory() . '/inc/acf-fields.php';
+require get_template_directory() . '/inc/template-helpers.php';
+
 function wrens_hollow_setup() {
 	add_theme_support( 'title-tag' );
 	add_theme_support( 'post-thumbnails' );

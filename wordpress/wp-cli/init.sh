@@ -46,6 +46,20 @@ else
   $WP plugin activate woocommerce
 fi
 
+# Editable-content plugins (both free, from wordpress.org): Advanced Custom
+# Fields powers the labeled page/CPT fields; Custom Post Type UI lets the owner
+# see the Events/Reviews/Books lists in the dashboard (the theme registers them
+# in code, so they work with or without the plugin).
+for plugin in advanced-custom-fields custom-post-type-ui; do
+  if $WP plugin is-installed "$plugin" >/dev/null 2>&1; then
+    echo "[init] Activating $plugin..."
+    $WP plugin activate "$plugin"
+  else
+    echo "[init] Installing $plugin..."
+    $WP plugin install "$plugin" --activate
+  fi
+done
+
 # Note: all informational chatter here goes to stderr (>&2). The only thing this
 # function may write to stdout is the page id, so command substitution stays clean.
 create_page() {
@@ -87,5 +101,8 @@ echo "[init] WooCommerce activation creates the Shop/Cart/Checkout/My Account pa
 
 echo "[init] Configuring store options, product, gateways, and shipping..."
 $WP eval-file /wp-cli-scripts/setup-woocommerce.php
+
+echo "[init] Seeding editable content (events, etc.)..."
+$WP eval-file /wp-cli-scripts/seed-content.php
 
 echo "[init] Done. Visit http://localhost:8080 (store) and http://localhost:8080/wp-admin (admin/admin)."
