@@ -33,9 +33,11 @@ $wh_wl_product = $wh_wl_id ? wc_get_product( $wh_wl_id ) : false;
     <div class="grid-2">
 
       <div class="card product-card" id="whiskey-and-secrets">
+        <?php if ( $wh_ws_id ) : ?><a href="<?php echo esc_url( get_permalink( $wh_ws_id ) ); ?>"><?php endif; ?>
         <div class="ph-box"><img src="<?php echo esc_url( get_template_directory_uri() . '/images/covers/whiskey-and-secrets.jpg' ); ?>" alt="Whiskey &amp; Secrets book cover" style="width:100%;height:100%;object-fit:cover;border-radius:6px;"></div>
         <p class="book-card__tag">Book 1 · Whiskey Tango Foxtrot</p>
         <h3>Whiskey &amp; Secrets</h3>
+        <?php if ( $wh_ws_id ) : ?></a><?php endif; ?>
         <p class="txt">Signed paperback.</p>
         <?php if ( $wh_ws_product ) : ?>
           <div class="product-card__row">
@@ -51,9 +53,11 @@ $wh_wl_product = $wh_wl_id ? wc_get_product( $wh_wl_id ) : false;
       </div>
 
       <div class="card product-card" id="whiskey-and-lies">
+        <?php if ( $wh_wl_id ) : ?><a href="<?php echo esc_url( get_permalink( $wh_wl_id ) ); ?>"><?php endif; ?>
         <div class="ph-box"><img src="<?php echo esc_url( get_template_directory_uri() . '/images/covers/whiskey-and-lies.jpg' ); ?>" alt="Whiskey &amp; Lies book cover" style="width:100%;height:100%;object-fit:cover;border-radius:6px;"></div>
         <p class="book-card__tag">Book 2 · Whiskey Tango Foxtrot</p>
         <h3>Whiskey &amp; Lies</h3>
+        <?php if ( $wh_wl_id ) : ?></a><?php endif; ?>
         <p class="txt">Signed paperback.</p>
         <?php if ( $wh_wl_product ) : ?>
           <div class="product-card__row">
@@ -69,9 +73,11 @@ $wh_wl_product = $wh_wl_id ? wc_get_product( $wh_wl_id ) : false;
       </div>
 
       <div class="card product-card" id="veilfall">
-        <div class="ph-box"><img src="<?php echo esc_url( get_template_directory_uri() . '/images/covers/veilfall.jpg' ); ?>" alt="Veilfall book cover" style="width:100%;height:100%;object-fit:cover;border-radius:6px;"></div>
+        <?php if ( $wh_vf_id ) : ?><a href="<?php echo esc_url( get_permalink( $wh_vf_id ) ); ?>"><?php endif; ?>
+        <div class="ph-box"><img src="<?php echo esc_url( get_template_directory_uri() . '/images/covers/veilfall.jpg' ); ?>" alt="Veilfall book cover" style="width:100%;height:100%;object-fit:cover;object-position:top;border-radius:6px;"></div>
         <p class="book-card__tag">Book 1 · The Veiled Prophecy</p>
         <h3>Veilfall</h3>
+        <?php if ( $wh_vf_id ) : ?></a><?php endif; ?>
         <p class="txt">Paperback.</p>
         <?php if ( $wh_vf_product ) : ?>
           <div class="product-card__row">

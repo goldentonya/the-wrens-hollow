@@ -33,7 +33,7 @@ $wh_product    = $wh_product_id ? wc_get_product( $wh_product_id ) : false;
       </div>
     </div>
     <div class="hero__cover wh-fade" style="--delay:.1s">
-      <div class="ph-box"><img src="<?php echo esc_url( get_template_directory_uri() . '/images/covers/whiskey-and-lies.jpg' ); ?>" alt="Whiskey &amp; Lies book cover" style="width:220px;height:320px;object-fit:cover;box-shadow:0 18px 40px rgba(60,40,50,.28);border-radius:4px;"></div>
+      <div class="ph-box"><img src="<?php echo esc_url( get_template_directory_uri() . '/images/covers/whiskey-and-lies.jpg' ); ?>" alt="Whiskey &amp; Lies book cover" style="width:100%;height:100%;object-fit:cover;border-radius:4px;"></div>
     </div>
   </div>
 </section>

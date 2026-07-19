@@ -13,6 +13,10 @@ update_option( 'woocommerce_default_country', 'US' );
 update_option( 'woocommerce_calc_taxes', 'no' );
 // Let people check out without creating an account.
 update_option( 'woocommerce_enable_guest_checkout', 'yes' );
+// Book covers are portrait; WooCommerce's default 1:1 hard crop chops off the
+// title and author name. Uncropped keeps the whole cover in product loops
+// (related products, shop archive fallback, etc).
+update_option( 'woocommerce_thumbnail_cropping', 'uncropped' );
 
 // --- Offline payment gateways (no merchant account needed) -------------
 foreach ( array( 'woocommerce_cod_settings', 'woocommerce_bacs_settings' ) as $option_name ) {
@@ -48,6 +52,48 @@ foreach ( $classic_pages as $page_id => $shortcode ) {
 	}
 }
 
+// --- Attach a book cover (from the theme's images/covers folder) as a
+// product's WordPress featured image, so WooCommerce's own templates
+// (e.g. the related-products loop on single-product.php) show the real
+// cover instead of WooCommerce's placeholder. Idempotent: skips products
+// that already have a featured image.
+function wrens_hollow_set_product_cover( $product_id, $cover_filename, $alt_text ) {
+	if ( ! $product_id || has_post_thumbnail( $product_id ) ) {
+		return;
+	}
+
+	$file_path = get_template_directory() . '/images/covers/' . $cover_filename;
+	if ( ! file_exists( $file_path ) ) {
+		echo "Cover file not found, skipping featured image: {$file_path}\n";
+		return;
+	}
+
+	$upload_dir     = wp_upload_dir();
+	$new_file_path  = $upload_dir['path'] . '/' . $cover_filename;
+	if ( ! file_exists( $new_file_path ) ) {
+		copy( $file_path, $new_file_path );
+	}
+
+	$filetype   = wp_check_filetype( $cover_filename, null );
+	$attach_id  = wp_insert_attachment(
+		array(
+			'post_mime_type' => $filetype['type'],
+			'post_title'     => $alt_text,
+			'post_content'   => '',
+			'post_status'    => 'inherit',
+		),
+		$new_file_path,
+		$product_id
+	);
+
+	require_once ABSPATH . 'wp-admin/includes/image.php';
+	wp_update_attachment_metadata( $attach_id, wp_generate_attachment_metadata( $attach_id, $new_file_path ) );
+	update_post_meta( $attach_id, '_wp_attachment_image_alt', $alt_text );
+	set_post_thumbnail( $product_id, $attach_id );
+
+	echo "Set featured image for product {$product_id} from {$cover_filename} (attachment {$attach_id}).\n";
+}
+
 // --- Whiskey & Secrets — the one real, purchasable product --------------
 $product_sku = 'whiskey-and-secrets-signed';
 $existing_id = wc_get_product_id_by_sku( $product_sku );
@@ -69,8 +115,10 @@ if ( ! $existing_id ) {
 	$product_id = $product->save();
 	echo "Created product 'Whiskey & Secrets — Signed Paperback' (ID {$product_id}).\n";
 } else {
+	$product_id = $existing_id;
 	echo "Product 'Whiskey & Secrets — Signed Paperback' already exists (ID {$existing_id}).\n";
 }
+wrens_hollow_set_product_cover( $product_id, 'whiskey-and-secrets.jpg', 'Whiskey & Secrets book cover' );
 
 // --- Veilfall — signed paperback, the second real, purchasable product --
 $veilfall_sku = 'veilfall-paperback';
@@ -93,8 +141,10 @@ if ( ! $veilfall_existing_id ) {
 	$veilfall_product_id = $veilfall_product->save();
 	echo "Created product 'Veilfall — Paperback' (ID {$veilfall_product_id}).\n";
 } else {
+	$veilfall_product_id = $veilfall_existing_id;
 	echo "Product 'Veilfall — Paperback' already exists (ID {$veilfall_existing_id}).\n";
 }
+wrens_hollow_set_product_cover( $veilfall_product_id, 'veilfall.jpg', 'Veilfall book cover' );
 
 // --- Whiskey & Lies — signed paperback, third real, purchasable product -
 $wl_sku = 'whiskey-and-lies-signed';
@@ -117,8 +167,10 @@ if ( ! $wl_existing_id ) {
 	$wl_product_id = $wl_product->save();
 	echo "Created product 'Whiskey & Lies — Signed Paperback' (ID {$wl_product_id}).\n";
 } else {
+	$wl_product_id = $wl_existing_id;
 	echo "Product 'Whiskey & Lies — Signed Paperback' already exists (ID {$wl_existing_id}).\n";
 }
+wrens_hollow_set_product_cover( $wl_product_id, 'whiskey-and-lies.jpg', 'Whiskey & Lies book cover' );
 
 // --- Flat-rate shipping on the built-in "Rest of the World" zone --------
 // Zone 0 is WooCommerce's catch-all: it matches every address not covered by

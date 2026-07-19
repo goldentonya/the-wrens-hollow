@@ -1,7 +1,7 @@
 <?php
 /**
  * Shared header/nav. Templates set $wh_nav_active before calling get_header()
- * to one of: 'home' | 'books' | 'shop' | 'about' | 'events' | 'read-free' | 'wtf' | '' (none).
+ * to one of: 'home' | 'books' | 'shop' | 'about' | 'horizon' | 'events' | 'read-free' | 'wtf' | '' (none).
  * 'read-free' and 'wtf' are the two series (The Veiled Prophecy and Whiskey
  * Tango Foxtrot) — both they and their individual book pages count as "Books"
  * for nav-highlighting purposes, and appear as a hover flyout under "Books".
@@ -68,6 +68,7 @@ $wh_books_active = in_array( $wh_nav_active, array( 'books', 'read-free', 'wtf' 
       </div>
       <a class="<?php echo esc_attr( wh_nav_class( 'shop', $wh_nav_active ) ); ?>" href="<?php echo esc_url( function_exists( 'wc_get_page_permalink' ) ? wc_get_page_permalink( 'shop' ) : home_url( '/shop/' ) ); ?>">Shop</a>
       <a class="<?php echo esc_attr( wh_nav_class( 'about', $wh_nav_active ) ); ?>" href="<?php echo esc_url( home_url( '/about/' ) ); ?>">About</a>
+      <a class="<?php echo esc_attr( wh_nav_class( 'horizon', $wh_nav_active ) ); ?>" href="<?php echo esc_url( home_url( '/on-the-horizon/' ) ); ?>">On the Horizon</a>
       <a class="<?php echo esc_attr( wh_nav_class( 'events', $wh_nav_active ) ); ?>" href="<?php echo esc_url( home_url( '/events-appearances/' ) ); ?>">Events</a>
       <a class="nav__link nav__cart" href="<?php echo esc_url( $wh_cart_url ); ?>" aria-label="Cart">🛒<span class="nav__cart-count" id="cartCount"><?php echo intval( $wh_cart_count ); ?></span></a>
     </nav>

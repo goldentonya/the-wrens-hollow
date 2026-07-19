@@ -59,7 +59,7 @@ get_header();
 
     <div class="book-list">
       <div class="card book-showcase">
-        <div class="ph-box"><img src="<?php echo esc_url( get_template_directory_uri() . '/images/covers/veilfall.jpg' ); ?>" alt="Veilfall book cover" style="width:100%;height:100%;object-fit:cover;border-radius:6px;"></div>
+        <div class="ph-box"><img src="<?php echo esc_url( get_template_directory_uri() . '/images/covers/veilfall.jpg' ); ?>" alt="Veilfall book cover" style="width:100%;height:100%;object-fit:cover;object-position:top;border-radius:6px;"></div>
         <div class="book-showcase__body">
           <p class="book-card__tag">Book 1 · Free</p>
           <h3>Veilfall</h3>

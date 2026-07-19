@@ -66,6 +66,7 @@ create_page() {
 create_page "home" "Home" "front-page.php" >/dev/null
 create_page "books" "Books" "page-books.php" >/dev/null
 create_page "about" "About" "page-about.php" >/dev/null
+create_page "on-the-horizon" "On the Horizon" "page-on-the-horizon.php" >/dev/null
 create_page "events-appearances" "Events & Appearances" "page-events-appearances.php" >/dev/null
 create_page "the-veiled-prophecy" "The Veiled Prophecy" "page-the-veiled-prophecy.php" >/dev/null
 create_page "whiskey-tango-foxtrot" "Whiskey Tango Foxtrot" "page-whiskey-tango-foxtrot.php" >/dev/null
