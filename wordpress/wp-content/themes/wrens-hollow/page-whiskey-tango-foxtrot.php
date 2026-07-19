@@ -24,9 +24,9 @@ $wh_wl_id = function_exists( 'wc_get_product_id_by_sku' ) ? wc_get_product_id_by
 </section>
 <section class="hero-cta">
   <div class="wrap sec--center wh-fade">
-    <p class="eyebrow eyebrow--on-dark">Contemporary romance</p>
-    <h1 class="hero-cta__title">Whiskey Tango Foxtrot</h1>
-    <p class="lede hero-cta__lede">Fierce, funny, unforgettable — love that hits like a shot and lingers like the good stuff.</p>
+    <p class="eyebrow eyebrow--on-dark"><?php wh_the( 'series_eyebrow', 'Contemporary romance' ); ?></p>
+    <h1 class="hero-cta__title"><?php wh_the( 'series_title', 'Whiskey Tango Foxtrot' ); ?></h1>
+    <p class="lede hero-cta__lede"><?php wh_the( 'series_lede', 'Fierce, funny, unforgettable — love that hits like a shot and lingers like the good stuff.' ); ?></p>
   </div>
 </section>
 
@@ -35,11 +35,10 @@ $wh_wl_id = function_exists( 'wc_get_product_id_by_sku' ) ? wc_get_product_id_by
   <div class="wrap series-about">
     <div>
       <p class="eyebrow">About the Series</p>
-      <h2 class="h-md">Sharp banter, real heartbreak, women who don't back down</h2>
-      <p class="txt" style="margin-top:14px;">Whiskey Tango Foxtrot is contemporary romance with teeth — the kind of story that makes you laugh on one page and reach for a tissue on the next.</p>
-      <p class="txt" style="margin-top:14px;">At its center are women who've been knocked down and refuse to stay there, and the men who are smart enough not to underestimate them.</p>
-      <p class="txt" style="margin-top:14px;">Every secret has a cost, every drink has a story, and every ending is earned — not handed out.</p>
-      <p class="txt" style="margin-top:14px;">Start with Whiskey &amp; Secrets, free forever, then follow the series as it unfolds.</p>
+      <h2 class="h-md"><?php wh_the( 'about_series_heading', "Sharp banter, real heartbreak, women who don't back down" ); ?></h2>
+      <div class="wh-rte" style="margin-top:14px;">
+        <?php wh_wysiwyg( 'about_series_body', "<p>Whiskey Tango Foxtrot is contemporary romance with teeth — the kind of story that makes you laugh on one page and reach for a tissue on the next.</p><p>At its center are women who've been knocked down and refuse to stay there, and the men who are smart enough not to underestimate them.</p><p>Every secret has a cost, every drink has a story, and every ending is earned — not handed out.</p><p>Start with Whiskey &amp; Secrets, free forever, then follow the series as it unfolds.</p>" ); ?>
+      </div>
     </div>
     <img class="series-about__art" src="<?php echo esc_url( get_template_directory_uri() . '/images/photos/map.jpeg' ); ?>" alt="Whiskey Tango Foxtrot series map art">
   </div>

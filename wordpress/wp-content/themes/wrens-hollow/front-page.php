@@ -13,22 +13,22 @@ get_header();
 </section>
 <section class="hero-cta">
   <div class="wrap sec--center wh-fade">
-    <p class="eyebrow eyebrow--on-dark">The Veiled Prophecy · Book 1</p>
-    <h1 class="hero-cta__title">She doesn't know who to trust.</h1>
+    <p class="eyebrow eyebrow--on-dark"><?php wh_the( 'home_hero_eyebrow', 'The Veiled Prophecy · Book 1' ); ?></p>
+    <h1 class="hero-cta__title"><?php wh_the( 'home_hero_title', "She doesn't know who to trust." ); ?></h1>
     <p class="lede hero-cta__lede">Begin the fantasy series with <strong>Veilfall</strong> — the free first book readers can't put down.</p>
     <div class="hero-cta__actions">
-      <a class="btn" href="<?php echo esc_url( home_url( '/the-veiled-prophecy/' ) ); ?>">Start Reading Free →</a>
+      <a class="btn" href="<?php echo esc_url( home_url( '/the-veiled-prophecy/' ) ); ?>"><?php wh_the( 'home_hero_button', 'Start Reading Free →' ); ?></a>
     </div>
-    <p class="trust-line hero-cta__trust">★★★★★ · 200+ reviews · free forever</p>
+    <p class="trust-line hero-cta__trust"><?php wh_the( 'home_hero_trust', '★★★★★ · 200+ reviews · free forever' ); ?></p>
   </div>
 </section>
 
 <!-- Explore the books -->
 <section class="sec" id="books">
   <div class="wrap">
-    <p class="eyebrow">Explore the books</p>
-    <h2 class="h-lg">Two worlds, one storyteller</h2>
-    <p class="lede" style="margin-top:12px;">Fierce contemporary romance. Dark fae fantasy. Pick your escape.</p>
+    <p class="eyebrow"><?php wh_the( 'home_books_eyebrow', 'Explore the books' ); ?></p>
+    <h2 class="h-lg"><?php wh_the( 'home_books_heading', 'Two worlds, one storyteller' ); ?></h2>
+    <p class="lede" style="margin-top:12px;"><?php wh_the( 'home_books_lede', 'Fierce contemporary romance. Dark fae fantasy. Pick your escape.' ); ?></p>
 
     <div class="series-spotlight-grid">
       <a class="series-spotlight" href="<?php echo esc_url( home_url( '/the-veiled-prophecy/' ) ); ?>">
@@ -70,9 +70,9 @@ get_header();
 <section class="sec sec--cream2 sec--dashed-top">
   <div class="wrap bio-row bio-row--sm">
     <div class="bio-teaser-content">
-      <p class="eyebrow">Behind the pen</p>
-      <h3 class="h-md">Hi, I'm Ali Wren</h3>
-      <p class="pull-quote" style="margin:16px 0 22px;">Author, biological anthropologist, and proud Minnesota mom. I write romantic adventures that blend science, suspense, and heart — stories with fierce heroines, loyal heroes, and love that's never quite as simple as it seems.</p>
+      <p class="eyebrow"><?php wh_the( 'home_about_eyebrow', 'Behind the pen' ); ?></p>
+      <h3 class="h-md"><?php wh_the( 'home_about_heading', "Hi, I'm Ali Wren" ); ?></h3>
+      <p class="pull-quote" style="margin:16px 0 22px;"><?php wh_the( 'home_about_quote', "Author, biological anthropologist, and proud Minnesota mom. I write romantic adventures that blend science, suspense, and heart — stories with fierce heroines, loyal heroes, and love that's never quite as simple as it seems." ); ?></p>
       <a class="btn btn--outline btn--sm" href="<?php echo esc_url( home_url( '/about/' ) ); ?>">Read more</a>
     </div>
     <div class="ph-box"><img src="<?php echo esc_url( get_template_directory_uri() . '/images/photos/book-signing-1.jpg' ); ?>" alt="Ali Wren at a book signing" style="width:100%;height:100%;object-fit:cover;border-radius:8px;"></div>
@@ -82,8 +82,8 @@ get_header();
 <!-- Newsletter band -->
 <section class="sec sec--tight sec--dark">
   <div class="wrap sec--center">
-    <p class="eyebrow eyebrow--on-dark">Join the Hollow</p>
-    <h2 class="h-md" style="font-size:24px;">Get bonus chapters + first look at new releases</h2>
+    <p class="eyebrow eyebrow--on-dark"><?php wh_the( 'home_news_eyebrow', 'Join the Hollow' ); ?></p>
+    <h2 class="h-md" style="font-size:24px;"><?php wh_the( 'home_news_heading', 'Get bonus chapters + first look at new releases' ); ?></h2>
     <form class="newsletter-form" id="newsletterForm" style="margin-left:auto;margin-right:auto;">
       <input class="field" type="email" placeholder="your@email.com" required aria-label="Email address">
       <button class="btn" type="submit">Subscribe</button>

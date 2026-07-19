@@ -23,9 +23,9 @@ $wh_vf_id = function_exists( 'wc_get_product_id_by_sku' ) ? wc_get_product_id_by
 </section>
 <section class="hero-cta">
   <div class="wrap sec--center wh-fade">
-    <p class="eyebrow eyebrow--on-dark">Fantasy series · Kingdom of Sylvaeris</p>
-    <h1 class="hero-cta__title">The Veiled Prophecy</h1>
-    <p class="lede hero-cta__lede">She thought she was human. The fae realm knows better — a saga of ancient magic, dangerous love, and a prophecy that won't stay hidden.</p>
+    <p class="eyebrow eyebrow--on-dark"><?php wh_the( 'series_eyebrow', 'Fantasy series · Kingdom of Sylvaeris' ); ?></p>
+    <h1 class="hero-cta__title"><?php wh_the( 'series_title', 'The Veiled Prophecy' ); ?></h1>
+    <p class="lede hero-cta__lede"><?php wh_the( 'series_lede', "She thought she was human. The fae realm knows better — a saga of ancient magic, dangerous love, and a prophecy that won't stay hidden." ); ?></p>
   </div>
 </section>
 
@@ -34,12 +34,10 @@ $wh_vf_id = function_exists( 'wc_get_product_id_by_sku' ) ? wc_get_product_id_by
   <div class="wrap series-about">
     <div>
       <p class="eyebrow">About the Series</p>
-      <h2 class="h-md">A world of secrets, prophecy, and dangerous love</h2>
-      <p class="txt" style="margin-top:14px;">Hidden deep beyond the veil, Sylvaeris is a land where ancient magic stirs, and fate weaves tighter than any spell.</p>
-      <p class="txt" style="margin-top:14px;">At the heart of this world is Veralyn, a girl who grew up believing she was human—until the truth calls her back.</p>
-      <p class="txt" style="margin-top:14px;">Beside her stands Caelum, the guarded prince with the power to read auras and a kingdom to protect.</p>
-      <p class="txt" style="margin-top:14px;">Dark secrets rise, the Veilbound Order beckons, and not everyone wants the heir's chosen to survive.</p>
-      <p class="txt" style="margin-top:14px;">A tale of fate, forbidden magic, and slow-burn romance awaits. Start free, then follow the saga.</p>
+      <h2 class="h-md"><?php wh_the( 'about_series_heading', 'A world of secrets, prophecy, and dangerous love' ); ?></h2>
+      <div class="wh-rte" style="margin-top:14px;">
+        <?php wh_wysiwyg( 'about_series_body', "<p>Hidden deep beyond the veil, Sylvaeris is a land where ancient magic stirs, and fate weaves tighter than any spell.</p><p>At the heart of this world is Veralyn, a girl who grew up believing she was human—until the truth calls her back.</p><p>Beside her stands Caelum, the guarded prince with the power to read auras and a kingdom to protect.</p><p>Dark secrets rise, the Veilbound Order beckons, and not everyone wants the heir's chosen to survive.</p><p>A tale of fate, forbidden magic, and slow-burn romance awaits. Start free, then follow the saga.</p>" ); ?>
+      </div>
     </div>
     <img class="series-about__art" src="<?php echo esc_url( get_template_directory_uri() . '/images/photos/wilderness.png' ); ?>" alt="A moonlit castle deep in the Sylvaeris wilderness">
   </div>

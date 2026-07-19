@@ -12,9 +12,9 @@ get_header();
 
 <section class="sec sec--pink">
   <div class="wrap">
-    <p class="eyebrow">Coming soon from Ali</p>
-    <h1 class="h-lg">On the Horizon</h1>
-    <p class="lede" style="margin-top:12px;">I'm always working on new stories. This page is where I share upcoming projects, early details, and what I'm currently writing. Information may change as these stories evolve.</p>
+    <p class="eyebrow"><?php wh_the( 'hz_eyebrow', 'Coming soon from Ali' ); ?></p>
+    <h1 class="h-lg"><?php wh_the( 'hz_title', 'On the Horizon' ); ?></h1>
+    <p class="lede" style="margin-top:12px;"><?php wh_the( 'hz_lede', "I'm always working on new stories. This page is where I share upcoming projects, early details, and what I'm currently writing. Information may change as these stories evolve." ); ?></p>
   </div>
 </section>
 

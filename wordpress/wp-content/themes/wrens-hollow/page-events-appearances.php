@@ -8,9 +8,9 @@ get_header();
 
 <section class="sec sec--pink">
   <div class="wrap">
-    <p class="eyebrow">Events &amp; appearances</p>
-    <h1 class="h-lg">Come say hi</h1>
-    <p class="lede" style="margin-top:12px;">Signings, book fairs &amp; author events — where to find me next.</p>
+    <p class="eyebrow"><?php wh_the( 'ev_eyebrow', 'Events & appearances' ); ?></p>
+    <h1 class="h-lg"><?php wh_the( 'ev_title', 'Come say hi' ); ?></h1>
+    <p class="lede" style="margin-top:12px;"><?php wh_the( 'ev_lede', 'Signings, book fairs & author events — where to find me next.' ); ?></p>
   </div>
 </section>
 

@@ -12,8 +12,8 @@ get_header();
 
 <section class="sec sec--pink">
   <div class="wrap">
-    <p class="eyebrow">The Books</p>
-    <h1 class="h-lg">Fierce women. Brilliant love. Stories with heart.</h1>
+    <p class="eyebrow"><?php wh_the( 'books_eyebrow', 'The Books' ); ?></p>
+    <h1 class="h-lg"><?php wh_the( 'books_title', 'Fierce women. Brilliant love. Stories with heart.' ); ?></h1>
     <p class="lede" style="margin-top:12px;">Every book Ali has written, organized by series. Pick a title below to read more — each one has its own page, and signed copies are in the <a href="<?php echo esc_url( function_exists( 'wc_get_page_permalink' ) ? wc_get_page_permalink( 'shop' ) : home_url( '/shop/' ) ); ?>" style="color:var(--plum);font-weight:700;">shop</a>.</p>
   </div>
 </section>
