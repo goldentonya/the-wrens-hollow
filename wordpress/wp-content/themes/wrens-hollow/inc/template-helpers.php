@@ -221,39 +221,9 @@ function wh_render_book_showcase( $book ) {
 }
 
 /**
- * Published Review posts, in menu order then oldest-first (stable carousel order).
- * Reviews assigned to a specific book (review_book) are excluded — those show on
- * that book's page instead, via wh_reviews_for_book().
+ * All published Review posts, in stable carousel order (menu order, then oldest).
  */
-function wh_reviews() {
-	$posts = get_posts(
-		array(
-			'post_type'      => 'wh_review',
-			'posts_per_page' => -1,
-			'post_status'    => 'publish',
-			'orderby'        => array(
-				'menu_order' => 'ASC',
-				'date'       => 'ASC',
-			),
-		)
-	);
-	return array_values(
-		array_filter(
-			$posts,
-			function ( $p ) {
-				return ! get_post_meta( $p->ID, 'review_book', true );
-			}
-		)
-	);
-}
-
-/**
- * Published Review posts assigned to a given book (by book post ID).
- */
-function wh_reviews_for_book( $book_id ) {
-	if ( ! $book_id ) {
-		return array();
-	}
+function wh_all_reviews() {
 	return get_posts(
 		array(
 			'post_type'      => 'wh_review',
@@ -263,25 +233,104 @@ function wh_reviews_for_book( $book_id ) {
 				'menu_order' => 'ASC',
 				'date'       => 'ASC',
 			),
-			'meta_key'       => 'review_book',
-			'meta_value'     => $book_id,
+		)
+	);
+}
+
+/**
+ * Homepage reviews: those whose placement is "homepage" (treating a missing
+ * placement with no book/series assignment as homepage, for safety).
+ */
+function wh_reviews() {
+	return array_values(
+		array_filter(
+			wh_all_reviews(),
+			function ( $p ) {
+				$placement = get_post_meta( $p->ID, 'review_placement', true );
+				if ( '' === $placement ) {
+					return ! get_post_meta( $p->ID, 'review_book', true ) && ! get_post_meta( $p->ID, 'review_series', true );
+				}
+				return 'homepage' === $placement;
+			}
+		)
+	);
+}
+
+/**
+ * Reviews assigned to a given book (by book post ID).
+ */
+function wh_reviews_for_book( $book_id ) {
+	if ( ! $book_id ) {
+		return array();
+	}
+	return array_values(
+		array_filter(
+			wh_all_reviews(),
+			function ( $p ) use ( $book_id ) {
+				return (int) $book_id === (int) get_post_meta( $p->ID, 'review_book', true );
+			}
+		)
+	);
+}
+
+/**
+ * Reviews assigned to a given series (by series slug).
+ */
+function wh_reviews_for_series( $series ) {
+	if ( ! $series ) {
+		return array();
+	}
+	return array_values(
+		array_filter(
+			wh_all_reviews(),
+			function ( $p ) use ( $series ) {
+				return $series === get_post_meta( $p->ID, 'review_series', true );
+			}
 		)
 	);
 }
 
 /**
  * Render one review card, matching the existing .review-card markup. The quote
- * is the post title; the source is the review_source field.
+ * is the post title; the source is the review_source field; stars come from the
+ * review_rating field (defaults to 5).
  */
 function wh_render_review_card( $post ) {
 	$source = wh_field( 'review_source', '', $post->ID );
+	$rating = (int) wh_field( 'review_rating', 5, $post->ID );
+	if ( $rating < 1 || $rating > 5 ) {
+		$rating = 5;
+	}
+	$stars = str_repeat( '★', $rating ) . str_repeat( '☆', 5 - $rating );
 	?>
 	<div class="card review-card">
-	  <p class="stars">★★★★★</p>
+	  <p class="stars"><?php echo esc_html( $stars ); ?></p>
 	  <p class="txt">"<?php echo esc_html( get_the_title( $post ) ); ?>"</p>
 	  <?php if ( $source ) : ?>
 	    <p class="source">— <?php echo esc_html( $source ); ?></p>
 	  <?php endif; ?>
+	</div>
+	<?php
+}
+
+/**
+ * Render a reviews marquee (two duplicate sets for the CSS loop) from a given
+ * array of review posts. Shared by the homepage and the two series pages.
+ */
+function wh_render_reviews_carousel( $reviews ) {
+	if ( ! $reviews ) {
+		return;
+	}
+	?>
+	<div class="reviews-carousel">
+	  <div class="reviews-carousel__track">
+	    <div class="reviews-carousel__set">
+	      <?php foreach ( $reviews as $wh_review ) { wh_render_review_card( $wh_review ); } ?>
+	    </div>
+	    <div class="reviews-carousel__set" aria-hidden="true">
+	      <?php foreach ( $reviews as $wh_review ) { wh_render_review_card( $wh_review ); } ?>
+	    </div>
+	  </div>
 	</div>
 	<?php
 }

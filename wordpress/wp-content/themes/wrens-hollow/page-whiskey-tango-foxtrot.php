@@ -117,74 +117,7 @@ $wh_wl_id = function_exists( 'wc_get_product_id_by_sku' ) ? wc_get_product_id_by
 <section class="sec sec--tight sec--cream2 sec--dashed-top">
   <div class="wrap sec--center">
     <p class="eyebrow" style="margin-bottom:32px;">What Readers Are Saying</p>
-    <div class="reviews-carousel">
-      <div class="reviews-carousel__track">
-        <div class="reviews-carousel__set">
-          <div class="card review-card">
-            <p class="stars">★★★★★</p>
-            <p class="txt">"Sharp, funny, and it wrecked me in the best way."</p>
-            <p class="source">— Goodreads</p>
-          </div>
-          <div class="card review-card">
-            <p class="stars">★★★★★</p>
-            <p class="txt">"Whiskey Tango Foxtrot had me laughing one page and crying the next."</p>
-            <p class="source">— BookBub</p>
-          </div>
-          <div class="card review-card">
-            <p class="stars">★★★★★</p>
-            <p class="txt">"Whiskey &amp; Secrets had the perfect amount of banter and heartbreak."</p>
-            <p class="source">— Instagram</p>
-          </div>
-          <div class="card review-card">
-            <p class="stars">★★★★★</p>
-            <p class="txt">"I need Book 3 immediately. These women do not back down."</p>
-            <p class="source">— Amazon</p>
-          </div>
-          <div class="card review-card">
-            <p class="stars">★★★★★</p>
-            <p class="txt">"The bonus chapters in Whiskey &amp; Lies destroyed me. In a good way."</p>
-            <p class="source">— NetGalley</p>
-          </div>
-          <div class="card review-card">
-            <p class="stars">★★★★★</p>
-            <p class="txt">"Ali Wren writes heroines who don't wait to be saved."</p>
-            <p class="source">— @reads.with.casey, TikTok</p>
-          </div>
-        </div>
-        <div class="reviews-carousel__set" aria-hidden="true">
-          <div class="card review-card">
-            <p class="stars">★★★★★</p>
-            <p class="txt">"Sharp, funny, and it wrecked me in the best way."</p>
-            <p class="source">— Goodreads</p>
-          </div>
-          <div class="card review-card">
-            <p class="stars">★★★★★</p>
-            <p class="txt">"Whiskey Tango Foxtrot had me laughing one page and crying the next."</p>
-            <p class="source">— BookBub</p>
-          </div>
-          <div class="card review-card">
-            <p class="stars">★★★★★</p>
-            <p class="txt">"Whiskey &amp; Secrets had the perfect amount of banter and heartbreak."</p>
-            <p class="source">— Instagram</p>
-          </div>
-          <div class="card review-card">
-            <p class="stars">★★★★★</p>
-            <p class="txt">"I need Book 3 immediately. These women do not back down."</p>
-            <p class="source">— Amazon</p>
-          </div>
-          <div class="card review-card">
-            <p class="stars">★★★★★</p>
-            <p class="txt">"The bonus chapters in Whiskey &amp; Lies destroyed me. In a good way."</p>
-            <p class="source">— NetGalley</p>
-          </div>
-          <div class="card review-card">
-            <p class="stars">★★★★★</p>
-            <p class="txt">"Ali Wren writes heroines who don't wait to be saved."</p>
-            <p class="source">— @reads.with.casey, TikTok</p>
-          </div>
-        </div>
-      </div>
-    </div>
+    <?php wh_render_reviews_carousel( wh_reviews_for_series( 'whiskey-tango-foxtrot' ) ); ?>
   </div>
 </section>
 

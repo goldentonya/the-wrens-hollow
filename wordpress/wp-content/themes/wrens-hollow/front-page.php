@@ -62,19 +62,7 @@ get_header();
 <section class="sec sec--tight sec--cream sec--dashed-top" id="reviews">
   <div class="wrap sec--center">
     <p class="eyebrow" style="margin-bottom:32px;">What Readers Are Saying</p>
-    <?php $wh_reviews = wh_reviews(); ?>
-    <?php if ( $wh_reviews ) : ?>
-    <div class="reviews-carousel">
-      <div class="reviews-carousel__track">
-        <div class="reviews-carousel__set">
-          <?php foreach ( $wh_reviews as $wh_review ) { wh_render_review_card( $wh_review ); } ?>
-        </div>
-        <div class="reviews-carousel__set" aria-hidden="true">
-          <?php foreach ( $wh_reviews as $wh_review ) { wh_render_review_card( $wh_review ); } ?>
-        </div>
-      </div>
-    </div>
-    <?php endif; ?>
+    <?php wh_render_reviews_carousel( wh_reviews() ); ?>
   </div>
 </section>
 

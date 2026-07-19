@@ -76,74 +76,7 @@ $wh_vf_id = function_exists( 'wc_get_product_id_by_sku' ) ? wc_get_product_id_by
 <section class="sec sec--tight sec--cream2 sec--dashed-top">
   <div class="wrap sec--center">
     <p class="eyebrow" style="margin-bottom:32px;">What Readers Are Saying</p>
-    <div class="reviews-carousel">
-      <div class="reviews-carousel__track">
-        <div class="reviews-carousel__set">
-          <div class="card review-card">
-            <p class="stars">★★★★★</p>
-            <p class="txt">"Veilfall is the fae fantasy I didn't know I needed. That ending!"</p>
-            <p class="source">— NetGalley</p>
-          </div>
-          <div class="card review-card">
-            <p class="stars">★★★★★</p>
-            <p class="txt">"The world-building is gorgeous — Sylvaeris feels like a real place."</p>
-            <p class="source">— Goodreads</p>
-          </div>
-          <div class="card review-card">
-            <p class="stars">★★★★★</p>
-            <p class="txt">"Veralyn and Caelum's slow burn wrecked me. Give me book two already!"</p>
-            <p class="source">— @reads.with.casey, TikTok</p>
-          </div>
-          <div class="card review-card">
-            <p class="stars">★★★★★</p>
-            <p class="txt">"Dark fae romance done right. I devoured this in one sitting."</p>
-            <p class="source">— Amazon</p>
-          </div>
-          <div class="card review-card">
-            <p class="stars">★★★★★</p>
-            <p class="txt">"The prophecy twist had me gasping out loud. Sylvaeris lives rent-free in my head."</p>
-            <p class="source">— BookBub</p>
-          </div>
-          <div class="card review-card">
-            <p class="stars">★★★★★</p>
-            <p class="txt">"Fierce heroine, dangerous magic, and a romance that earns every slow burn."</p>
-            <p class="source">— Instagram</p>
-          </div>
-        </div>
-        <div class="reviews-carousel__set" aria-hidden="true">
-          <div class="card review-card">
-            <p class="stars">★★★★★</p>
-            <p class="txt">"Veilfall is the fae fantasy I didn't know I needed. That ending!"</p>
-            <p class="source">— NetGalley</p>
-          </div>
-          <div class="card review-card">
-            <p class="stars">★★★★★</p>
-            <p class="txt">"The world-building is gorgeous — Sylvaeris feels like a real place."</p>
-            <p class="source">— Goodreads</p>
-          </div>
-          <div class="card review-card">
-            <p class="stars">★★★★★</p>
-            <p class="txt">"Veralyn and Caelum's slow burn wrecked me. Give me book two already!"</p>
-            <p class="source">— @reads.with.casey, TikTok</p>
-          </div>
-          <div class="card review-card">
-            <p class="stars">★★★★★</p>
-            <p class="txt">"Dark fae romance done right. I devoured this in one sitting."</p>
-            <p class="source">— Amazon</p>
-          </div>
-          <div class="card review-card">
-            <p class="stars">★★★★★</p>
-            <p class="txt">"The prophecy twist had me gasping out loud. Sylvaeris lives rent-free in my head."</p>
-            <p class="source">— BookBub</p>
-          </div>
-          <div class="card review-card">
-            <p class="stars">★★★★★</p>
-            <p class="txt">"Fierce heroine, dangerous magic, and a romance that earns every slow burn."</p>
-            <p class="source">— Instagram</p>
-          </div>
-        </div>
-      </div>
-    </div>
+    <?php wh_render_reviews_carousel( wh_reviews_for_series( 'veiled-prophecy' ) ); ?>
   </div>
 </section>
 

@@ -303,3 +303,80 @@ if ( ! get_option( 'wh_seeded_book_reviews' ) && function_exists( 'wh_book' ) ) 
 } elseif ( class_exists( 'WP_CLI' ) ) {
 	WP_CLI::log( '[seed] Book reviews already seeded — skipping.' );
 }
+
+/** Back-fill rating + placement on reviews created before those fields existed,
+ * so the editor shows the correct selection for each. Runs once. */
+if ( ! get_option( 'wh_migrated_review_meta' ) ) {
+	$all_reviews = get_posts(
+		array(
+			'post_type'   => 'wh_review',
+			'post_status' => 'any',
+			'numberposts' => -1,
+			'fields'      => 'ids',
+		)
+	);
+	foreach ( $all_reviews as $rid ) {
+		if ( '' === (string) get_post_meta( $rid, 'review_rating', true ) ) {
+			update_field( 'review_rating', '5', $rid );
+		}
+		if ( '' === (string) get_post_meta( $rid, 'review_placement', true ) ) {
+			$placement = get_post_meta( $rid, 'review_book', true ) ? 'book' : 'homepage';
+			update_field( 'review_placement', $placement, $rid );
+		}
+	}
+	update_option( 'wh_migrated_review_meta', 1 );
+	if ( class_exists( 'WP_CLI' ) ) {
+		WP_CLI::log( '[seed] Back-filled rating/placement on existing reviews.' );
+	}
+}
+
+/** Seed the two series-page review carousels once (placement = series). */
+if ( ! get_option( 'wh_seeded_series_reviews' ) ) {
+	$series_reviews = array(
+		'veiled-prophecy'       => array(
+			array( 'quote' => "Veilfall is the fae fantasy I didn't know I needed. That ending!", 'source' => 'NetGalley' ),
+			array( 'quote' => 'The world-building is gorgeous — Sylvaeris feels like a real place.', 'source' => 'Goodreads' ),
+			array( 'quote' => "Veralyn and Caelum's slow burn wrecked me. Give me book two already!", 'source' => '@reads.with.casey, TikTok' ),
+			array( 'quote' => 'Dark fae romance done right. I devoured this in one sitting.', 'source' => 'Amazon' ),
+			array( 'quote' => 'The prophecy twist had me gasping out loud. Sylvaeris lives rent-free in my head.', 'source' => 'BookBub' ),
+			array( 'quote' => 'Fierce heroine, dangerous magic, and a romance that earns every slow burn.', 'source' => 'Instagram' ),
+		),
+		'whiskey-tango-foxtrot' => array(
+			array( 'quote' => 'Sharp, funny, and it wrecked me in the best way.', 'source' => 'Goodreads' ),
+			array( 'quote' => 'Whiskey Tango Foxtrot had me laughing one page and crying the next.', 'source' => 'BookBub' ),
+			array( 'quote' => 'Whiskey & Secrets had the perfect amount of banter and heartbreak.', 'source' => 'Instagram' ),
+			array( 'quote' => 'I need Book 3 immediately. These women do not back down.', 'source' => 'Amazon' ),
+			array( 'quote' => 'The bonus chapters in Whiskey & Lies destroyed me. In a good way.', 'source' => 'NetGalley' ),
+			array( 'quote' => "Ali Wren writes heroines who don't wait to be saved.", 'source' => '@reads.with.casey, TikTok' ),
+		),
+	);
+
+	$srcount = 0;
+	foreach ( $series_reviews as $series_slug => $revs ) {
+		foreach ( $revs as $i => $rv ) {
+			$post_id = wp_insert_post(
+				array(
+					'post_type'   => 'wh_review',
+					'post_title'  => $rv['quote'],
+					'post_status' => 'publish',
+					'menu_order'  => $i,
+				)
+			);
+			if ( $post_id && ! is_wp_error( $post_id ) ) {
+				update_field( 'review_source', $rv['source'], $post_id );
+				update_field( 'review_rating', '5', $post_id );
+				update_field( 'review_placement', 'series', $post_id );
+				update_field( 'review_series', $series_slug, $post_id );
+				$srcount++;
+			}
+		}
+	}
+
+	update_option( 'wh_seeded_series_reviews', 1 );
+
+	if ( class_exists( 'WP_CLI' ) ) {
+		WP_CLI::log( "[seed] Created {$srcount} series reviews." );
+	}
+} elseif ( class_exists( 'WP_CLI' ) ) {
+	WP_CLI::log( '[seed] Series reviews already seeded — skipping.' );
+}
