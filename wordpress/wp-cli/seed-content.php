@@ -17,17 +17,9 @@ if ( ! function_exists( 'update_field' ) ) {
 	return;
 }
 
-/** Seed Events, only if none exist yet. */
-$existing_events = get_posts(
-	array(
-		'post_type'   => 'wh_event',
-		'post_status' => 'any',
-		'numberposts' => 1,
-		'fields'      => 'ids',
-	)
-);
-
-if ( empty( $existing_events ) ) {
+/** Seed Events once, tracked by an option flag so manual events don't block it
+ * and it never double-seeds on subsequent boots. */
+if ( ! get_option( 'wh_seeded_events' ) ) {
 	$events = array(
 		array(
 			'title'    => "The Summer's Best Book Fair for Grown Ups",
@@ -105,9 +97,11 @@ if ( empty( $existing_events ) ) {
 		}
 	}
 
+	update_option( 'wh_seeded_events', 1 );
+
 	if ( class_exists( 'WP_CLI' ) ) {
 		WP_CLI::log( "[seed] Created {$count} events." );
 	}
 } elseif ( class_exists( 'WP_CLI' ) ) {
-	WP_CLI::log( '[seed] Events already present — skipping event seed.' );
+	WP_CLI::log( '[seed] Events already seeded — skipping.' );
 }

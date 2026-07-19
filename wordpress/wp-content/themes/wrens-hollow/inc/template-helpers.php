@@ -69,27 +69,52 @@ function wh_img( $name, $theme_fallback = '', $alt = '', $attrs = '', $post_id =
 /**
  * Ordered Event posts. $which = 'upcoming' | 'past'.
  * Upcoming: is_upcoming on, soonest first. Past: is_upcoming off, newest first.
+ *
+ * Filtering/sorting is done in PHP (not a meta_query) so an event that is
+ * missing its date or flag still shows up rather than silently vanishing — a
+ * dateless event just sorts to the end of its group.
  */
 function wh_events( $which = 'past' ) {
 	$is_upcoming = ( 'upcoming' === $which );
-	$q = new WP_Query(
+
+	$posts = get_posts(
 		array(
 			'post_type'      => 'wh_event',
 			'posts_per_page' => -1,
 			'post_status'    => 'publish',
-			'meta_key'       => 'event_date',
-			'orderby'        => 'meta_value_num',
-			'order'          => $is_upcoming ? 'ASC' : 'DESC',
-			'meta_query'     => array(
-				array(
-					'key'     => 'is_upcoming',
-					'value'   => '1',
-					'compare' => $is_upcoming ? '=' : '!=',
-				),
-			),
 		)
 	);
-	return $q->posts;
+
+	$posts = array_values(
+		array_filter(
+			$posts,
+			function ( $p ) use ( $is_upcoming ) {
+				$flag = (string) get_post_meta( $p->ID, 'is_upcoming', true );
+				$on   = ( '1' === $flag );
+				return $is_upcoming ? $on : ! $on;
+			}
+		)
+	);
+
+	usort(
+		$posts,
+		function ( $a, $b ) use ( $is_upcoming ) {
+			$da = (string) get_post_meta( $a->ID, 'event_date', true );
+			$db = (string) get_post_meta( $b->ID, 'event_date', true );
+			if ( '' === $da && '' === $db ) {
+				return 0;
+			}
+			if ( '' === $da ) {
+				return 1; // dateless sorts last
+			}
+			if ( '' === $db ) {
+				return -1;
+			}
+			return $is_upcoming ? strcmp( $da, $db ) : strcmp( $db, $da );
+		}
+	);
+
+	return $posts;
 }
 
 /**
