@@ -493,6 +493,13 @@ h3.h-md { font-size: 22px; line-height: 1.25; }
 .hero__cover { justify-self: end; }
 .hero .txt { font-size: 16px; line-height: 1.75; margin-bottom: 14px; }
 .book-about .txt { font-size: 16px; line-height: 1.75; margin-bottom: 14px; }
+/* About-the-book copy entered in the editor (WYSIWYG) has plain <p>/<em>/<a>
+   tags rather than the .txt class, so mirror the .book-about .txt styling here. */
+.book-about__body { color: var(--text-body); }
+.book-about__body p { font-size: 16px; line-height: 1.75; margin: 0 0 14px; }
+.book-about__body p:last-child { margin-bottom: 0; }
+.book-about__body em { font-style: italic; }
+.book-about__body a { color: var(--plum); font-weight: 700; }
 .hero__cover .ph-box { width: 320px; height: 466px; box-shadow: 0 0 0 6px rgba(217,179,193,.35), 0 10px 30px rgba(106,65,82,.25); }
 @media (max-width: 760px) {
   .hero { grid-template-columns: 1fr; text-align: center; }

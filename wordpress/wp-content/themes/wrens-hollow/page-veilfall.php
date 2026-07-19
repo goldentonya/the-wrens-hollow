@@ -7,6 +7,9 @@ get_header();
 
 $wh_product_id = function_exists( 'wc_get_product_id_by_sku' ) ? wc_get_product_id_by_sku( 'veilfall-paperback' ) : 0;
 $wh_product    = $wh_product_id ? wc_get_product( $wh_product_id ) : false;
+
+$wh_book    = function_exists( 'wh_book' ) ? wh_book( 'veilfall' ) : null;
+$wh_book_id = $wh_book ? $wh_book->ID : false;
 ?>
 
 <section class="sec--dark2 series-header">
@@ -21,16 +24,16 @@ $wh_product    = $wh_product_id ? wc_get_product( $wh_product_id ) : false;
   ?>
   <div class="wrap" style="max-width:560px;">
     <p class="eyebrow eyebrow--on-dark">The Veiled Prophecy · Book 1</p>
-    <h1 class="h-lg" style="color:#fff;">Veilfall</h1>
-    <p class="lede" style="margin:14px auto 0;">Step into the Kingdom of Sylvaeris.</p>
+    <h1 class="h-lg" style="color:#fff;"><?php echo esc_html( $wh_book ? get_the_title( $wh_book ) : 'Veilfall' ); ?></h1>
+    <p class="lede" style="margin:14px auto 0;"><?php wh_the( 'hero_lede', 'Step into the Kingdom of Sylvaeris.', $wh_book_id ); ?></p>
   </div>
 </section>
 
 <section class="sec sec--pink">
   <div class="wrap hero">
     <div class="wh-fade">
-      <p class="book-card__tag">Book 1 · Available now</p>
-      <p class="txt">She was hidden in the human realm to stay safe. But magic has a way of finding what was never meant to be forgotten. Start Veralyn's story with this dark fae fantasy romance.</p>
+      <p class="book-card__tag"><?php wh_the( 'hero_tag', 'Book 1 · Available now', $wh_book_id ); ?></p>
+      <p class="txt"><?php wh_the( 'hero_blurb', "She was hidden in the human realm to stay safe. But magic has a way of finding what was never meant to be forgotten. Start Veralyn's story with this dark fae fantasy romance.", $wh_book_id ); ?></p>
       <div class="product-card__row" id="buy" style="justify-content:flex-start;gap:16px;margin-top:20px;">
         <?php if ( $wh_product ) : ?>
           <span class="product-card__price"><?php echo wp_kses_post( $wh_product->get_price_html() ); ?> · Paperback</span>
@@ -42,7 +45,7 @@ $wh_product    = $wh_product_id ? wc_get_product( $wh_product_id ) : false;
       </div>
     </div>
     <div class="hero__cover wh-fade" style="--delay:.1s">
-      <div class="ph-box"><img src="<?php echo esc_url( get_template_directory_uri() . '/images/covers/veilfall.jpg' ); ?>" alt="Veilfall book cover" style="width:100%;height:100%;object-fit:cover;border-radius:4px;"></div>
+      <div class="ph-box"><img src="<?php echo esc_url( $wh_book ? wh_book_cover( $wh_book ) : get_template_directory_uri() . '/images/covers/veilfall.jpg' ); ?>" alt="<?php echo esc_attr( $wh_book ? get_the_title( $wh_book ) : 'Veilfall' ); ?> book cover" style="width:100%;height:100%;object-fit:cover;border-radius:4px;"></div>
     </div>
   </div>
 </section>
@@ -50,15 +53,10 @@ $wh_product    = $wh_product_id ? wc_get_product( $wh_product_id ) : false;
 <section class="sec sec--cream sec--dashed-top">
   <div class="wrap book-about">
     <p class="eyebrow">About the book</p>
-    <h2 class="h-md">Veilfall</h2>
-    <p class="txt" style="max-width:600px;">She was hidden in the human realm to stay safe. But magic has a way of finding what was never meant to be forgotten.</p>
-    <p class="txt" style="max-width:600px;">Veralyn spent her whole life believing she was ordinary, until the night everything changed. When her parents are killed, the truth shatters through her carefully built world: she's not human. She's fae. And not just any fae, she's bound to a prophecy that could alter the future of the entire realm. Forced to return to Sylvaeris she attends Auravale Academy.</p>
-    <p class="txt" style="max-width:600px;">Auravale Academy is a school for the elite and powerful. Vera must confront a world she was never meant to leave… and powers she doesn't yet understand.</p>
-    <p class="txt" style="max-width:600px;">Caelum Thornevale, Prince of the realm and heir to the throne, is used to having control. But when he crosses paths with Vera everything changes.</p>
-    <p class="txt" style="max-width:600px;">As her magic awakens, so do old enemies and forgotten secrets. In a kingdom on the brink of war, fate is not a choice.</p>
-    <p class="txt" style="max-width:600px;font-style:italic;">But love might be.</p>
-    <p class="txt" style="max-width:600px;margin-top:20px;"><a href="<?php echo esc_url( function_exists( 'wc_get_page_permalink' ) ? wc_get_page_permalink( 'shop' ) . '#veilfall' : home_url( '/shop/#veilfall' ) ); ?>" style="color:var(--plum);font-weight:700;">Find the Paperback available here!</a></p>
-    <p class="txt" style="max-width:600px;">The Ebook is available on Kindle Unlimited!</p>
+    <h2 class="h-md"><?php echo esc_html( $wh_book ? get_the_title( $wh_book ) : 'Veilfall' ); ?></h2>
+    <div class="book-about__body" style="max-width:600px;">
+      <?php wh_wysiwyg( 'about_body', '', $wh_book_id ); ?>
+    </div>
   </div>
 </section>
 

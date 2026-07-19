@@ -4,6 +4,9 @@
  */
 $wh_nav_active = 'read-free';
 get_header();
+
+$wh_book    = function_exists( 'wh_book' ) ? wh_book( 'veilbound' ) : null;
+$wh_book_id = $wh_book ? $wh_book->ID : false;
 ?>
 
 <section class="sec--dark2 series-header">
@@ -18,23 +21,23 @@ get_header();
   ?>
   <div class="wrap" style="max-width:560px;">
     <p class="eyebrow eyebrow--on-dark">The Veiled Prophecy · Book 2</p>
-    <h1 class="h-lg" style="color:#fff;">Veilbound</h1>
-    <p class="lede" style="margin:14px auto 0;">The fate of the kingdom — and her heart — hangs in the balance.</p>
+    <h1 class="h-lg" style="color:#fff;"><?php echo esc_html( $wh_book ? get_the_title( $wh_book ) : 'Veilbound' ); ?></h1>
+    <p class="lede" style="margin:14px auto 0;"><?php wh_the( 'hero_lede', 'The fate of the kingdom — and her heart — hangs in the balance.', $wh_book_id ); ?></p>
   </div>
 </section>
 
 <section class="sec sec--pink">
   <div class="wrap hero">
     <div class="wh-fade">
-      <p class="book-card__tag">Book 2 · Coming soon</p>
-      <p class="txt">The next chapter in the Kingdom of Sylvaeris saga, picking up where Veilfall leaves off.</p>
+      <p class="book-card__tag"><?php wh_the( 'hero_tag', 'Book 2 · Coming soon', $wh_book_id ); ?></p>
+      <p class="txt"><?php wh_the( 'hero_blurb', 'The next chapter in the Kingdom of Sylvaeris saga, picking up where Veilfall leaves off.', $wh_book_id ); ?></p>
       <div style="margin-top:20px;">
         <button class="btn btn--outline" type="button" data-notify="Veilbound">Notify me on release</button>
       </div>
       <p class="txt" style="margin-top:18px;"><a href="<?php echo esc_url( home_url( '/veilfall/' ) ); ?>" style="color:var(--plum);font-weight:700;">Haven't started the series? Read Veilfall free →</a></p>
     </div>
     <div class="hero__cover wh-fade" style="--delay:.1s">
-      <div class="ph-box"><img src="<?php echo esc_url( get_template_directory_uri() . '/images/covers/veilbound.jpg' ); ?>" alt="Veilbound book cover" style="width:100%;height:100%;object-fit:cover;border-radius:4px;"></div>
+      <div class="ph-box"><img src="<?php echo esc_url( $wh_book ? wh_book_cover( $wh_book ) : get_template_directory_uri() . '/images/covers/veilbound.jpg' ); ?>" alt="<?php echo esc_attr( $wh_book ? get_the_title( $wh_book ) : 'Veilbound' ); ?> book cover" style="width:100%;height:100%;object-fit:cover;border-radius:4px;"></div>
     </div>
   </div>
 </section>
@@ -42,13 +45,10 @@ get_header();
 <section class="sec sec--cream sec--dashed-top">
   <div class="wrap book-about">
     <p class="eyebrow">About the book</p>
-    <h2 class="h-md">Veilbound</h2>
-    <p class="txt" style="max-width:600px;">In Veilfall, Veralyn’s world shattered when her parents were murdered and she was forced to return to the fae realm she never knew was hers. Hidden in the human world to protect her from a prophecy foretelling her death, Vera was thrust into Auravale Academy and the dangerous ranks of the Veilbound Order — where enemies watch from the shadows.</p>
-    <p class="txt" style="max-width:600px;">In Veilbound, Vera’s magic fully awakens during the Veilfall Festival, revealing gifts tied not only to the fae realm, but to the first Fae Queen herself. As her power deepens, so do the mysteries surrounding her fate, including unexpected connections to a vampire and a wolf shifter she was never meant to meet.</p>
-    <p class="txt" style="max-width:600px;">Caelum Thornevale, Prince of Sylvaeris and heir to all the fae lands, refuses to let Vera face her destiny alone. Bound by a fated mate bond that Vera continues to resist, Caelum fights to protect her—even as she pushes him away to shield him from a future where she may not survive.</p>
-    <p class="txt" style="max-width:600px;">With love that could destroy her and a prophecy counting down her remaining time, Vera must decide whether protecting her heart is worth losing everything else.</p>
-    <p class="txt" style="max-width:600px;font-style:italic;">Veilbound is a romantic fae fantasy filled with prophecy, ancient magic, fated mates, and a love that refuses to be denied.</p>
-    <p class="txt" style="max-width:600px;margin-top:20px;font-weight:700;color:var(--plum-deep);">Coming Fall 2026!</p>
+    <h2 class="h-md"><?php echo esc_html( $wh_book ? get_the_title( $wh_book ) : 'Veilbound' ); ?></h2>
+    <div class="book-about__body" style="max-width:600px;">
+      <?php wh_wysiwyg( 'about_body', '', $wh_book_id ); ?>
+    </div>
   </div>
 </section>
 

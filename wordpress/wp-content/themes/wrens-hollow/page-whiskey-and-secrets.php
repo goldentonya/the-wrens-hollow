@@ -7,6 +7,9 @@ get_header();
 
 $wh_product_id = function_exists( 'wc_get_product_id_by_sku' ) ? wc_get_product_id_by_sku( 'whiskey-and-secrets-signed' ) : 0;
 $wh_product    = $wh_product_id ? wc_get_product( $wh_product_id ) : false;
+
+$wh_book    = function_exists( 'wh_book' ) ? wh_book( 'whiskey-and-secrets' ) : null;
+$wh_book_id = $wh_book ? $wh_book->ID : false;
 ?>
 
 <section class="sec--dark2 series-header">
@@ -21,16 +24,16 @@ $wh_product    = $wh_product_id ? wc_get_product( $wh_product_id ) : false;
   ?>
   <div class="wrap" style="max-width:560px;">
     <p class="eyebrow eyebrow--on-dark">Whiskey Tango Foxtrot · Book 1</p>
-    <h1 class="h-lg" style="color:#fff;">Whiskey &amp; Secrets</h1>
-    <p class="lede" style="margin:14px auto 0;">Some secrets are worth the hangover.</p>
+    <h1 class="h-lg" style="color:#fff;"><?php echo esc_html( $wh_book ? get_the_title( $wh_book ) : 'Whiskey & Secrets' ); ?></h1>
+    <p class="lede" style="margin:14px auto 0;"><?php wh_the( 'hero_lede', 'Some secrets are worth the hangover.', $wh_book_id ); ?></p>
   </div>
 </section>
 
 <section class="sec sec--pink">
   <div class="wrap hero">
     <div class="wh-fade">
-      <p class="book-card__tag">Book 1 · Available now</p>
-      <p class="txt">Fierce, funny, unforgettable contemporary romance — sharp banter, real heartbreak, and a heroine who doesn't back down. Whiskey &amp; Secrets kicks off the Whiskey Tango Foxtrot series with the kind of love that hits like a shot and lingers like the good stuff.</p>
+      <p class="book-card__tag"><?php wh_the( 'hero_tag', 'Book 1 · Available now', $wh_book_id ); ?></p>
+      <p class="txt"><?php wh_the( 'hero_blurb', "Fierce, funny, unforgettable contemporary romance — sharp banter, real heartbreak, and a heroine who doesn't back down. Whiskey & Secrets kicks off the Whiskey Tango Foxtrot series with the kind of love that hits like a shot and lingers like the good stuff.", $wh_book_id ); ?></p>
       <div class="product-card__row" id="buy" style="justify-content:flex-start;gap:16px;margin-top:20px;">
         <?php if ( $wh_product ) : ?>
           <span class="product-card__price"><?php echo wp_kses_post( $wh_product->get_price_html() ); ?> · Signed paperback</span>
@@ -42,7 +45,7 @@ $wh_product    = $wh_product_id ? wc_get_product( $wh_product_id ) : false;
       </div>
     </div>
     <div class="hero__cover wh-fade" style="--delay:.1s">
-      <div class="ph-box"><img src="<?php echo esc_url( get_template_directory_uri() . '/images/covers/whiskey-and-secrets.jpg' ); ?>" alt="Whiskey &amp; Secrets book cover" style="width:100%;height:100%;object-fit:cover;border-radius:4px;"></div>
+      <div class="ph-box"><img src="<?php echo esc_url( $wh_book ? wh_book_cover( $wh_book ) : get_template_directory_uri() . '/images/covers/whiskey-and-secrets.jpg' ); ?>" alt="<?php echo esc_attr( $wh_book ? get_the_title( $wh_book ) : 'Whiskey & Secrets' ); ?> book cover" style="width:100%;height:100%;object-fit:cover;border-radius:4px;"></div>
     </div>
   </div>
 </section>
@@ -50,12 +53,10 @@ $wh_product    = $wh_product_id ? wc_get_product( $wh_product_id ) : false;
 <section class="sec sec--cream sec--dashed-top">
   <div class="wrap book-about">
     <p class="eyebrow">About the book</p>
-    <h2 class="h-md">Whiskey &amp; Secrets</h2>
-    <p class="txt" style="max-width:600px;">When biological anthropology grad student Sarah agrees to lead a research expedition in the Amazon Rainforest, she never expected to need military protection — let alone from Wade "Wraith" Blakely, the stoic, enigmatic former Green Beret who's been assigned to keep her team safe.</p>
-    <p class="txt" style="max-width:600px;">Wade is used to dangerous missions, but babysitting scientists wasn't what he signed up for. Until one of them goes missing, and secrets buried deep in the jungle — and in Sarah's past — begin to surface. As the threat around them escalates, so does the undeniable pull between Sarah and Wade. But trusting each other might be their only way out alive.</p>
-    <p class="txt" style="max-width:600px;margin-top:20px;"><a href="<?php echo esc_url( function_exists( 'wc_get_page_permalink' ) ? wc_get_page_permalink( 'shop' ) . '#whiskey-and-secrets' : home_url( '/shop/#whiskey-and-secrets' ) ); ?>" style="color:var(--plum);font-weight:700;">Find the paperback available here →</a></p>
-    <p class="txt" style="max-width:600px;">The ebook will be available on Kindle Unlimited!</p>
-    <p class="txt" style="max-width:600px;font-style:italic;margin-top:20px;">Readers are loving Whiskey &amp; Secrets! With an average rating of 4.5 stars on Goodreads, fans are praising its mix of adventure, romance, and suspense.</p>
+    <h2 class="h-md"><?php echo esc_html( $wh_book ? get_the_title( $wh_book ) : 'Whiskey & Secrets' ); ?></h2>
+    <div class="book-about__body" style="max-width:600px;">
+      <?php wh_wysiwyg( 'about_body', '', $wh_book_id ); ?>
+    </div>
     <a class="btn btn--outline" href="https://www.goodreads.com/book/show/246550825-whiskey-secrets" target="_blank" rel="noopener" style="margin-top:6px;">Goodreads</a>
   </div>
 </section>
