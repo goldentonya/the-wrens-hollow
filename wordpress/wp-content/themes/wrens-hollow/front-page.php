@@ -31,26 +31,26 @@ get_header();
     <p class="lede" style="margin-top:12px;"><?php wh_the( 'home_books_lede', 'Fierce contemporary romance. Dark fae fantasy. Pick your escape.' ); ?></p>
 
     <div class="series-spotlight-grid">
-      <a class="series-spotlight" href="<?php echo esc_url( home_url( '/the-veiled-prophecy/' ) ); ?>">
+      <a class="series-spotlight" href="<?php echo esc_url( wh_field( 'home_spot1_url', home_url( '/the-veiled-prophecy/' ) ) ); ?>">
         <div class="series-spotlight__cover ph-box">
-          <img src="<?php echo esc_url( get_template_directory_uri() . '/images/covers/veilfall.jpg' ); ?>" alt="Veilfall book cover" style="width:100%;height:100%;object-fit:cover;object-position:top;border-radius:6px;">
+          <?php wh_img( 'home_spot1_cover', 'images/covers/veilfall.jpg', 'The Veiled Prophecy book cover', 'style="width:100%;height:100%;object-fit:cover;object-position:top;border-radius:6px;"' ); ?>
         </div>
         <div class="series-spotlight__body">
-          <p class="book-card__tag">Fantasy · Kingdom of Sylvaeris</p>
-          <h3>The Veiled Prophecy</h3>
-          <p class="txt">She thought she was human. The fae realm knows better. Start Veralyn's story with Veilfall, free forever.</p>
+          <p class="book-card__tag"><?php wh_the( 'home_spot1_tag', 'Fantasy · Kingdom of Sylvaeris' ); ?></p>
+          <h3><?php wh_the( 'home_spot1_title', 'The Veiled Prophecy' ); ?></h3>
+          <p class="txt"><?php wh_the( 'home_spot1_blurb', "She thought she was human. The fae realm knows better. Start Veralyn's story with Veilfall, free forever." ); ?></p>
           <span class="series-spotlight__link">Enter the Story <span aria-hidden="true">→</span></span>
         </div>
       </a>
 
-      <a class="series-spotlight" href="<?php echo esc_url( home_url( '/whiskey-tango-foxtrot/' ) ); ?>">
+      <a class="series-spotlight" href="<?php echo esc_url( wh_field( 'home_spot2_url', home_url( '/whiskey-tango-foxtrot/' ) ) ); ?>">
         <div class="series-spotlight__cover ph-box">
-          <img src="<?php echo esc_url( get_template_directory_uri() . '/images/covers/whiskey-and-secrets.jpg' ); ?>" alt="Whiskey &amp; Secrets book cover" style="width:100%;height:100%;object-fit:cover;border-radius:6px;">
+          <?php wh_img( 'home_spot2_cover', 'images/covers/whiskey-and-secrets.jpg', 'Whiskey Tango Foxtrot book cover', 'style="width:100%;height:100%;object-fit:cover;border-radius:6px;"' ); ?>
         </div>
         <div class="series-spotlight__body">
-          <p class="book-card__tag">Contemporary romance</p>
-          <h3>Whiskey Tango Foxtrot</h3>
-          <p class="txt">Whiskey &amp; Secrets · Whiskey &amp; Lies. Sharp banter, real heartbreak, and women who don't back down.</p>
+          <p class="book-card__tag"><?php wh_the( 'home_spot2_tag', 'Contemporary romance' ); ?></p>
+          <h3><?php wh_the( 'home_spot2_title', 'Whiskey Tango Foxtrot' ); ?></h3>
+          <p class="txt"><?php wh_the( 'home_spot2_blurb', "Whiskey & Secrets · Whiskey & Lies. Sharp banter, real heartbreak, and women who don't back down." ); ?></p>
           <span class="series-spotlight__link">Enter the Story <span aria-hidden="true">→</span></span>
         </div>
       </a>
@@ -95,33 +95,11 @@ get_header();
 <!-- On the horizon -->
 <section class="sec sec--dashed-top">
   <div class="wrap">
-    <p class="eyebrow">On the horizon</p>
-    <h2 class="h-lg">Currently writing</h2>
+    <p class="eyebrow"><?php wh_the( 'home_writing_eyebrow', 'On the horizon' ); ?></p>
+    <h2 class="h-lg"><?php wh_the( 'home_writing_heading', 'Currently writing' ); ?></h2>
 
     <div class="horizon-grid">
-      <a class="card horizon-card" href="<?php echo esc_url( home_url( '/on-the-horizon/' ) ); ?>">
-        <p class="roadmap__status">In progress</p>
-        <h3>Veilbound</h3>
-        <p class="book-card__tag" style="color:var(--text-muted);">Book 2 · The Veiled Prophecy · Fae Fantasy Romance</p>
-        <p class="txt">Vera's magic is fully awakening — and so is the prophecy counting down her remaining time. The next chapter in the Kingdom of Sylvaeris saga picks up right where Veilfall leaves off.</p>
-        <div class="horizon-card__progress">
-          <div class="progress-track"><div class="progress-fill" style="width:62%"></div></div>
-          <span class="horizon-card__progress-label">Draft in progress · Coming Fall 2026</span>
-        </div>
-        <span class="series-spotlight__link">See what else is coming <span aria-hidden="true">→</span></span>
-      </a>
-
-      <a class="card horizon-card" href="<?php echo esc_url( home_url( '/on-the-horizon/' ) ); ?>">
-        <p class="roadmap__status">In progress</p>
-        <h3>His Northern Fixation <span style="font-weight:400;font-style:italic;color:var(--text-muted);font-size:.6em;">working title</span></h3>
-        <p class="book-card__tag" style="color:var(--text-muted);">Standalone · Northfall Syndicate · Romantic Suspense</p>
-        <p class="txt">Axel Halvik moved to Minnesota to protect his brother and take down his father's criminal empire — until Allyce, a single mother with a stalker closing in, becomes the one thing he can't walk away from.</p>
-        <div class="horizon-card__progress">
-          <div class="progress-track"><div class="progress-fill" style="width:30%"></div></div>
-          <span class="horizon-card__progress-label">Early chapters · Northfall Syndicate series</span>
-        </div>
-        <span class="series-spotlight__link">See what else is coming <span aria-hidden="true">→</span></span>
-      </a>
+      <?php foreach ( wh_projects_home() as $wh_project ) { wh_render_home_project_card( $wh_project ); } ?>
     </div>
   </div>
 </section>
@@ -129,12 +107,16 @@ get_header();
 <!-- Events & appearances -->
 <section class="sec sec--pink sec--dashed-top">
   <div class="wrap">
-    <p class="eyebrow">Events &amp; appearances</p>
-    <p class="lede">Signings, book fairs &amp; author events — where to find me next.</p>
+    <p class="eyebrow"><?php wh_the( 'home_events_eyebrow', 'Events & appearances' ); ?></p>
+    <p class="lede"><?php wh_the( 'home_events_lede', 'Signings, book fairs & author events — where to find me next.' ); ?></p>
 
     <div class="events-teaser-grid">
       <div>
         <p class="eyebrow" style="margin-bottom:14px;">Upcoming</p>
+        <?php $wh_home_upcoming = wh_events( 'upcoming' ); ?>
+        <?php if ( $wh_home_upcoming ) : ?>
+          <?php wh_render_event_card( $wh_home_upcoming[0] ); ?>
+        <?php else : ?>
         <div class="card event-card">
           <div class="event-date event-date--tba">
             <div class="event-date__mon" style="color:var(--text-muted);">TBA</div>
@@ -144,30 +126,12 @@ get_header();
             <p class="txt">New appearances are added throughout the year — check back soon.</p>
           </div>
         </div>
+        <?php endif; ?>
       </div>
 
       <div>
         <p class="eyebrow" style="margin-bottom:14px;">Past events</p>
-        <div class="card event-card">
-          <div class="event-date">
-            <div class="event-date__day">11</div>
-            <div class="event-date__mon">JUL</div>
-          </div>
-          <div>
-            <h3>The Summer's Best Book Fair for Grown Ups</h3>
-            <p class="txt">📍 The Grandstand, Falcon Heights, MN · 11am–7pm</p>
-          </div>
-        </div>
-        <div class="card event-card">
-          <div class="event-date">
-            <div class="event-date__day">28</div>
-            <div class="event-date__mon">JUN</div>
-          </div>
-          <div>
-            <h3>Booked It! At the Brewery</h3>
-            <p class="txt">📍 Sunken Ship Brewery Company, Princeton, MN · 11am–4pm</p>
-          </div>
-        </div>
+        <?php foreach ( array_slice( wh_events( 'past' ), 0, 2 ) as $wh_event ) { wh_render_event_card( $wh_event ); } ?>
       </div>
     </div>
 

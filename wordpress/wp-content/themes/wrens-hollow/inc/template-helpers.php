@@ -285,6 +285,57 @@ function wh_render_project( $post ) {
 }
 
 /**
+ * Projects flagged to show on the home page ("Currently writing").
+ */
+function wh_projects_home() {
+	return array_values(
+		array_filter(
+			wh_projects(),
+			function ( $p ) {
+				return '1' === (string) get_post_meta( $p->ID, 'project_on_home', true );
+			}
+		)
+	);
+}
+
+/**
+ * Render one home-page "Currently writing" card (.horizon-card) for a project.
+ */
+function wh_render_home_project_card( $post ) {
+	$id       = $post->ID;
+	$status   = wh_field( 'project_status', 'in-progress', $id );
+	$subtitle = wh_field( 'project_subtitle', '', $id );
+	$blurb    = wh_field( 'project_home_blurb', '', $id );
+	$progress = (int) wh_field( 'project_progress', 0, $id );
+	$plabel   = wh_field( 'project_progress_label', '', $id );
+	$labels   = array(
+		'now-available' => 'Now available',
+		'in-progress'   => 'In progress',
+		'planning'      => 'Planning',
+	);
+	$slabel   = isset( $labels[ $status ] ) ? $labels[ $status ] : 'In progress';
+	?>
+	<a class="card horizon-card" href="<?php echo esc_url( home_url( '/on-the-horizon/' ) ); ?>">
+	  <p class="roadmap__status"><?php echo esc_html( $slabel ); ?></p>
+	  <h3><?php echo esc_html( get_the_title( $post ) ); ?></h3>
+	  <?php if ( $subtitle ) : ?>
+	    <p class="book-card__tag" style="color:var(--text-muted);"><?php echo esc_html( $subtitle ); ?></p>
+	  <?php endif; ?>
+	  <?php if ( $blurb ) : ?>
+	    <p class="txt"><?php echo esc_html( $blurb ); ?></p>
+	  <?php endif; ?>
+	  <div class="horizon-card__progress">
+	    <div class="progress-track"><div class="progress-fill" style="width:<?php echo esc_attr( $progress ); ?>%"></div></div>
+	    <?php if ( $plabel ) : ?>
+	      <span class="horizon-card__progress-label"><?php echo esc_html( $plabel ); ?></span>
+	    <?php endif; ?>
+	  </div>
+	  <span class="series-spotlight__link">See what else is coming <span aria-hidden="true">→</span></span>
+	</a>
+	<?php
+}
+
+/**
  * All published Review posts, in stable carousel order (menu order, then oldest).
  */
 function wh_all_reviews() {

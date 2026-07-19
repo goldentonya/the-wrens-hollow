@@ -376,6 +376,67 @@ function wrens_hollow_register_acf_fields() {
 					'name'         => 'project_link_url',
 					'type'         => 'url',
 				),
+				array(
+					'key'           => 'field_wh_project_on_home',
+					'label'         => 'Feature on the home page?',
+					'name'          => 'project_on_home',
+					'type'          => 'true_false',
+					'instructions'  => 'Show this project in the "Currently writing" section on the home page (with a progress bar).',
+					'ui'            => 1,
+					'default_value' => 0,
+				),
+				array(
+					'key'               => 'field_wh_project_home_blurb',
+					'label'             => 'Home-page blurb',
+					'name'              => 'project_home_blurb',
+					'type'              => 'textarea',
+					'rows'              => 3,
+					'instructions'      => 'Short description for the home-page card (the full description above is used on the On the Horizon page).',
+					'conditional_logic' => array(
+						array(
+							array(
+								'field'    => 'field_wh_project_on_home',
+								'operator' => '==',
+								'value'    => '1',
+							),
+						),
+					),
+				),
+				array(
+					'key'               => 'field_wh_project_progress',
+					'label'             => 'Progress (%)',
+					'name'              => 'project_progress',
+					'type'              => 'number',
+					'min'               => 0,
+					'max'               => 100,
+					'append'            => '%',
+					'instructions'      => 'How full the progress bar is on the home-page card.',
+					'conditional_logic' => array(
+						array(
+							array(
+								'field'    => 'field_wh_project_on_home',
+								'operator' => '==',
+								'value'    => '1',
+							),
+						),
+					),
+				),
+				array(
+					'key'               => 'field_wh_project_progress_label',
+					'label'             => 'Progress label',
+					'name'              => 'project_progress_label',
+					'type'              => 'text',
+					'instructions'      => 'Caption under the progress bar, e.g. "Draft in progress · Coming Fall 2026".',
+					'conditional_logic' => array(
+						array(
+							array(
+								'field'    => 'field_wh_project_on_home',
+								'operator' => '==',
+								'value'    => '1',
+							),
+						),
+					),
+				),
 			),
 			'location' => array(
 				array(

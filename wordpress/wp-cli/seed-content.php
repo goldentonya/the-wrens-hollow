@@ -513,3 +513,56 @@ HTML,
 } elseif ( class_exists( 'WP_CLI' ) ) {
 	WP_CLI::log( '[seed] Projects already seeded — skipping.' );
 }
+
+/** Seed home-page extras once: which projects show under "Currently writing"
+ * (with progress), and the two series-spotlight covers. */
+if ( ! get_option( 'wh_seeded_home_extras' ) && function_exists( 'wh_book' ) ) {
+	$home_projects = array(
+		'Veilbound'             => array(
+			'blurb'    => "Vera's magic is fully awakening — and so is the prophecy counting down her remaining time. The next chapter in the Kingdom of Sylvaeris saga picks up right where Veilfall leaves off.",
+			'progress' => 62,
+			'label'    => 'Draft in progress · Coming Fall 2026',
+		),
+		'His Northern Fixation' => array(
+			'blurb'    => "Axel Halvik moved to Minnesota to protect his brother and take down his father's criminal empire — until Allyce, a single mother with a stalker closing in, becomes the one thing he can't walk away from.",
+			'progress' => 30,
+			'label'    => 'Early chapters · Northfall Syndicate series',
+		),
+	);
+	foreach ( $home_projects as $title => $d ) {
+		$found = get_posts(
+			array(
+				'post_type'      => 'wh_project',
+				'title'          => $title,
+				'posts_per_page' => 1,
+				'post_status'    => 'publish',
+			)
+		);
+		if ( $found ) {
+			$pid = $found[0]->ID;
+			update_field( 'project_on_home', 1, $pid );
+			update_field( 'project_home_blurb', $d['blurb'], $pid );
+			update_field( 'project_progress', $d['progress'], $pid );
+			update_field( 'project_progress_label', $d['label'], $pid );
+		}
+	}
+
+	$home_id = (int) get_option( 'page_on_front' );
+	if ( $home_id ) {
+		$vf = wh_book( 'veilfall' );
+		if ( $vf && has_post_thumbnail( $vf->ID ) ) {
+			update_field( 'home_spot1_cover', get_post_thumbnail_id( $vf->ID ), $home_id );
+		}
+		$ws = wh_book( 'whiskey-and-secrets' );
+		if ( $ws && has_post_thumbnail( $ws->ID ) ) {
+			update_field( 'home_spot2_cover', get_post_thumbnail_id( $ws->ID ), $home_id );
+		}
+	}
+
+	update_option( 'wh_seeded_home_extras', 1 );
+	if ( class_exists( 'WP_CLI' ) ) {
+		WP_CLI::log( '[seed] Seeded home-page extras (currently-writing + spotlight covers).' );
+	}
+} elseif ( class_exists( 'WP_CLI' ) ) {
+	WP_CLI::log( '[seed] Home extras already seeded — skipping.' );
+}
