@@ -451,87 +451,48 @@ if ( ! get_option( 'wh_seeded_book_covers' ) && function_exists( 'wh_book' ) ) {
 	WP_CLI::log( '[seed] Book covers already attached — skipping.' );
 }
 
-/** Seed the About-page journey timeline once. */
-if ( ! get_option( 'wh_seeded_milestones' ) ) {
-	$milestones = array(
-		array(
-			'label' => 'Started writing Whiskey & Secrets',
-			'date'  => 'May 2024',
-			'body'  => '<p>Started writing <strong>Whiskey &amp; Secrets</strong>, the first book in the Whiskey Tango Foxtrot series—a romance filled with science, suspense, and a fiercely protective Green Beret.</p>',
-		),
-		array(
-			'label' => 'Launched Whiskey & Secrets',
-			'date'  => 'June 2025',
-			'body'  => '<p>Official launch of <strong>Whiskey &amp; Secrets</strong>! The beginning of a series that pairs strong women (often scientists) with the men brave enough to fight beside them.</p>',
-		),
-		array(
-			'label' => 'Launched Veilfall',
-			'date'  => 'November 2025',
-			'body'  => '<p>Launched <strong>Veilfall</strong>! The start of the Veiled Prophecy series.</p>',
-		),
-		array(
-			'label' => 'Currently writing Whiskey & Lies and Veilbound',
-			'date'  => '2026',
-			'body'  => "<p>Currently writing <strong>Whiskey &amp; Lies</strong>, book two in the series—featuring Fallon, a guarded survivor with a fiery spirit, and Jake, the team's communications expert with secrets of his own. Also writing <strong>Veilbound</strong>, book two in the Veiled Prophecy series.</p>\n<p>I took a break from both to start the Northfall Syndicate series. A suspense stalker book centered in Cambridge, MN. This one is very near and dear to my heart and to all those fighting with past traumas.</p>",
-		),
-	);
-
-	$mcount = 0;
-	foreach ( $milestones as $i => $m ) {
-		$post_id = wp_insert_post(
+/** Seed the About page's Journey timeline + Facts once, directly as page
+ * postmeta (see inc/inline-repeaters.php) — these are inline "add row" lists
+ * on the About page itself, not a separate CPT, since they're only ever shown
+ * there. */
+if ( ! get_option( 'wh_seeded_about_repeaters' ) ) {
+	$about_page = get_page_by_path( 'about' );
+	if ( $about_page ) {
+		$milestones = array(
 			array(
-				'post_type'   => 'wh_milestone',
-				'post_title'  => $m['label'],
-				'post_status' => 'publish',
-				'menu_order'  => $i,
-			)
+				'date' => 'May 2024',
+				'body' => '<p>Started writing <strong>Whiskey &amp; Secrets</strong>, the first book in the Whiskey Tango Foxtrot series—a romance filled with science, suspense, and a fiercely protective Green Beret.</p>',
+			),
+			array(
+				'date' => 'June 2025',
+				'body' => '<p>Official launch of <strong>Whiskey &amp; Secrets</strong>! The beginning of a series that pairs strong women (often scientists) with the men brave enough to fight beside them.</p>',
+			),
+			array(
+				'date' => 'November 2025',
+				'body' => '<p>Launched <strong>Veilfall</strong>! The start of the Veiled Prophecy series.</p>',
+			),
+			array(
+				'date' => '2026',
+				'body' => "<p>Currently writing <strong>Whiskey &amp; Lies</strong>, book two in the series—featuring Fallon, a guarded survivor with a fiery spirit, and Jake, the team's communications expert with secrets of his own. Also writing <strong>Veilbound</strong>, book two in the Veiled Prophecy series.</p>\n<p>I took a break from both to start the Northfall Syndicate series. A suspense stalker book centered in Cambridge, MN. This one is very near and dear to my heart and to all those fighting with past traumas.</p>",
+			),
 		);
-		if ( $post_id && ! is_wp_error( $post_id ) ) {
-			update_field( 'milestone_date', $m['date'], $post_id );
-			update_field( 'milestone_body', $m['body'], $post_id );
-			$mcount++;
-		}
+		update_post_meta( $about_page->ID, 'about_milestones', $milestones );
+
+		$facts = array(
+			array( 'icon' => '📍', 'text' => 'Based in Minnesota' ),
+			array( 'icon' => '✍️', 'text' => 'Two series in progress' ),
+			array( 'icon' => '☕', 'text' => 'Fueled by coffee' ),
+			array( 'icon' => '💌', 'text' => 'Loves hearing from readers' ),
+		);
+		update_post_meta( $about_page->ID, 'about_facts', $facts );
 	}
 
-	update_option( 'wh_seeded_milestones', 1 );
+	update_option( 'wh_seeded_about_repeaters', 1 );
 	if ( class_exists( 'WP_CLI' ) ) {
-		WP_CLI::log( "[seed] Created {$mcount} milestones." );
+		WP_CLI::log( '[seed] Seeded About page Journey timeline + Facts.' );
 	}
 } elseif ( class_exists( 'WP_CLI' ) ) {
-	WP_CLI::log( '[seed] Milestones already seeded — skipping.' );
-}
-
-/** Seed the About-page "a few things about me" facts once. */
-if ( ! get_option( 'wh_seeded_facts' ) ) {
-	$facts = array(
-		array( 'icon' => '📍', 'text' => 'Based in Minnesota' ),
-		array( 'icon' => '✍️', 'text' => 'Two series in progress' ),
-		array( 'icon' => '☕', 'text' => 'Fueled by coffee' ),
-		array( 'icon' => '💌', 'text' => 'Loves hearing from readers' ),
-	);
-
-	$fcount = 0;
-	foreach ( $facts as $i => $f ) {
-		$post_id = wp_insert_post(
-			array(
-				'post_type'   => 'wh_fact',
-				'post_title'  => $f['text'],
-				'post_status' => 'publish',
-				'menu_order'  => $i,
-			)
-		);
-		if ( $post_id && ! is_wp_error( $post_id ) ) {
-			update_field( 'fact_icon', $f['icon'], $post_id );
-			$fcount++;
-		}
-	}
-
-	update_option( 'wh_seeded_facts', 1 );
-	if ( class_exists( 'WP_CLI' ) ) {
-		WP_CLI::log( "[seed] Created {$fcount} facts." );
-	}
-} elseif ( class_exists( 'WP_CLI' ) ) {
-	WP_CLI::log( '[seed] Facts already seeded — skipping.' );
+	WP_CLI::log( '[seed] About page repeaters already seeded — skipping.' );
 }
 
 /** Seed the On-the-Horizon projects once. */
@@ -677,60 +638,85 @@ if ( ! get_option( 'wh_seeded_home_extras' ) && function_exists( 'wh_book' ) ) {
 	WP_CLI::log( '[seed] Home extras already seeded — skipping.' );
 }
 
-/** Seed the Whiskey Tango Foxtrot team members once, with badge images. */
-if ( ! get_option( 'wh_seeded_team' ) ) {
+/** Seed the Whiskey Tango Foxtrot team roster once, directly as page postmeta
+ * (see inc/inline-repeaters.php) — it's an inline "add row" list on that page
+ * itself, not a separate CPT, since it's only ever shown there. */
+if ( ! get_option( 'wh_seeded_wtf_team' ) ) {
 	require_once ABSPATH . 'wp-admin/includes/image.php';
-	$team = array(
-		array( 'img' => 'wraith', 'name' => 'Wade "Wraith" Blakely', 'desc' => 'Team leader. Quiet, deadly, and protective. A force in the field with a guarded heart.' ),
-		array( 'img' => 'glitch', 'name' => 'Jake "Glitch" Thompson', 'desc' => 'Communications expert. Brilliant with tech, haunted by his past, loyal to the end.' ),
-		array( 'img' => 'reaper', 'name' => 'Simon "Reaper" Miller', 'desc' => 'Second-in-command. Lethal and strategic, but with a sarcastic streak and unmatched loyalty.' ),
-		array( 'img' => 'sparta', 'name' => 'Shawn "Sparta" Jackson', 'desc' => 'Operations specialist. Keeps the team focused, carries ancient wisdom, and has a plan for everything.' ),
-		array( 'img' => 'magellan', 'name' => 'Joel "Magellan" Ramirez', 'desc' => 'Weapons and logistics. Strength, charm, and a heart as steady as his aim.' ),
-		array( 'img' => 'stitches', 'name' => 'Nick "Stitches" Davies', 'desc' => "Medic. Calm under pressure, a healer who's seen too much." ),
-		array( 'img' => 'ghost', 'name' => 'Jackson "Ghost" Lewis', 'desc' => 'Intel. Silent, calculating, and often underestimated.' ),
-	);
+	$wtf_page = get_page_by_path( 'whiskey-tango-foxtrot' );
 
-	$tcount = 0;
-	foreach ( $team as $i => $m ) {
-		$post_id = wp_insert_post(
-			array(
-				'post_type'   => 'wh_character',
-				'post_title'  => $m['name'],
-				'post_status' => 'publish',
-				'menu_order'  => $i,
-			)
+	if ( $wtf_page ) {
+		$team_source = array(
+			array( 'img' => 'wraith', 'name' => 'Wade "Wraith" Blakely', 'desc' => 'Team leader. Quiet, deadly, and protective. A force in the field with a guarded heart.' ),
+			array( 'img' => 'glitch', 'name' => 'Jake "Glitch" Thompson', 'desc' => 'Communications expert. Brilliant with tech, haunted by his past, loyal to the end.' ),
+			array( 'img' => 'reaper', 'name' => 'Simon "Reaper" Miller', 'desc' => 'Second-in-command. Lethal and strategic, but with a sarcastic streak and unmatched loyalty.' ),
+			array( 'img' => 'sparta', 'name' => 'Shawn "Sparta" Jackson', 'desc' => 'Operations specialist. Keeps the team focused, carries ancient wisdom, and has a plan for everything.' ),
+			array( 'img' => 'magellan', 'name' => 'Joel "Magellan" Ramirez', 'desc' => 'Weapons and logistics. Strength, charm, and a heart as steady as his aim.' ),
+			array( 'img' => 'stitches', 'name' => 'Nick "Stitches" Davies', 'desc' => "Medic. Calm under pressure, a healer who's seen too much." ),
+			array( 'img' => 'ghost', 'name' => 'Jackson "Ghost" Lewis', 'desc' => 'Intel. Silent, calculating, and often underestimated.' ),
 		);
-		if ( ! $post_id || is_wp_error( $post_id ) ) {
-			continue;
-		}
-		update_field( 'character_desc', $m['desc'], $post_id );
 
-		$file = get_template_directory() . '/images/team/' . $m['img'] . '.png';
-		if ( file_exists( $file ) ) {
-			$upload = wp_upload_bits( $m['img'] . '.png', null, file_get_contents( $file ) );
-			if ( empty( $upload['error'] ) ) {
-				$attach_id = wp_insert_attachment(
-					array(
-						'post_mime_type' => $upload['type'],
-						'post_title'     => $m['name'] . ' badge',
-						'post_status'    => 'inherit',
-					),
-					$upload['file'],
-					$post_id
-				);
-				if ( $attach_id && ! is_wp_error( $attach_id ) ) {
-					wp_update_attachment_metadata( $attach_id, wp_generate_attachment_metadata( $attach_id, $upload['file'] ) );
-					set_post_thumbnail( $post_id, $attach_id );
+		$team = array();
+		foreach ( $team_source as $m ) {
+			$attach_id = 0;
+			$file      = get_template_directory() . '/images/team/' . $m['img'] . '.png';
+			if ( file_exists( $file ) ) {
+				$upload = wp_upload_bits( $m['img'] . '.png', null, file_get_contents( $file ) );
+				if ( empty( $upload['error'] ) ) {
+					$attach_id = wp_insert_attachment(
+						array(
+							'post_mime_type' => $upload['type'],
+							'post_title'     => $m['name'] . ' badge',
+							'post_status'    => 'inherit',
+						),
+						$upload['file'],
+						$wtf_page->ID
+					);
+					if ( $attach_id && ! is_wp_error( $attach_id ) ) {
+						wp_update_attachment_metadata( $attach_id, wp_generate_attachment_metadata( $attach_id, $upload['file'] ) );
+					} else {
+						$attach_id = 0;
+					}
 				}
 			}
+			$team[] = array(
+				'name'  => $m['name'],
+				'desc'  => $m['desc'],
+				'image' => $attach_id,
+			);
 		}
-		$tcount++;
+
+		update_post_meta( $wtf_page->ID, 'wtf_team', $team );
 	}
 
-	update_option( 'wh_seeded_team', 1 );
+	update_option( 'wh_seeded_wtf_team', 1 );
 	if ( class_exists( 'WP_CLI' ) ) {
-		WP_CLI::log( "[seed] Created {$tcount} team members." );
+		WP_CLI::log( '[seed] Seeded Whiskey Tango Foxtrot team roster.' );
 	}
 } elseif ( class_exists( 'WP_CLI' ) ) {
-	WP_CLI::log( '[seed] Team already seeded — skipping.' );
+	WP_CLI::log( '[seed] WTF team roster already seeded — skipping.' );
+}
+
+/** One-time cleanup: delete any leftover wh_milestone/wh_fact/wh_character
+ * posts from before these became inline page repeaters. Harmless to skip if
+ * none exist (e.g. a fresh install that never had the old CPTs). */
+if ( ! get_option( 'wh_cleaned_up_old_repeater_cpts' ) ) {
+	$old_posts = get_posts(
+		array(
+			'post_type'      => array( 'wh_milestone', 'wh_fact', 'wh_character' ),
+			'post_status'    => 'any',
+			'posts_per_page' => -1,
+			'fields'         => 'ids',
+		)
+	);
+	foreach ( $old_posts as $old_id ) {
+		wp_delete_post( $old_id, true );
+	}
+
+	update_option( 'wh_cleaned_up_old_repeater_cpts', 1 );
+	if ( class_exists( 'WP_CLI' ) ) {
+		WP_CLI::log( '[seed] Cleaned up ' . count( $old_posts ) . ' leftover milestone/fact/team-member posts.' );
+	}
+} elseif ( class_exists( 'WP_CLI' ) ) {
+	WP_CLI::log( '[seed] Old repeater CPT cleanup already done — skipping.' );
 }

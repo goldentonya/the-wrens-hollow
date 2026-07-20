@@ -353,33 +353,35 @@ function wh_render_project( $post ) {
 }
 
 /**
- * Published Team members (wh_character), in menu order (the "Order" box).
+ * Team roster, Journey timeline, and Facts are each shown on exactly ONE page
+ * (the Whiskey Tango Foxtrot page; the About page; the About page), so instead
+ * of a separate CPT menu they're stored as a plain array in that page's own
+ * postmeta (see inc/inline-repeaters.php for the "add row / remove row" admin
+ * UI that edits them right on the page). get_queried_object_id() is safe here
+ * because these helpers are only ever called while rendering that one page.
+ */
+
+/**
+ * Team roster rows: array of ['name'=>, 'desc'=>, 'image'=> attachment ID].
  */
 function wh_characters() {
-	return get_posts(
-		array(
-			'post_type'      => 'wh_character',
-			'posts_per_page' => -1,
-			'post_status'    => 'publish',
-			'orderby'        => array(
-				'menu_order' => 'ASC',
-				'date'       => 'ASC',
-			),
-		)
-	);
+	$rows = get_post_meta( get_queried_object_id(), 'wtf_team', true );
+	return is_array( $rows ) ? $rows : array();
 }
 
 /**
- * Render one .team-card for a team member (badge = featured image, name = title).
+ * Render one .team-card for a team roster row (badge = uploaded image, if any).
  */
-function wh_render_character( $post ) {
-	$desc = wh_field( 'character_desc', '', $post->ID );
+function wh_render_character( $row ) {
+	$name  = isset( $row['name'] ) ? $row['name'] : '';
+	$desc  = isset( $row['desc'] ) ? $row['desc'] : '';
+	$image = ! empty( $row['image'] ) ? wp_get_attachment_image_url( (int) $row['image'], 'full' ) : '';
 	?>
 	<div class="team-card">
-	  <?php if ( has_post_thumbnail( $post->ID ) ) : ?>
-	    <div class="team-card__badge"><img src="<?php echo esc_url( get_the_post_thumbnail_url( $post->ID, 'full' ) ); ?>" alt="<?php echo esc_attr( get_the_title( $post ) ); ?> emblem"></div>
+	  <?php if ( $image ) : ?>
+	    <div class="team-card__badge"><img src="<?php echo esc_url( $image ); ?>" alt="<?php echo esc_attr( $name ); ?> emblem"></div>
 	  <?php endif; ?>
-	  <h3><?php echo esc_html( get_the_title( $post ) ); ?></h3>
+	  <h3><?php echo esc_html( $name ); ?></h3>
 	  <?php if ( $desc ) : ?>
 	    <p class="txt"><?php echo esc_html( $desc ); ?></p>
 	  <?php endif; ?>
@@ -388,31 +390,24 @@ function wh_render_character( $post ) {
 }
 
 /**
- * Published Milestone posts (About page journey timeline), in menu order.
+ * Journey-timeline rows: array of ['date'=>, 'body'=>].
  */
 function wh_milestones() {
-	return get_posts(
-		array(
-			'post_type'      => 'wh_milestone',
-			'posts_per_page' => -1,
-			'post_status'    => 'publish',
-			'orderby'        => array(
-				'menu_order' => 'ASC',
-				'date'       => 'ASC',
-			),
-		)
-	);
+	$rows = get_post_meta( get_queried_object_id(), 'about_milestones', true );
+	return is_array( $rows ) ? $rows : array();
 }
 
 /**
  * Render one journey-timeline entry, matching the existing .timeline__item
  * markup — which alternates the spacer/card on either side of the node
- * depending on whether it's an even or odd position in the list.
+ * depending on whether it's an even or odd position in the list. $row['body']
+ * is saved through wp_kses_post() (see inc/inline-repeaters.php), so basic
+ * HTML like <strong> is preserved but unsafe markup is stripped.
  */
-function wh_render_milestone( $post, $index ) {
-	$date = wh_field( 'milestone_date', '', $post->ID );
-	$body = wh_field( 'milestone_body', '', $post->ID );
-	$card = '<div class="timeline__card"><p class="timeline__date">' . esc_html( $date ) . '</p><div class="timeline__content wh-rte">' . $body . '</div></div>'; // phpcs:ignore WordPress.Security.EscapeOutput -- WYSIWYG.
+function wh_render_milestone( $row, $index ) {
+	$date = isset( $row['date'] ) ? $row['date'] : '';
+	$body = isset( $row['body'] ) ? $row['body'] : '';
+	$card = '<div class="timeline__card"><p class="timeline__date">' . esc_html( $date ) . '</p><div class="timeline__content wh-rte">' . $body . '</div></div>'; // phpcs:ignore WordPress.Security.EscapeOutput -- sanitized on save via wp_kses_post().
 	?>
 	<div class="timeline__item">
 	  <?php if ( 0 === $index % 2 ) : ?>
@@ -429,27 +424,18 @@ function wh_render_milestone( $post, $index ) {
 }
 
 /**
- * Published Fact posts (About page "a few things about me"), in menu order.
- * The fact's text is the post title; fact_icon is the emoji.
+ * Facts rows: array of ['icon'=>, 'text'=>].
  */
 function wh_facts() {
-	return get_posts(
-		array(
-			'post_type'      => 'wh_fact',
-			'posts_per_page' => -1,
-			'post_status'    => 'publish',
-			'orderby'        => array(
-				'menu_order' => 'ASC',
-				'date'       => 'ASC',
-			),
-		)
-	);
+	$rows = get_post_meta( get_queried_object_id(), 'about_facts', true );
+	return is_array( $rows ) ? $rows : array();
 }
 
-function wh_render_fact( $post ) {
-	$icon = wh_field( 'fact_icon', '', $post->ID );
+function wh_render_fact( $row ) {
+	$icon = isset( $row['icon'] ) ? $row['icon'] : '';
+	$text = isset( $row['text'] ) ? $row['text'] : '';
 	?>
-	<div><span class="ico"><?php echo esc_html( $icon ); ?></span><?php echo esc_html( get_the_title( $post ) ); ?></div>
+	<div><span class="ico"><?php echo esc_html( $icon ); ?></span><?php echo esc_html( $text ); ?></div>
 	<?php
 }
 

@@ -8,13 +8,19 @@
  * lands somewhere the owner can edit that content directly — no extra step
  * needed there.
  *
- * What ISN'T on the page screen is the *list* content — Events, Reviews, Books,
- * Writing (projects), Team — which lives in its own dashboard menu, the same
- * way blog posts or shop products do. This box gives one-click shortcuts from
- * the page to whichever of those menus feed that page, so "click Edit on the
- * page" always leads somewhere useful. Book pages are the special case: their
- * real content lives on the matching Book post, so their box links straight to
- * "Edit this book" instead of implying the page text itself is the source.
+ * What ISN'T on the page screen is *list* content that's reused across more
+ * than one page — Events, Reviews, Books, Writing (projects) — which lives in
+ * its own dashboard menu, the same way blog posts or shop products do. This
+ * box gives one-click shortcuts from the page to whichever of those menus feed
+ * that page, so "click Edit on the page" always leads somewhere useful. Book
+ * pages are the special case: their real content lives on the matching Book
+ * post, so their box links straight to "Edit this book" instead of implying
+ * the page text itself is the source.
+ *
+ * Lists shown on only ONE page (Team, Journey timeline, Facts) are handled
+ * differently — they're edited as inline "add row" lists directly on that
+ * page's own editor (see inc/inline-repeaters.php), so they need no shortcut
+ * here at all.
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -27,10 +33,6 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 function wrens_hollow_page_content_links_map() {
 	return array(
-		'page-about.php'                    => array(
-			array( 'label' => 'Manage journey timeline →', 'post_type' => 'wh_milestone' ),
-			array( 'label' => 'Manage facts list →', 'post_type' => 'wh_fact' ),
-		),
 		'front-page.php'                    => array(
 			array( 'label' => 'Manage reviews (homepage carousel) →', 'post_type' => 'wh_review' ),
 			array( 'label' => 'Manage "Currently writing" projects →', 'post_type' => 'wh_project' ),
@@ -52,7 +54,6 @@ function wrens_hollow_page_content_links_map() {
 		'page-whiskey-tango-foxtrot.php'    => array(
 			array( 'label' => 'Manage reviews (this series) →', 'post_type' => 'wh_review' ),
 			array( 'label' => 'Manage books →', 'post_type' => 'wh_book' ),
-			array( 'label' => 'Manage the team roster →', 'post_type' => 'wh_character' ),
 		),
 	);
 }

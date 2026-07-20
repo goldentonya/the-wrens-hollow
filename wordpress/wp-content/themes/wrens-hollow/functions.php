@@ -19,6 +19,7 @@ require get_template_directory() . '/inc/template-helpers.php';
 require get_template_directory() . '/inc/customizer.php';
 require get_template_directory() . '/inc/nav-walker.php';
 require get_template_directory() . '/inc/admin-links.php';
+require get_template_directory() . '/inc/inline-repeaters.php';
 
 function wrens_hollow_setup() {
 	add_theme_support( 'title-tag' );
