@@ -27,22 +27,7 @@ get_header();
       <div class="aside-card">
         <h3><?php wh_the( 'facts_heading', 'A few things about me' ); ?></h3>
         <div class="aside-card__facts">
-          <?php
-          $wh_fact_fallbacks = array(
-            1 => array( '📍', 'Based in Minnesota' ),
-            2 => array( '✍️', 'Two series in progress' ),
-            3 => array( '☕', 'Fueled by coffee' ),
-            4 => array( '💌', 'Loves hearing from readers' ),
-          );
-          for ( $wh_i = 1; $wh_i <= 4; $wh_i++ ) :
-            $wh_icon = wh_field( 'fact_' . $wh_i . '_icon', $wh_fact_fallbacks[ $wh_i ][0] );
-            $wh_text = wh_field( 'fact_' . $wh_i . '_text', $wh_fact_fallbacks[ $wh_i ][1] );
-            if ( '' === $wh_icon && '' === $wh_text ) {
-              continue;
-            }
-            ?>
-            <div><span class="ico"><?php echo esc_html( $wh_icon ); ?></span><?php echo esc_html( $wh_text ); ?></div>
-          <?php endfor; ?>
+          <?php foreach ( wh_facts() as $wh_fact ) { wh_render_fact( $wh_fact ); } ?>
         </div>
       </div>
       <div class="aside-card">
@@ -86,46 +71,12 @@ get_header();
   </div>
   <div class="wrap">
     <div class="timeline">
-      <div class="timeline__item">
-        <div class="timeline__spacer"></div>
-        <div class="timeline__node"></div>
-        <div class="timeline__card">
-          <p class="timeline__date"><?php wh_the( 'tl_1_date', 'May 2024' ); ?></p>
-          <div class="timeline__content wh-rte">
-            <?php wh_wysiwyg( 'tl_1_body', wh_default( 'field_wh_ab_tl1_body' ) ); ?>
-          </div>
-        </div>
-      </div>
-      <div class="timeline__item">
-        <div class="timeline__card">
-          <p class="timeline__date"><?php wh_the( 'tl_2_date', 'June 2025' ); ?></p>
-          <div class="timeline__content wh-rte">
-            <?php wh_wysiwyg( 'tl_2_body', wh_default( 'field_wh_ab_tl2_body' ) ); ?>
-          </div>
-        </div>
-        <div class="timeline__node"></div>
-        <div class="timeline__spacer"></div>
-      </div>
-      <div class="timeline__item">
-        <div class="timeline__spacer"></div>
-        <div class="timeline__node"></div>
-        <div class="timeline__card">
-          <p class="timeline__date"><?php wh_the( 'tl_3_date', 'November 2025' ); ?></p>
-          <div class="timeline__content wh-rte">
-            <?php wh_wysiwyg( 'tl_3_body', wh_default( 'field_wh_ab_tl3_body' ) ); ?>
-          </div>
-        </div>
-      </div>
-      <div class="timeline__item">
-        <div class="timeline__card">
-          <p class="timeline__date"><?php wh_the( 'tl_4_date', '2026' ); ?></p>
-          <div class="timeline__content wh-rte">
-            <?php wh_wysiwyg( 'tl_4_body', wh_default( 'field_wh_ab_tl4_body' ) ); ?>
-          </div>
-        </div>
-        <div class="timeline__node"></div>
-        <div class="timeline__spacer"></div>
-      </div>
+      <?php
+      $wh_milestones = wh_milestones();
+      foreach ( $wh_milestones as $wh_i => $wh_milestone ) {
+        wh_render_milestone( $wh_milestone, $wh_i );
+      }
+      ?>
     </div>
   </div>
 </section>

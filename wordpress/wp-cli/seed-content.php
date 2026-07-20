@@ -424,6 +424,89 @@ if ( ! get_option( 'wh_seeded_book_covers' ) && function_exists( 'wh_book' ) ) {
 	WP_CLI::log( '[seed] Book covers already attached — skipping.' );
 }
 
+/** Seed the About-page journey timeline once. */
+if ( ! get_option( 'wh_seeded_milestones' ) ) {
+	$milestones = array(
+		array(
+			'label' => 'Started writing Whiskey & Secrets',
+			'date'  => 'May 2024',
+			'body'  => '<p>Started writing <strong>Whiskey &amp; Secrets</strong>, the first book in the Whiskey Tango Foxtrot series—a romance filled with science, suspense, and a fiercely protective Green Beret.</p>',
+		),
+		array(
+			'label' => 'Launched Whiskey & Secrets',
+			'date'  => 'June 2025',
+			'body'  => '<p>Official launch of <strong>Whiskey &amp; Secrets</strong>! The beginning of a series that pairs strong women (often scientists) with the men brave enough to fight beside them.</p>',
+		),
+		array(
+			'label' => 'Launched Veilfall',
+			'date'  => 'November 2025',
+			'body'  => '<p>Launched <strong>Veilfall</strong>! The start of the Veiled Prophecy series.</p>',
+		),
+		array(
+			'label' => 'Currently writing Whiskey & Lies and Veilbound',
+			'date'  => '2026',
+			'body'  => "<p>Currently writing <strong>Whiskey &amp; Lies</strong>, book two in the series—featuring Fallon, a guarded survivor with a fiery spirit, and Jake, the team's communications expert with secrets of his own. Also writing <strong>Veilbound</strong>, book two in the Veiled Prophecy series.</p>\n<p>I took a break from both to start the Northfall Syndicate series. A suspense stalker book centered in Cambridge, MN. This one is very near and dear to my heart and to all those fighting with past traumas.</p>",
+		),
+	);
+
+	$mcount = 0;
+	foreach ( $milestones as $i => $m ) {
+		$post_id = wp_insert_post(
+			array(
+				'post_type'   => 'wh_milestone',
+				'post_title'  => $m['label'],
+				'post_status' => 'publish',
+				'menu_order'  => $i,
+			)
+		);
+		if ( $post_id && ! is_wp_error( $post_id ) ) {
+			update_field( 'milestone_date', $m['date'], $post_id );
+			update_field( 'milestone_body', $m['body'], $post_id );
+			$mcount++;
+		}
+	}
+
+	update_option( 'wh_seeded_milestones', 1 );
+	if ( class_exists( 'WP_CLI' ) ) {
+		WP_CLI::log( "[seed] Created {$mcount} milestones." );
+	}
+} elseif ( class_exists( 'WP_CLI' ) ) {
+	WP_CLI::log( '[seed] Milestones already seeded — skipping.' );
+}
+
+/** Seed the About-page "a few things about me" facts once. */
+if ( ! get_option( 'wh_seeded_facts' ) ) {
+	$facts = array(
+		array( 'icon' => '📍', 'text' => 'Based in Minnesota' ),
+		array( 'icon' => '✍️', 'text' => 'Two series in progress' ),
+		array( 'icon' => '☕', 'text' => 'Fueled by coffee' ),
+		array( 'icon' => '💌', 'text' => 'Loves hearing from readers' ),
+	);
+
+	$fcount = 0;
+	foreach ( $facts as $i => $f ) {
+		$post_id = wp_insert_post(
+			array(
+				'post_type'   => 'wh_fact',
+				'post_title'  => $f['text'],
+				'post_status' => 'publish',
+				'menu_order'  => $i,
+			)
+		);
+		if ( $post_id && ! is_wp_error( $post_id ) ) {
+			update_field( 'fact_icon', $f['icon'], $post_id );
+			$fcount++;
+		}
+	}
+
+	update_option( 'wh_seeded_facts', 1 );
+	if ( class_exists( 'WP_CLI' ) ) {
+		WP_CLI::log( "[seed] Created {$fcount} facts." );
+	}
+} elseif ( class_exists( 'WP_CLI' ) ) {
+	WP_CLI::log( '[seed] Facts already seeded — skipping.' );
+}
+
 /** Seed the On-the-Horizon projects once. */
 if ( ! get_option( 'wh_seeded_projects' ) ) {
 	$projects = array(

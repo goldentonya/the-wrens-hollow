@@ -108,6 +108,50 @@ function wrens_hollow_register_post_types() {
 	);
 
 	register_post_type(
+		'wh_milestone',
+		array(
+			'labels'       => array(
+				'name'          => 'Journey',
+				'singular_name' => 'Milestone',
+				'menu_name'     => 'Journey',
+				'add_new_item'  => 'Add New Milestone',
+				'edit_item'     => 'Edit Milestone',
+				'new_item'      => 'New Milestone',
+				'all_items'     => 'All Milestones (About page timeline)',
+			),
+			'public'       => false,
+			'show_ui'      => true,
+			'show_in_menu' => true,
+			'show_in_rest' => true,
+			'menu_icon'    => 'dashicons-clock',
+			'menu_position'=> 26,
+			'supports'     => array( 'title', 'page-attributes' ),
+		)
+	);
+
+	register_post_type(
+		'wh_fact',
+		array(
+			'labels'       => array(
+				'name'          => 'Facts',
+				'singular_name' => 'Fact',
+				'menu_name'     => 'Facts',
+				'add_new_item'  => 'Add New Fact',
+				'edit_item'     => 'Edit Fact',
+				'new_item'      => 'New Fact',
+				'all_items'     => 'All Facts (About page)',
+			),
+			'public'       => false,
+			'show_ui'      => true,
+			'show_in_menu' => true,
+			'show_in_rest' => true,
+			'menu_icon'    => 'dashicons-info',
+			'menu_position'=> 27,
+			'supports'     => array( 'title', 'page-attributes' ),
+		)
+	);
+
+	register_post_type(
 		'wh_book',
 		array(
 			'labels'       => array(
@@ -145,6 +189,12 @@ function wrens_hollow_enter_title_here( $text, $post ) {
 	}
 	if ( isset( $post->post_type ) && 'wh_character' === $post->post_type ) {
 		return 'Name & callsign — e.g. Wade "Wraith" Blakely';
+	}
+	if ( isset( $post->post_type ) && 'wh_milestone' === $post->post_type ) {
+		return 'Short label (for your reference only, not shown on the site)';
+	}
+	if ( isset( $post->post_type ) && 'wh_fact' === $post->post_type ) {
+		return 'Fact text — e.g. "Based in Minnesota"';
 	}
 	return $text;
 }

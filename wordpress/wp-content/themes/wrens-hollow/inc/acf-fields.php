@@ -488,5 +488,81 @@ function wrens_hollow_register_acf_fields() {
 			'hide_on_screen' => array( 'the_content' ),
 		)
 	);
+
+	// --- Milestone fields (attached to the wh_milestone post type / About page
+	// journey timeline). The title box is for admin reference only — the date
+	// and body below are what's shown on the site. ---
+	acf_add_local_field_group(
+		array(
+			'key'      => 'group_wh_milestone',
+			'title'    => 'Milestone details',
+			'fields'   => array(
+				array(
+					'key'          => 'field_wh_milestone_date',
+					'label'        => 'Date',
+					'name'         => 'milestone_date',
+					'type'         => 'text',
+					'instructions' => 'Shown as the timeline date, e.g. "May 2024" or "2026".',
+					'required'     => 1,
+				),
+				array(
+					'key'          => 'field_wh_milestone_body',
+					'label'        => 'Description',
+					'name'         => 'milestone_body',
+					'type'         => 'wysiwyg',
+					'media_upload' => 0,
+					'tabs'         => 'all',
+				),
+			),
+			'location' => array(
+				array(
+					array(
+						'param'    => 'post_type',
+						'operator' => '==',
+						'value'    => 'wh_milestone',
+					),
+				),
+			),
+			'menu_order'     => 0,
+			'position'       => 'normal',
+			'style'          => 'default',
+			'active'         => true,
+			'show_in_rest'   => 1,
+			'hide_on_screen' => array( 'the_content' ),
+		)
+	);
+
+	// --- Fact fields (attached to the wh_fact post type / About page "a few
+	// things about me"). The fact's own text is the post title. ---
+	acf_add_local_field_group(
+		array(
+			'key'      => 'group_wh_fact',
+			'title'    => 'Fact icon',
+			'fields'   => array(
+				array(
+					'key'          => 'field_wh_fact_icon',
+					'label'        => 'Icon',
+					'name'         => 'fact_icon',
+					'type'         => 'text',
+					'instructions' => 'A single emoji, e.g. 📍 ✍️ ☕ 💌',
+				),
+			),
+			'location' => array(
+				array(
+					array(
+						'param'    => 'post_type',
+						'operator' => '==',
+						'value'    => 'wh_fact',
+					),
+				),
+			),
+			'menu_order'     => 0,
+			'position'       => 'normal',
+			'style'          => 'default',
+			'active'         => true,
+			'show_in_rest'   => 1,
+			'hide_on_screen' => array( 'the_content' ),
+		)
+	);
 }
 add_action( 'acf/init', 'wrens_hollow_register_acf_fields' );

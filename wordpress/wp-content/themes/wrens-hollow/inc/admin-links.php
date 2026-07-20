@@ -27,6 +27,10 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 function wrens_hollow_page_content_links_map() {
 	return array(
+		'page-about.php'                    => array(
+			array( 'label' => 'Manage journey timeline →', 'post_type' => 'wh_milestone' ),
+			array( 'label' => 'Manage facts list →', 'post_type' => 'wh_fact' ),
+		),
 		'front-page.php'                    => array(
 			array( 'label' => 'Manage reviews (homepage carousel) →', 'post_type' => 'wh_review' ),
 			array( 'label' => 'Manage "Currently writing" projects →', 'post_type' => 'wh_project' ),

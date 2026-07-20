@@ -337,6 +337,72 @@ function wh_render_character( $post ) {
 }
 
 /**
+ * Published Milestone posts (About page journey timeline), in menu order.
+ */
+function wh_milestones() {
+	return get_posts(
+		array(
+			'post_type'      => 'wh_milestone',
+			'posts_per_page' => -1,
+			'post_status'    => 'publish',
+			'orderby'        => array(
+				'menu_order' => 'ASC',
+				'date'       => 'ASC',
+			),
+		)
+	);
+}
+
+/**
+ * Render one journey-timeline entry, matching the existing .timeline__item
+ * markup — which alternates the spacer/card on either side of the node
+ * depending on whether it's an even or odd position in the list.
+ */
+function wh_render_milestone( $post, $index ) {
+	$date = wh_field( 'milestone_date', '', $post->ID );
+	$body = wh_field( 'milestone_body', '', $post->ID );
+	$card = '<div class="timeline__card"><p class="timeline__date">' . esc_html( $date ) . '</p><div class="timeline__content wh-rte">' . $body . '</div></div>'; // phpcs:ignore WordPress.Security.EscapeOutput -- WYSIWYG.
+	?>
+	<div class="timeline__item">
+	  <?php if ( 0 === $index % 2 ) : ?>
+	    <div class="timeline__spacer"></div>
+	    <div class="timeline__node"></div>
+	    <?php echo $card; // phpcs:ignore WordPress.Security.EscapeOutput -- built above. ?>
+	  <?php else : ?>
+	    <?php echo $card; // phpcs:ignore WordPress.Security.EscapeOutput -- built above. ?>
+	    <div class="timeline__node"></div>
+	    <div class="timeline__spacer"></div>
+	  <?php endif; ?>
+	</div>
+	<?php
+}
+
+/**
+ * Published Fact posts (About page "a few things about me"), in menu order.
+ * The fact's text is the post title; fact_icon is the emoji.
+ */
+function wh_facts() {
+	return get_posts(
+		array(
+			'post_type'      => 'wh_fact',
+			'posts_per_page' => -1,
+			'post_status'    => 'publish',
+			'orderby'        => array(
+				'menu_order' => 'ASC',
+				'date'       => 'ASC',
+			),
+		)
+	);
+}
+
+function wh_render_fact( $post ) {
+	$icon = wh_field( 'fact_icon', '', $post->ID );
+	?>
+	<div><span class="ico"><?php echo esc_html( $icon ); ?></span><?php echo esc_html( get_the_title( $post ) ); ?></div>
+	<?php
+}
+
+/**
  * Projects flagged to show on the home page ("Currently writing").
  */
 function wh_projects_home() {
