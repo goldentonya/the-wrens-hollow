@@ -40,16 +40,13 @@ $wh_wl_product = $wh_wl_id ? wc_get_product( $wh_wl_id ) : false;
           <p class="book-card__tag">Book 1 · Whiskey Tango Foxtrot</p>
           <h3><?php if ( $wh_ws_id ) : ?><a href="<?php echo esc_url( get_permalink( $wh_ws_id ) ); ?>"><?php endif; ?>Whiskey &amp; Secrets<?php if ( $wh_ws_id ) : ?></a><?php endif; ?></h3>
           <p class="txt">Signed paperback.</p>
-          <?php if ( $wh_ws_product ) : ?>
-            <span class="product-card__price"><?php echo wp_kses_post( $wh_ws_product->get_price_html() ); ?></span>
-          <?php else : ?>
-            <span class="product-card__price">$21.99</span>
-          <?php endif; ?>
         </div>
         <div class="product-card__row">
           <?php if ( $wh_ws_product ) : ?>
+            <span class="product-card__price"><?php echo wp_kses_post( $wh_ws_product->get_price_html() ); ?></span>
             <?php echo do_shortcode( '[add_to_cart id="' . $wh_ws_id . '" show_price="false" style=""]' ); ?>
           <?php else : ?>
+            <span class="product-card__price">$21.99</span>
             <button class="btn btn--outline btn--sm" type="button" data-notify="the Whiskey & Secrets paperback">Notify me</button>
           <?php endif; ?>
         </div>
@@ -63,16 +60,13 @@ $wh_wl_product = $wh_wl_id ? wc_get_product( $wh_wl_id ) : false;
           <p class="book-card__tag">Book 2 · Whiskey Tango Foxtrot</p>
           <h3><?php if ( $wh_wl_id ) : ?><a href="<?php echo esc_url( get_permalink( $wh_wl_id ) ); ?>"><?php endif; ?>Whiskey &amp; Lies<?php if ( $wh_wl_id ) : ?></a><?php endif; ?></h3>
           <p class="txt">Signed paperback.</p>
-          <?php if ( $wh_wl_product ) : ?>
-            <span class="product-card__price"><?php echo wp_kses_post( $wh_wl_product->get_price_html() ); ?></span>
-          <?php else : ?>
-            <span class="product-card__price">$21.99</span>
-          <?php endif; ?>
         </div>
         <div class="product-card__row">
           <?php if ( $wh_wl_product ) : ?>
+            <span class="product-card__price"><?php echo wp_kses_post( $wh_wl_product->get_price_html() ); ?></span>
             <?php echo do_shortcode( '[add_to_cart id="' . $wh_wl_id . '" show_price="false" style=""]' ); ?>
           <?php else : ?>
+            <span class="product-card__price">$21.99</span>
             <button class="btn btn--outline btn--sm" type="button" data-notify="Whiskey & Lies">Notify me</button>
           <?php endif; ?>
         </div>
@@ -86,16 +80,13 @@ $wh_wl_product = $wh_wl_id ? wc_get_product( $wh_wl_id ) : false;
           <p class="book-card__tag">Book 1 · The Veiled Prophecy</p>
           <h3><?php if ( $wh_vf_id ) : ?><a href="<?php echo esc_url( get_permalink( $wh_vf_id ) ); ?>"><?php endif; ?>Veilfall<?php if ( $wh_vf_id ) : ?></a><?php endif; ?></h3>
           <p class="txt">Paperback.</p>
-          <?php if ( $wh_vf_product ) : ?>
-            <span class="product-card__price"><?php echo wp_kses_post( $wh_vf_product->get_price_html() ); ?></span>
-          <?php else : ?>
-            <span class="product-card__price">$19.99</span>
-          <?php endif; ?>
         </div>
         <div class="product-card__row">
           <?php if ( $wh_vf_product ) : ?>
+            <span class="product-card__price"><?php echo wp_kses_post( $wh_vf_product->get_price_html() ); ?></span>
             <?php echo do_shortcode( '[add_to_cart id="' . $wh_vf_id . '" show_price="false" style=""]' ); ?>
           <?php else : ?>
+            <span class="product-card__price">$19.99</span>
             <button class="btn btn--outline btn--sm" type="button" data-notify="the Veilfall paperback">Notify me</button>
           <?php endif; ?>
         </div>
@@ -107,9 +98,9 @@ $wh_wl_product = $wh_wl_id ? wc_get_product( $wh_wl_id ) : false;
           <p class="book-card__tag">Book 2 · The Veiled Prophecy</p>
           <h3>Veilbound</h3>
           <p class="txt">Signed paperback.</p>
-          <span class="product-card__price">Coming soon</span>
         </div>
         <div class="product-card__row">
+          <span class="product-card__price">Coming soon</span>
           <button class="btn btn--outline btn--sm" type="button" data-notify="Veilbound">Notify me</button>
         </div>
       </div>

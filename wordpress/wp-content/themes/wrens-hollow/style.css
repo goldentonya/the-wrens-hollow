@@ -900,13 +900,16 @@ h3.h-md { font-size: 22px; line-height: 1.25; }
 .chip.is-active { background: var(--plum); color: #fff; }
 
 .product-card .ph-box { width: 100%; aspect-ratio: 210 / 296; height: auto; margin: 0; box-shadow: 0 0 0 6px rgba(217,179,193,.35), 0 10px 30px rgba(106,65,82,.25); }
-.product-card { display: flex; flex-direction: column; opacity: 1; }
+/* min-width: 0 stops the placeholder card's shorter content (no image once a
+   missing cover 404s to a text label) from shrinking its grid *column* below
+   the other three — without it, the 4 columns render at uneven widths. */
+.product-card { display: flex; flex-direction: column; height: 100%; min-width: 0; opacity: 1; }
 .product-card--soon { opacity: .68; }
-.product-card__body { display: flex; flex-direction: column; }
+.product-card__body { display: flex; flex-direction: column; margin-top: 16px; }
 .product-card h3 { font-size: 18px; margin-bottom: 6px; }
-.product-card__row { display: flex; flex-direction: column; align-items: flex-start; margin-top: 14px; }
+.product-card__row { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 16px; }
 .product-card__price { display: block; font: 700 17px var(--font-body); color: var(--text-heading); }
-.product-card__row .btn { width: auto; justify-content: center; }
+.product-card__row .btn { width: auto; flex: none; justify-content: center; }
 /* WooCommerce's [add_to_cart] shortcode renders its own <p><a class="button add_to_cart_button">
    markup outside of any .woocommerce wrapper on this custom shop template, so it misses the
    theme's usual button styling entirely — restyle it to match the site's buttons here. */
@@ -1046,10 +1049,20 @@ h3.h-md { font-size: 22px; line-height: 1.25; }
 .footer-brand__word { display: flex; flex-direction: column; gap: 3px; }
 .footer-brand__title { font: 700 13px/1.1 'Mulish', sans-serif; letter-spacing: .13em; color: #fff; }
 .footer-brand__sub { font: 400 9px/1 'Mulish', sans-serif; letter-spacing: .13em; text-transform: uppercase; color: var(--text-on-dark-muted); }
-.footer-mark { height: 42px; width: auto; flex: none; }
+/* Scoped to .site-footer (not just .footer-mark) so this out-specifies
+   WooCommerce's global ".woocommerce img { height: auto }" — on the shop,
+   cart, checkout, and account pages <body> carries the "woocommerce" class,
+   so that rule otherwise wins and blows the logo up to its natural 700x290
+   size, shoving the title text into the next footer column. */
+.site-footer .footer-mark { height: 42px; width: auto; flex: none; }
 .footer-tagline { color: var(--text-on-dark-muted); font-size: 14px; margin: 16px 0 0; max-width: 320px; }
 
-.footer-col__title { font: 700 12px 'Mulish', sans-serif; letter-spacing: .1em; text-transform: uppercase; color: var(--plum-soft); margin: 0 0 16px; }
+/* Scoped to .site-footer so this out-specifies WooCommerce's global
+   ".woocommerce h3 { color: var(--text-heading) }", which otherwise wins on
+   the shop/cart/checkout/account pages (body carries the "woocommerce" class
+   there) and swaps in a near-black color meant for light backgrounds —
+   nearly invisible against the dark footer. */
+.site-footer .footer-col__title { font: 700 12px 'Mulish', sans-serif; letter-spacing: .1em; text-transform: uppercase; color: var(--plum-soft); margin: 0 0 16px; }
 
 .footer-links {
   display: grid;
@@ -1112,7 +1125,10 @@ h3.h-md { font-size: 22px; line-height: 1.25; }
    WooCommerce — reskin default cart/checkout/account/shop markup
    to match the site's design instead of WooCommerce's own theme.
    ============================================================ */
-.woocommerce:not(body) {
+/* :not(p) excludes the [add_to_cart] shortcode's <p class="product woocommerce
+   add_to_cart_inline">: it carries the "woocommerce" class too, so without this
+   it inherits this wrapper's padding meant for the cart/checkout/account page. */
+.woocommerce:not(body):not(p) {
   font-family: var(--font-body);
   color: var(--text-body);
   max-width: 1080px;
