@@ -80,17 +80,20 @@ get_header();
 </section>
 
 <!-- Newsletter band -->
-<section class="sec sec--tight sec--dark">
-  <div class="wrap sec--center">
-    <p class="eyebrow eyebrow--on-dark"><?php wh_the( 'home_news_eyebrow', 'Join the Hollow' ); ?></p>
-    <h2 class="h-md" style="font-size:24px;"><?php wh_the( 'home_news_heading', 'Get bonus chapters + first look at new releases' ); ?></h2>
-    <form class="newsletter-form" id="newsletterForm" style="margin-left:auto;margin-right:auto;">
-      <input class="field" type="email" placeholder="your@email.com" required aria-label="Email address">
-      <button class="btn" type="submit">Subscribe</button>
-    </form>
-    <p class="form-status" id="newsletterStatus"></p>
-  </div>
-</section>
+<?php
+get_template_part(
+	'template-parts/newsletter-band',
+	null,
+	array(
+		'section_class' => 'sec sec--tight sec--dark',
+		'eyebrow_class' => 'eyebrow eyebrow--on-dark',
+		'eyebrow'       => wh_field( 'home_news_eyebrow', 'Join the Hollow' ),
+		'heading'       => wh_field( 'home_news_heading', 'Get bonus chapters + first look at new releases' ),
+		'heading_style' => 'font-size:24px;',
+		'button'        => 'Subscribe',
+	)
+);
+?>
 
 <!-- On the horizon -->
 <section class="sec sec--dashed-top">

@@ -43,6 +43,25 @@ function wrens_hollow_register_page_fields() {
 					'rows'          => 2,
 					'default_value' => 'Signings, book fairs & author events — where to find me next.',
 				),
+				array(
+					'key'     => 'field_wh_ev_msg_news',
+					'type'    => 'message',
+					'message' => 'The "Join the Hollow" band near the bottom of the page.',
+				),
+				array(
+					'key'           => 'field_wh_ev_news_eyebrow',
+					'label'         => 'Newsletter band — eyebrow',
+					'name'          => 'news_eyebrow',
+					'type'          => 'text',
+					'default_value' => 'Join the Hollow',
+				),
+				array(
+					'key'           => 'field_wh_ev_news_heading',
+					'label'         => 'Newsletter band — heading',
+					'name'          => 'news_heading',
+					'type'          => 'text',
+					'default_value' => 'Never miss an event or release',
+				),
 			),
 			'location' => array(
 				array(
@@ -463,6 +482,25 @@ function wrens_hollow_register_page_fields() {
 					'rows'          => 4,
 					'default_value' => "Vera's magic is fully awakening, revealing gifts tied to the first Fae Queen herself — and unexpected connections to a vampire and a wolf shifter she was never meant to meet. With Caelum bound to her by a fated mate bond she keeps resisting, Vera must decide whether protecting her heart is worth losing everything else.",
 				),
+				array(
+					'key'     => 'field_wh_vp_msg_news',
+					'type'    => 'message',
+					'message' => 'The "Join the Hollow" band near the bottom of the page.',
+				),
+				array(
+					'key'           => 'field_wh_vp_news_eyebrow',
+					'label'         => 'Newsletter band — eyebrow',
+					'name'          => 'news_eyebrow',
+					'type'          => 'text',
+					'default_value' => 'Join the Hollow',
+				),
+				array(
+					'key'           => 'field_wh_vp_news_heading',
+					'label'         => 'Newsletter band — heading',
+					'name'          => 'news_heading',
+					'type'          => 'text',
+					'default_value' => 'Get bonus chapters + first look at new releases',
+				),
 			),
 			'location' => array(
 				array(
@@ -574,6 +612,25 @@ function wrens_hollow_register_page_fields() {
 					'rows'          => 4,
 					'default_value' => "Jake \"Glitch\" Thompson came home from the military carrying more scars than he admits. Fallon Moore has always been the steady one — until Jake becomes the exception to every rule she swore by. As shadows from Fallon's past close in fast, Jake must decide if he's willing to fight through her ghosts to build the life they could have together.",
 				),
+				array(
+					'key'     => 'field_wh_wtf_msg_news',
+					'type'    => 'message',
+					'message' => 'The "Join the Hollow" band near the bottom of the page.',
+				),
+				array(
+					'key'           => 'field_wh_wtf_news_eyebrow',
+					'label'         => 'Newsletter band — eyebrow',
+					'name'          => 'news_eyebrow',
+					'type'          => 'text',
+					'default_value' => 'Join the Hollow',
+				),
+				array(
+					'key'           => 'field_wh_wtf_news_heading',
+					'label'         => 'Newsletter band — heading',
+					'name'          => 'news_heading',
+					'type'          => 'text',
+					'default_value' => 'Get bonus chapters + first look at new releases',
+				),
 			),
 			'location' => array(
 				array(
@@ -619,6 +676,25 @@ function wrens_hollow_register_page_fields() {
 					'type'          => 'textarea',
 					'rows'          => 3,
 					'default_value' => "I'm always working on new stories. This page is where I share upcoming projects, early details, and what I'm currently writing. Information may change as these stories evolve.",
+				),
+				array(
+					'key'     => 'field_wh_hz_msg_news',
+					'type'    => 'message',
+					'message' => 'The "Join the Hollow" band near the bottom of the page.',
+				),
+				array(
+					'key'           => 'field_wh_hz_news_eyebrow',
+					'label'         => 'Newsletter band — eyebrow',
+					'name'          => 'news_eyebrow',
+					'type'          => 'text',
+					'default_value' => 'Join the Hollow',
+				),
+				array(
+					'key'           => 'field_wh_hz_news_heading',
+					'label'         => 'Newsletter band — heading',
+					'name'          => 'news_heading',
+					'type'          => 'text',
+					'default_value' => 'Be the first to know when these release',
 				),
 			),
 			'location' => array(

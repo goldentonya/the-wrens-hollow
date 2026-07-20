@@ -79,16 +79,16 @@ $wh_vf_id = function_exists( 'wc_get_product_id_by_sku' ) ? wc_get_product_id_by
 </section>
 
 <!-- Newsletter -->
-<section class="sec sec--tight sec--pink sec--dashed-top">
-  <div class="wrap sec--center">
-    <p class="eyebrow">Join the Hollow</p>
-    <h2 class="h-md" style="color:var(--plum-deep);">Get bonus chapters + first look at new releases</h2>
-    <form class="newsletter-form" id="newsletterForm" style="margin-left:auto;margin-right:auto;">
-      <input class="field" type="email" placeholder="your@email.com" required aria-label="Email address">
-      <button class="btn" type="submit">Notify me</button>
-    </form>
-    <p class="form-status" id="newsletterStatus"></p>
-  </div>
-</section>
+<?php
+get_template_part(
+	'template-parts/newsletter-band',
+	null,
+	array(
+		'section_class' => 'sec sec--tight sec--pink sec--dashed-top',
+		'eyebrow'       => wh_field( 'news_eyebrow', 'Join the Hollow' ),
+		'heading'       => wh_field( 'news_heading', 'Get bonus chapters + first look at new releases' ),
+	)
+);
+?>
 
 <?php get_footer(); ?>

@@ -52,16 +52,16 @@ get_header();
 </section>
 <?php endif; ?>
 
-<section class="sec sec--tight sec--cream2 sec--dashed-top">
-  <div class="wrap sec--center">
-    <p class="eyebrow">Join the Hollow</p>
-    <h2 class="h-md" style="color:var(--plum-deep);">Never miss an event or release</h2>
-    <form class="newsletter-form" id="newsletterForm" style="margin-left:auto;margin-right:auto;">
-      <input class="field" type="email" placeholder="your@email.com" required aria-label="Email address">
-      <button class="btn" type="submit">Subscribe</button>
-    </form>
-    <p class="form-status" id="newsletterStatus"></p>
-  </div>
-</section>
+<?php
+get_template_part(
+	'template-parts/newsletter-band',
+	null,
+	array(
+		'eyebrow' => wh_field( 'news_eyebrow', 'Join the Hollow' ),
+		'heading' => wh_field( 'news_heading', 'Never miss an event or release' ),
+		'button'  => 'Subscribe',
+	)
+);
+?>
 
 <?php get_footer(); ?>
