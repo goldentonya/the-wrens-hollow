@@ -4,9 +4,6 @@
  */
 $wh_nav_active = 'wtf';
 get_header();
-
-$wh_ws_id = function_exists( 'wc_get_product_id_by_sku' ) ? wc_get_product_id_by_sku( 'whiskey-and-secrets-signed' ) : 0;
-$wh_wl_id = function_exists( 'wc_get_product_id_by_sku' ) ? wc_get_product_id_by_sku( 'whiskey-and-lies-signed' ) : 0;
 ?>
 
 <!-- Masthead -->
@@ -55,26 +52,7 @@ $wh_wl_id = function_exists( 'wc_get_product_id_by_sku' ) ? wc_get_product_id_by
 <section class="sec sec--cream sec--dashed-top">
   <div class="wrap">
     <p class="eyebrow">Reading order</p>
-    <div class="card book-showcase book-showcase--featured">
-      <div class="ph-box"><img src="<?php echo esc_url( get_template_directory_uri() . '/images/covers/whiskey-and-secrets.jpg' ); ?>" alt="Whiskey &amp; Secrets book cover" style="width:100%;height:100%;object-fit:cover;border-radius:6px;"></div>
-      <div class="book-showcase__body">
-        <p class="book-card__tag"><?php wh_the( 'reading1_tag', 'Book 1 · First chapters free' ); ?></p>
-        <h3><?php wh_the( 'reading1_title', 'Whiskey & Secrets' ); ?></h3>
-        <p class="txt"><?php wh_the( 'reading1_blurb', 'When biological anthropology grad student Sarah leads a research expedition into the Amazon, she never expects to need military protection — least of all from Wade "Wraith" Blakely, the stoic former Green Beret assigned to keep her team safe. When one of them goes missing, secrets buried in the jungle, and in Sarah\'s past, start to surface.' ); ?></p>
-        <a class="btn btn--sm" href="<?php echo esc_url( home_url( '/whiskey-and-secrets/' ) ); ?>">Start reading free →</a>
-        <a class="btn btn--outline btn--sm" href="<?php echo esc_url( $wh_ws_id ? get_permalink( $wh_ws_id ) : ( function_exists( 'wc_get_page_permalink' ) ? wc_get_page_permalink( 'shop' ) . '#whiskey-and-secrets' : home_url( '/shop/#whiskey-and-secrets' ) ) ); ?>" style="margin-left:8px;">Buy book →</a>
-      </div>
-    </div>
-    <div class="card book-showcase">
-      <div class="ph-box"><img src="<?php echo esc_url( get_template_directory_uri() . '/images/covers/whiskey-and-lies.jpg' ); ?>" alt="Whiskey &amp; Lies book cover" style="width:100%;height:100%;object-fit:cover;border-radius:6px;"></div>
-      <div class="book-showcase__body">
-        <p class="book-card__tag"><?php wh_the( 'reading2_tag', 'Book 2 · Free' ); ?></p>
-        <h3><?php wh_the( 'reading2_title', 'Whiskey & Lies' ); ?></h3>
-        <p class="txt"><?php wh_the( 'reading2_blurb', "Jake \"Glitch\" Thompson came home from the military carrying more scars than he admits. Fallon Moore has always been the steady one — until Jake becomes the exception to every rule she swore by. As shadows from Fallon's past close in fast, Jake must decide if he's willing to fight through her ghosts to build the life they could have together." ); ?></p>
-        <a class="btn btn--sm" href="<?php echo esc_url( home_url( '/whiskey-and-lies/' ) ); ?>">Start reading free →</a>
-        <a class="btn btn--outline btn--sm" href="<?php echo esc_url( $wh_wl_id ? get_permalink( $wh_wl_id ) : ( function_exists( 'wc_get_page_permalink' ) ? wc_get_page_permalink( 'shop' ) . '#whiskey-and-lies' : home_url( '/shop/#whiskey-and-lies' ) ) ); ?>" style="margin-left:8px;">Buy book →</a>
-      </div>
-    </div>
+    <?php foreach ( wh_books( 'whiskey-tango-foxtrot' ) as $wh_i => $wh_book_post ) { wh_render_reading_order_card( $wh_book_post, 0 === $wh_i ); } ?>
   </div>
 </section>
 

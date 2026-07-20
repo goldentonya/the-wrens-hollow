@@ -229,8 +229,24 @@ function wrens_hollow_register_acf_fields() {
 					'label'         => 'Book number in series',
 					'name'          => 'book_number',
 					'type'          => 'number',
-					'instructions'  => 'Order within the series (1, 2, 3…).',
+					'instructions'  => 'Order within the series (1, 2, 3…). Also controls order in the series page\'s "Reading order" section.',
 					'default_value' => 1,
+				),
+				array(
+					'key'           => 'field_wh_book_released',
+					'label'         => 'Released?',
+					'name'          => 'is_released',
+					'type'          => 'true_false',
+					'instructions'  => 'On = the series page shows "Start reading free / Buy book" buttons. Off = shows "Notify me on release / Learn more" instead.',
+					'ui'            => 1,
+					'default_value' => 1,
+				),
+				array(
+					'key'          => 'field_wh_book_sku',
+					'label'        => 'Product code (SKU)',
+					'name'         => 'product_sku',
+					'type'         => 'text',
+					'instructions' => 'The matching product\'s SKU in the Shop, so the "Buy book" button links straight to it. Leave empty to link to the Shop page instead.',
 				),
 
 				// ---- Tab: Books-page card ----

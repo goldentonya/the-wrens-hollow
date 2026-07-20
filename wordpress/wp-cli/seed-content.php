@@ -259,6 +259,33 @@ HTML,
 	WP_CLI::log( '[seed] Books already seeded — skipping.' );
 }
 
+/** Back-fill "Released?" + product SKU on the 4 existing books once, so the
+ * series-page "Reading order" buttons work correctly now that it's pulled
+ * live from the Books menu instead of separately-edited page fields. Runs
+ * once regardless of when the books above were created. */
+if ( ! get_option( 'wh_seeded_book_release_info' ) && function_exists( 'wh_book' ) ) {
+	$release_info = array(
+		'veilfall'            => array( 'released' => 1, 'sku' => 'veilfall-paperback' ),
+		'veilbound'           => array( 'released' => 0, 'sku' => '' ),
+		'whiskey-and-secrets' => array( 'released' => 1, 'sku' => 'whiskey-and-secrets-signed' ),
+		'whiskey-and-lies'    => array( 'released' => 1, 'sku' => 'whiskey-and-lies-signed' ),
+	);
+	foreach ( $release_info as $key => $info ) {
+		$book = wh_book( $key );
+		if ( ! $book ) {
+			continue;
+		}
+		update_field( 'is_released', $info['released'], $book->ID );
+		update_field( 'product_sku', $info['sku'], $book->ID );
+	}
+	update_option( 'wh_seeded_book_release_info', 1 );
+	if ( class_exists( 'WP_CLI' ) ) {
+		WP_CLI::log( '[seed] Back-filled release info on existing books.' );
+	}
+} elseif ( class_exists( 'WP_CLI' ) ) {
+	WP_CLI::log( '[seed] Book release info already seeded — skipping.' );
+}
+
 /** Seed the per-book reviews once (assigned to a book via review_book). */
 if ( ! get_option( 'wh_seeded_book_reviews' ) && function_exists( 'wh_book' ) ) {
 	$book_reviews = array(

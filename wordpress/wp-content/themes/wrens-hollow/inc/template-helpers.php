@@ -222,6 +222,57 @@ function wh_book_cover( $book ) {
 }
 
 /**
+ * Render one series-page "Reading order" card, matching the existing
+ * .book-showcase / .book-showcase--featured markup. Pulled live from the Books
+ * menu (same tag/blurb as the Books-page card) so adding, removing, or
+ * reordering a book in that series shows up here automatically — buttons
+ * switch between "Start reading free / Buy book" and "Notify me / Learn more"
+ * based on the book's "Released?" field.
+ */
+function wh_render_reading_order_card( $book, $featured = false ) {
+	$key      = get_post_meta( $book->ID, 'book_key', true );
+	$tag      = wh_field( 'grid_tag', '', $book->ID );
+	$blurb    = wh_field( 'grid_blurb', '', $book->ID );
+	$cover    = wh_book_cover( $book );
+	$title    = get_the_title( $book );
+	$page_url = home_url( '/' . $key . '/' );
+	// Read the raw postmeta (not wh_field()) so an explicit "off" (stored as
+	// '0') isn't mistaken for "never set" — true_false fields store '0'/'1' as
+	// strings, and wh_field() treats a false-ish value as empty.
+	$released_meta = get_post_meta( $book->ID, 'is_released', true );
+	$released      = ( '' === $released_meta ) ? true : ( '1' === $released_meta );
+
+	$sku        = wh_field( 'product_sku', '', $book->ID );
+	$product_id = ( $sku && function_exists( 'wc_get_product_id_by_sku' ) ) ? wc_get_product_id_by_sku( $sku ) : 0;
+	$buy_url    = $product_id
+		? get_permalink( $product_id )
+		: ( function_exists( 'wc_get_page_permalink' ) ? wc_get_page_permalink( 'shop' ) . '#' . $key : home_url( '/shop/#' . $key ) );
+
+	$class = 'card book-showcase' . ( $featured ? ' book-showcase--featured' : '' );
+	?>
+	<div class="<?php echo esc_attr( $class ); ?>">
+	  <div class="ph-box"><img src="<?php echo esc_url( $cover ); ?>" alt="<?php echo esc_attr( $title ); ?> book cover" style="width:100%;height:100%;object-fit:cover;object-position:top;border-radius:6px;"></div>
+	  <div class="book-showcase__body">
+	    <?php if ( $tag ) : ?>
+	      <p class="book-card__tag"><?php echo esc_html( $tag ); ?></p>
+	    <?php endif; ?>
+	    <h3><?php echo esc_html( $title ); ?></h3>
+	    <?php if ( $blurb ) : ?>
+	      <p class="txt"><?php echo esc_html( $blurb ); ?></p>
+	    <?php endif; ?>
+	    <?php if ( $released ) : ?>
+	      <a class="btn btn--sm" href="<?php echo esc_url( $page_url ); ?>">Start reading free →</a>
+	      <a class="btn btn--outline btn--sm" href="<?php echo esc_url( $buy_url ); ?>" style="margin-left:8px;">Buy book →</a>
+	    <?php else : ?>
+	      <button class="btn btn--sm" type="button" data-notify="<?php echo esc_attr( $title ); ?>">Notify me on release</button>
+	      <a class="btn btn--outline btn--sm" href="<?php echo esc_url( $page_url ); ?>" style="margin-left:8px;">Learn more →</a>
+	    <?php endif; ?>
+	  </div>
+	</div>
+	<?php
+}
+
+/**
  * Render one Books-page library card, matching the existing .book-showcase markup.
  */
 function wh_render_book_showcase( $book ) {
