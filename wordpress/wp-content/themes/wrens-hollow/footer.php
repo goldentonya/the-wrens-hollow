@@ -5,7 +5,7 @@
     <div class="footer-grid">
       <div class="footer-brand">
         <a class="footer-brand__link" href="<?php echo esc_url( home_url( '/' ) ); ?>">
-          <img class="footer-mark" src="<?php echo esc_url( get_template_directory_uri() . '/images/photos/ali-wren-logo-mark.png' ); ?>" alt="Ali Wren logo" width="700" height="290">
+          <img class="footer-mark" src="<?php echo esc_url( wh_logo_url() ); ?>" alt="Ali Wren logo" width="700" height="290">
           <span class="footer-brand__word">
             <span class="footer-brand__title">THE WREN'S HOLLOW</span>
             <span class="footer-brand__sub">Ali Wren &middot; Author</span>
@@ -17,12 +17,17 @@
       <div class="footer-col">
         <h3 class="footer-col__title">Explore</h3>
         <nav class="footer-links">
-          <a href="<?php echo esc_url( home_url( '/' ) ); ?>">Home</a>
-          <a href="<?php echo esc_url( home_url( '/books/' ) ); ?>">Books</a>
-          <a href="<?php echo esc_url( home_url( '/about/' ) ); ?>">About</a>
-          <a href="<?php echo esc_url( function_exists( 'wc_get_page_permalink' ) ? wc_get_page_permalink( 'shop' ) : home_url( '/shop/' ) ); ?>">Shop</a>
-          <a href="<?php echo esc_url( home_url( '/on-the-horizon/' ) ); ?>">On the Horizon</a>
-          <a href="<?php echo esc_url( home_url( '/events-appearances/' ) ); ?>">Events</a>
+          <?php
+          wp_nav_menu(
+          	array(
+          		'theme_location' => 'footer',
+          		'container'      => false,
+          		'items_wrap'     => '%3$s',
+          		'walker'         => new Wrens_Hollow_Footer_Walker(),
+          		'fallback_cb'    => 'wrens_hollow_footer_nav_fallback',
+          	)
+          );
+          ?>
         </nav>
       </div>
 

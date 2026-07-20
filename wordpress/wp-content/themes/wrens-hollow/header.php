@@ -17,12 +17,6 @@ if ( ! isset( $wh_nav_active ) ) {
 
 $wh_cart_count = ( function_exists( 'WC' ) && WC()->cart ) ? WC()->cart->get_cart_contents_count() : 0;
 $wh_cart_url   = function_exists( 'wc_get_cart_url' ) ? wc_get_cart_url() : home_url( '/' );
-
-function wh_nav_class( $key, $current ) {
-	return 'nav__link' . ( $key === $current ? ' is-active' : '' );
-}
-
-$wh_books_active = in_array( $wh_nav_active, array( 'books', 'read-free', 'wtf' ), true );
 ?>
 <!DOCTYPE html>
 <html lang="en" <?php language_attributes(); ?>>
@@ -32,12 +26,13 @@ $wh_books_active = in_array( $wh_nav_active, array( 'books', 'read-free', 'wtf' 
 <?php wp_head(); ?>
 </head>
 <body <?php body_class(); ?>>
+<?php wp_body_open(); ?>
 <a class="skip-link" href="#main">Skip to content</a>
 
 <header class="site-header">
   <div class="wrap nav">
     <a class="nav__brand" href="<?php echo esc_url( home_url( '/' ) ); ?>">
-      <img class="nav__logo" src="<?php echo esc_url( get_template_directory_uri() . '/images/photos/ali-wren-logo-mark.png' ); ?>" alt="Ali Wren logo" width="700" height="290">
+      <img class="nav__logo" src="<?php echo esc_url( wh_logo_url() ); ?>" alt="Ali Wren logo" width="700" height="290">
     </a>
     <a class="nav__word" href="<?php echo esc_url( home_url( '/' ) ); ?>">
       <span class="nav__title">THE WREN'S HOLLOW</span>
@@ -46,32 +41,7 @@ $wh_books_active = in_array( $wh_nav_active, array( 'books', 'read-free', 'wtf' 
     <button class="nav__toggle" id="navToggle" aria-expanded="false" aria-controls="navLinks" aria-label="Toggle menu">
       <span></span><span></span><span></span>
     </button>
-    <nav class="nav__links" id="navLinks">
-      <a class="<?php echo esc_attr( wh_nav_class( 'home', $wh_nav_active ) ); ?>" href="<?php echo esc_url( home_url( '/' ) ); ?>">Home</a>
-      <div class="nav__dropdown">
-        <a class="nav__link nav__link--has-chevron<?php echo $wh_books_active ? ' is-active' : ''; ?>" href="<?php echo esc_url( home_url( '/books/' ) ); ?>">
-          Books
-          <svg class="nav__dropdown-chevron" viewBox="0 0 10 6" aria-hidden="true"><path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </a>
-        <div class="nav__dropdown-menu">
-          <div class="nav__dropdown-menu-inner">
-            <a class="nav__dropdown-link<?php echo 'read-free' === $wh_nav_active ? ' is-active' : ''; ?>" href="<?php echo esc_url( home_url( '/the-veiled-prophecy/' ) ); ?>">
-              <span class="nav__dropdown-link-title">The Veiled Prophecy</span>
-              <span class="nav__dropdown-link-sub">Fantasy · Kingdom of Sylvaeris</span>
-            </a>
-            <a class="nav__dropdown-link<?php echo 'wtf' === $wh_nav_active ? ' is-active' : ''; ?>" href="<?php echo esc_url( home_url( '/whiskey-tango-foxtrot/' ) ); ?>">
-              <span class="nav__dropdown-link-title">Whiskey Tango Foxtrot</span>
-              <span class="nav__dropdown-link-sub">Contemporary romance</span>
-            </a>
-          </div>
-        </div>
-      </div>
-      <a class="<?php echo esc_attr( wh_nav_class( 'about', $wh_nav_active ) ); ?>" href="<?php echo esc_url( home_url( '/about/' ) ); ?>">About</a>
-      <a class="<?php echo esc_attr( wh_nav_class( 'shop', $wh_nav_active ) ); ?>" href="<?php echo esc_url( function_exists( 'wc_get_page_permalink' ) ? wc_get_page_permalink( 'shop' ) : home_url( '/shop/' ) ); ?>">Shop</a>
-      <a class="<?php echo esc_attr( wh_nav_class( 'horizon', $wh_nav_active ) ); ?>" href="<?php echo esc_url( home_url( '/on-the-horizon/' ) ); ?>">On the Horizon</a>
-      <a class="<?php echo esc_attr( wh_nav_class( 'events', $wh_nav_active ) ); ?>" href="<?php echo esc_url( home_url( '/events-appearances/' ) ); ?>">Events</a>
-      <a class="nav__link nav__cart" href="<?php echo esc_url( $wh_cart_url ); ?>" aria-label="Cart">🛒<span class="nav__cart-count<?php echo $wh_cart_count > 0 ? '' : ' is-empty'; ?>" id="cartCount"><?php echo intval( $wh_cart_count ); ?></span></a>
-    </nav>
+    <?php get_template_part( 'template-parts/site-nav' ); ?>
   </div>
 </header>
 

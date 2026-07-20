@@ -11,6 +11,23 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
+ * URL of the site logo mark: the custom_logo set in Appearance > Customize >
+ * Site Identity, else the theme's own logo file. Used for both the header
+ * (.nav__logo) and footer (.footer-mark) images, which keep their exact markup
+ * and CSS classes — only the image source is dynamic.
+ */
+function wh_logo_url() {
+	$logo_id = get_theme_mod( 'custom_logo' );
+	if ( $logo_id ) {
+		$src = wp_get_attachment_image_url( $logo_id, 'full' );
+		if ( $src ) {
+			return $src;
+		}
+	}
+	return get_template_directory_uri() . '/images/photos/ali-wren-logo-mark.png';
+}
+
+/**
  * The registered default_value for a field, looked up by its field key. Lets a
  * template use a field's default as the fallback without duplicating the copy
  * (ACF returns null for unsaved fields, so a fallback is still needed for the

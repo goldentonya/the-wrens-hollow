@@ -99,6 +99,76 @@ fi
 
 echo "[init] WooCommerce activation creates the Shop/Cart/Checkout/My Account pages automatically."
 
+echo "[init] Setting up navigation menus..."
+# Page IDs the menus link to. Looked up unconditionally (not inside the
+# "if menu missing" blocks below) so they're available whether this is a fresh
+# install or a rerun where only one of the two menus is missing.
+BOOKS_ID=$($WP post list --post_type=page --name=books --field=ID --format=csv 2>/dev/null | head -n1)
+ABOUT_ID=$($WP post list --post_type=page --name=about --field=ID --format=csv 2>/dev/null | head -n1)
+HORIZON_ID=$($WP post list --post_type=page --name=on-the-horizon --field=ID --format=csv 2>/dev/null | head -n1)
+EVENTS_ID=$($WP post list --post_type=page --name=events-appearances --field=ID --format=csv 2>/dev/null | head -n1)
+VP_ID=$($WP post list --post_type=page --name=the-veiled-prophecy --field=ID --format=csv 2>/dev/null | head -n1)
+WTF_ID=$($WP post list --post_type=page --name=whiskey-tango-foxtrot --field=ID --format=csv 2>/dev/null | head -n1)
+SHOP_ID=$($WP option get woocommerce_shop_page_id 2>/dev/null)
+HOME_URL=$($WP option get home 2>/dev/null)
+SHOP_URL_FALLBACK="${HOME_URL}/shop/"
+
+if [ -z "$SHOP_ID" ] || [ "$SHOP_ID" = "0" ]; then
+  SHOP_ID=""
+fi
+
+if ! $WP menu list --fields=name --format=csv 2>/dev/null | grep -qx "Primary"; then
+  echo "[init] Creating Primary menu..."
+  $WP menu create "Primary" >/dev/null
+
+  $WP menu item add-custom Primary "Home" "$HOME_URL" --porcelain >/dev/null
+
+  BOOKS_ITEM=$($WP menu item add-post Primary "$BOOKS_ID" --title="Books" --porcelain)
+
+  VP_ITEM=$($WP menu item add-post Primary "$VP_ID" --title="The Veiled Prophecy" --parent-id="$BOOKS_ITEM" --porcelain)
+  $WP post update "$VP_ITEM" --post_content="Fantasy · Kingdom of Sylvaeris" >/dev/null 2>&1
+
+  WTF_ITEM=$($WP menu item add-post Primary "$WTF_ID" --title="Whiskey Tango Foxtrot" --parent-id="$BOOKS_ITEM" --porcelain)
+  $WP post update "$WTF_ITEM" --post_content="Contemporary romance" >/dev/null 2>&1
+
+  $WP menu item add-post Primary "$ABOUT_ID" --title="About" --porcelain >/dev/null
+
+  if [ -n "$SHOP_ID" ]; then
+    $WP menu item add-post Primary "$SHOP_ID" --title="Shop" --porcelain >/dev/null
+  else
+    $WP menu item add-custom Primary "Shop" "$SHOP_URL_FALLBACK" --porcelain >/dev/null
+  fi
+
+  $WP menu item add-post Primary "$HORIZON_ID" --title="On the Horizon" --porcelain >/dev/null
+  $WP menu item add-post Primary "$EVENTS_ID" --title="Events" --porcelain >/dev/null
+
+  $WP menu location assign Primary primary
+else
+  echo "[init] Primary menu already exists."
+fi
+
+if ! $WP menu list --fields=name --format=csv 2>/dev/null | grep -qx "Footer"; then
+  echo "[init] Creating Footer menu..."
+  $WP menu create "Footer" >/dev/null
+
+  $WP menu item add-custom Footer "Home" "$HOME_URL" --porcelain >/dev/null
+  $WP menu item add-post Footer "$BOOKS_ID" --title="Books" --porcelain >/dev/null
+  $WP menu item add-post Footer "$ABOUT_ID" --title="About" --porcelain >/dev/null
+
+  if [ -n "$SHOP_ID" ]; then
+    $WP menu item add-post Footer "$SHOP_ID" --title="Shop" --porcelain >/dev/null
+  else
+    $WP menu item add-custom Footer "Shop" "$SHOP_URL_FALLBACK" --porcelain >/dev/null
+  fi
+
+  $WP menu item add-post Footer "$HORIZON_ID" --title="On the Horizon" --porcelain >/dev/null
+  $WP menu item add-post Footer "$EVENTS_ID" --title="Events" --porcelain >/dev/null
+
+  $WP menu location assign Footer footer
+else
+  echo "[init] Footer menu already exists."
+fi
+
 echo "[init] Configuring store options, product, gateways, and shipping..."
 $WP eval-file /wp-cli-scripts/setup-woocommerce.php
 

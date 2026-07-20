@@ -17,6 +17,8 @@ require get_template_directory() . '/inc/acf-fields.php';
 require get_template_directory() . '/inc/acf-page-fields.php';
 require get_template_directory() . '/inc/template-helpers.php';
 require get_template_directory() . '/inc/customizer.php';
+require get_template_directory() . '/inc/nav-walker.php';
+require get_template_directory() . '/inc/admin-links.php';
 
 function wrens_hollow_setup() {
 	add_theme_support( 'title-tag' );
@@ -25,6 +27,37 @@ function wrens_hollow_setup() {
 	add_theme_support( 'wc-product-gallery-zoom' );
 	add_theme_support( 'wc-product-gallery-lightbox' );
 	add_theme_support( 'wc-product-gallery-slider' );
+
+	// Standard theme scaffolding.
+	add_theme_support(
+		'html5',
+		array( 'search-form', 'comment-form', 'comment-list', 'gallery', 'caption', 'style', 'script' )
+	);
+	add_theme_support( 'responsive-embeds' );
+	// The header/footer logo mark keeps its exact markup and CSS classes
+	// (see wh_logo_url() in inc/template-helpers.php); this just lets the owner
+	// replace the image itself via Appearance > Customize > Site Identity.
+	add_theme_support(
+		'custom-logo',
+		array(
+			'height'      => 290,
+			'width'       => 700,
+			'flex-height' => true,
+			'flex-width'  => true,
+		)
+	);
+
+	register_nav_menus(
+		array(
+			'primary' => 'Primary navigation',
+			'footer'  => 'Footer links',
+		)
+	);
+
+	// Matches the site's fixed content column (see .wrap max-width in style.css).
+	if ( ! isset( $GLOBALS['content_width'] ) ) {
+		$GLOBALS['content_width'] = 1080;
+	}
 }
 add_action( 'after_setup_theme', 'wrens_hollow_setup' );
 
