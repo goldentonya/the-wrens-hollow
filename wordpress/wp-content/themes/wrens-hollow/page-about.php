@@ -12,11 +12,11 @@ get_header();
     <div>
       <p class="eyebrow">Behind the pen</p>
       <p class="bio-greeting">
-        <?php wh_the( 'about_greeting', 'Welcome!' ); ?>
+        <?php wh_the_page_field( 'about_greeting', 'Welcome!' ); ?>
         <svg class="bio-greeting__swash" viewBox="0 0 160 14" aria-hidden="true"><path d="M2 9c20-10 40-10 60-2s40 8 60-2 30-5 34 1" /></svg>
       </p>
-      <h1 class="h-lg bio-name"><?php wh_the( 'about_name', "I'm Ali Wren" ); ?></h1>
-      <p class="txt" style="margin-top:6px;"><?php wh_the( 'about_tagline', 'Indie author · Minnesota · romance & fantasy.' ); ?></p>
+      <h1 class="h-lg bio-name"><?php wh_the_page_field( 'about_name', "I'm Ali Wren" ); ?></h1>
+      <p class="txt" style="margin-top:6px;"><?php wh_the_page_field( 'about_tagline', 'Indie author · Minnesota · romance & fantasy.' ); ?></p>
     </div>
   </div>
 </section>
@@ -57,9 +57,9 @@ get_header();
       </div>
     </aside>
     <div>
-      <div class="wh-rte"><?php wh_wysiwyg( 'bio_intro', wh_default( 'field_wh_ab_bio_intro' ) ); ?></div>
-      <p class="pull-quote"><?php wh_the( 'bio_pullquote', wh_default( 'field_wh_ab_bio_pullquote' ) ); ?></p>
-      <div class="wh-rte"><?php wh_wysiwyg( 'bio_more', wh_default( 'field_wh_ab_bio_more' ) ); ?></div>
+      <div class="wh-rte"><?php wh_wysiwyg_page_field( 'bio_intro', wrens_hollow_about_field_default( 'bio_intro' ) ); ?></div>
+      <p class="pull-quote"><?php wh_the_page_field( 'bio_pullquote', wrens_hollow_about_field_default( 'bio_pullquote' ) ); ?></p>
+      <div class="wh-rte"><?php wh_wysiwyg_page_field( 'bio_more', wrens_hollow_about_field_default( 'bio_more' ) ); ?></div>
     </div>
   </div>
 </section>
@@ -84,9 +84,9 @@ get_header();
 <section class="sec sec--cream2">
   <div class="wrap grid-2 contact-grid">
     <div>
-      <p class="eyebrow"><?php wh_the( 'connect_eyebrow', 'Join the Hollow' ); ?></p>
-      <h2 class="h-lg" style="color:var(--plum-deep);"><?php wh_the( 'connect_heading', "Let's Stay Connected" ); ?></h2>
-      <p class="txt" style="margin-top:14px;"><?php wh_the( 'connect_body', 'Love strong heroines, slow-burn romance, and a little bit of danger? Sign up for my newsletter and get bonus chapters plus first look at new releases, behind-the-scenes peeks, character deep-dives, and updates straight to your inbox.' ); ?></p>
+      <p class="eyebrow"><?php wh_the_page_field( 'connect_eyebrow', 'Join the Hollow' ); ?></p>
+      <h2 class="h-lg" style="color:var(--plum-deep);"><?php wh_the_page_field( 'connect_heading', "Let's Stay Connected" ); ?></h2>
+      <p class="txt" style="margin-top:14px;"><?php wh_the_page_field( 'connect_body', 'Love strong heroines, slow-burn romance, and a little bit of danger? Sign up for my newsletter and get bonus chapters plus first look at new releases, behind-the-scenes peeks, character deep-dives, and updates straight to your inbox.' ); ?></p>
       <form class="newsletter-form" id="newsletterForm">
         <input class="field" type="email" placeholder="your@email.com" required aria-label="Email address">
         <button class="btn" type="submit">Subscribe</button>
@@ -95,9 +95,9 @@ get_header();
       <p class="form-note">Free. No spam. Unsubscribe anytime.</p>
     </div>
     <div>
-      <p class="eyebrow"><?php wh_the( 'hello_eyebrow', 'Say hello' ); ?></p>
-      <h2 class="h-lg" style="color:var(--plum-deep);"><?php wh_the( 'hello_heading', "I'd Love to Hear from You!" ); ?></h2>
-      <p class="txt" style="margin-top:14px;"><?php wh_the( 'hello_body', "Whether you're a fellow reader, a book club, a blogger, or just curious about my writing—drop a note below!" ); ?></p>
+      <p class="eyebrow"><?php wh_the_page_field( 'hello_eyebrow', 'Say hello' ); ?></p>
+      <h2 class="h-lg" style="color:var(--plum-deep);"><?php wh_the_page_field( 'hello_heading', "I'd Love to Hear from You!" ); ?></h2>
+      <p class="txt" style="margin-top:14px;"><?php wh_the_page_field( 'hello_body', "Whether you're a fellow reader, a book club, a blogger, or just curious about my writing—drop a note below!" ); ?></p>
       <form class="optin-form" id="contactForm">
         <div class="optin-row">
           <label class="optin-label" for="contactName">Your name</label>

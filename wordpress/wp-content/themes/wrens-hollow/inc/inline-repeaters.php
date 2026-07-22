@@ -25,32 +25,28 @@ if ( ! defined( 'ABSPATH' ) ) {
 function wrens_hollow_inline_repeaters_config() {
 	return array(
 		'facts'      => array(
-			'template'     => 'page-about.php',
-			'tab_group'    => 'about_lists',
-			'tab_label'    => 'Facts',
-			'title'        => 'About page — Facts & Journey',
-			'meta_key'     => 'about_facts',
-			'row_label'    => 'fact',
-			'intro_fields' => array(
+			'template'      => 'page-about.php',
+			'skip_metabox'  => true, // rendered as a tab inside inc/about-page-editor.php instead
+			'meta_key'      => 'about_facts',
+			'row_label'     => 'fact',
+			'intro_fields'  => array(
 				'facts_heading' => array( 'type' => 'text', 'label' => 'Section heading', 'default' => 'A few things about me' ),
 			),
-			'fields'       => array(
+			'fields'        => array(
 				'icon' => array( 'type' => 'text', 'label' => 'Icon', 'width' => '70px', 'placeholder' => '📍' ),
 				'text' => array( 'type' => 'text', 'label' => 'Text', 'width' => '', 'placeholder' => 'Based in Minnesota' ),
 			),
 		),
 		'milestones' => array(
-			'template'     => 'page-about.php',
-			'tab_group'    => 'about_lists',
-			'tab_label'    => 'Journey timeline',
-			'title'        => 'About page — Facts & Journey',
-			'meta_key'     => 'about_milestones',
-			'row_label'    => 'milestone',
-			'intro_fields' => array(
+			'template'      => 'page-about.php',
+			'skip_metabox'  => true, // rendered as a tab inside inc/about-page-editor.php instead
+			'meta_key'      => 'about_milestones',
+			'row_label'     => 'milestone',
+			'intro_fields'  => array(
 				'journey_eyebrow' => array( 'type' => 'text', 'label' => 'Eyebrow', 'default' => 'My Journey' ),
 				'journey_heading' => array( 'type' => 'text', 'label' => 'Heading', 'default' => 'The Road So Far' ),
 			),
-			'fields'       => array(
+			'fields'        => array(
 				'date' => array( 'type' => 'text', 'label' => 'Date', 'width' => '160px', 'placeholder' => 'May 2024' ),
 				'body' => array( 'type' => 'textarea', 'label' => 'Description', 'width' => '', 'placeholder' => 'What happened. Basic HTML like <strong>bold</strong> is allowed.' ),
 			),
@@ -70,44 +66,17 @@ function wrens_hollow_inline_repeaters_config() {
 }
 
 /**
- * Meta boxes for a template that has more than one repeater sharing a
- * 'tab_group' are combined into ONE box with a click-to-switch tab bar (e.g.
- * About's "Facts" and "Journey timeline" are two tabs in one box, rather than
- * two separate boxes) — closer to how the site's other tabbed field groups
- * (Books, Home, etc.) present multiple sections. Repeaters without a
- * 'tab_group' get their own plain box, as before.
+ * Registers a plain meta box per repeater, except any marked 'skip_metabox'
+ * (Facts/Journey — those render as tabs inside the About page's own unified
+ * editor, see inc/about-page-editor.php, but still save through the shared
+ * handler below since their 'template' still matches).
  */
 function wrens_hollow_register_inline_repeater_metaboxes( $post ) {
 	$template = get_page_template_slug( $post );
-	$groups   = array();
-	$solo     = array();
-
 	foreach ( wrens_hollow_inline_repeaters_config() as $id => $cfg ) {
-		if ( $cfg['template'] !== $template ) {
+		if ( $cfg['template'] !== $template || ! empty( $cfg['skip_metabox'] ) ) {
 			continue;
 		}
-		if ( ! empty( $cfg['tab_group'] ) ) {
-			$groups[ $cfg['tab_group'] ][ $id ] = $cfg;
-		} else {
-			$solo[ $id ] = $cfg;
-		}
-	}
-
-	foreach ( $groups as $group_id => $members ) {
-		$title = reset( $members )['title'];
-		add_meta_box(
-			'wh_repeater_group_' . $group_id,
-			$title,
-			function ( $post ) use ( $members ) {
-				wrens_hollow_render_inline_repeater_tabs( $members, $post );
-			},
-			'page',
-			'normal',
-			'default'
-		);
-	}
-
-	foreach ( $solo as $id => $cfg ) {
 		add_meta_box(
 			'wh_repeater_' . $id,
 			$cfg['title'],
@@ -122,29 +91,6 @@ function wrens_hollow_register_inline_repeater_metaboxes( $post ) {
 	}
 }
 add_action( 'add_meta_boxes_page', 'wrens_hollow_register_inline_repeater_metaboxes' );
-
-/**
- * Renders a tab bar + one pane per repeater in $members (id => cfg), all
- * inside a single meta box. Only the first pane starts visible; JS
- * (admin-repeater.js) handles switching.
- */
-function wrens_hollow_render_inline_repeater_tabs( $members, $post ) {
-	wp_nonce_field( 'wh_save_repeaters', 'wh_repeaters_nonce' );
-	?>
-	<div class="wh-tabs">
-	  <div class="wh-tabs__nav">
-	    <?php foreach ( $members as $id => $cfg ) : ?>
-	      <button type="button" class="wh-tabs__tab" data-wh-tab="<?php echo esc_attr( $id ); ?>"><?php echo esc_html( $cfg['tab_label'] ); ?></button>
-	    <?php endforeach; ?>
-	  </div>
-	  <?php foreach ( $members as $id => $cfg ) : ?>
-	    <div class="wh-tabs__pane" data-wh-pane="<?php echo esc_attr( $id ); ?>">
-	      <?php wrens_hollow_render_inline_repeater( $id, $cfg, $post ); ?>
-	    </div>
-	  <?php endforeach; ?>
-	</div>
-	<?php
-}
 
 function wrens_hollow_render_inline_repeater( $id, $cfg, $post ) {
 	$rows = get_post_meta( $post->ID, $cfg['meta_key'], true );

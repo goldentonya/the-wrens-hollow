@@ -62,6 +62,15 @@ function wh_the_page_field( $key, $fallback = '', $post_id = null ) {
 }
 
 /**
+ * Rich-text counterpart to wh_the_page_field() — the value is trusted HTML
+ * (sanitized on save via wp_kses_post(), see inc/about-page-editor.php), so
+ * it's printed as-is rather than escaped.
+ */
+function wh_wysiwyg_page_field( $key, $fallback = '', $post_id = null ) {
+	echo wh_page_field( $key, $fallback, $post_id ); // phpcs:ignore WordPress.Security.EscapeOutput -- sanitized on save via wp_kses_post().
+}
+
+/**
  * Raw field value, or the fallback when ACF is inactive or the field is empty.
  */
 function wh_field( $name, $fallback = '', $post_id = false ) {
