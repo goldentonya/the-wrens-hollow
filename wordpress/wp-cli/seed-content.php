@@ -638,6 +638,98 @@ if ( ! get_option( 'wh_seeded_home_extras' ) && function_exists( 'wh_book' ) ) {
 	WP_CLI::log( '[seed] Home extras already seeded — skipping.' );
 }
 
+/** Attach the current theme photos to the newly-added image fields (home hero,
+ * both series' cover + about-section art) once, so those fields show the
+ * site's real photo instead of "no image uploaded" until the owner replaces
+ * it. Uploads each theme file into the Media Library and sets the field to
+ * that attachment, same pattern as the book cover / team badge seeding above. */
+if ( ! get_option( 'wh_seeded_page_images' ) ) {
+	require_once ABSPATH . 'wp-admin/includes/image.php';
+
+	/**
+	 * Uploads a theme image file (if not already uploaded under that filename)
+	 * and returns its attachment ID, or 0 on failure.
+	 */
+	$wh_seed_upload_image = function ( $rel_path, $parent_id, $title ) {
+		$filename = basename( $rel_path );
+
+		$existing = get_posts(
+			array(
+				'post_type'      => 'attachment',
+				'posts_per_page' => 1,
+				'title'          => $title,
+				'post_status'    => 'inherit',
+				'fields'         => 'ids',
+			)
+		);
+		if ( $existing ) {
+			return (int) $existing[0];
+		}
+
+		$file = get_template_directory() . '/' . ltrim( $rel_path, '/' );
+		if ( ! file_exists( $file ) ) {
+			return 0;
+		}
+		$upload = wp_upload_bits( $filename, null, file_get_contents( $file ) );
+		if ( ! empty( $upload['error'] ) ) {
+			return 0;
+		}
+		$attach_id = wp_insert_attachment(
+			array(
+				'post_mime_type' => $upload['type'],
+				'post_title'     => $title,
+				'post_status'    => 'inherit',
+			),
+			$upload['file'],
+			$parent_id
+		);
+		if ( ! $attach_id || is_wp_error( $attach_id ) ) {
+			return 0;
+		}
+		wp_update_attachment_metadata( $attach_id, wp_generate_attachment_metadata( $attach_id, $upload['file'] ) );
+		return $attach_id;
+	};
+
+	$home_id = (int) get_option( 'page_on_front' );
+	if ( $home_id ) {
+		$id = $wh_seed_upload_image( 'images/photos/ali-wren-header.jpg', $home_id, 'Home hero photo' );
+		if ( $id ) {
+			update_field( 'home_hero_image', $id, $home_id );
+		}
+	}
+
+	$vp_page = get_page_by_path( 'the-veiled-prophecy' );
+	if ( $vp_page ) {
+		$id = $wh_seed_upload_image( 'images/photos/prophecy.png', $vp_page->ID, 'The Veiled Prophecy cover photo' );
+		if ( $id ) {
+			update_field( 'series_cover_image', $id, $vp_page->ID );
+		}
+		$id = $wh_seed_upload_image( 'images/photos/wilderness.png', $vp_page->ID, 'The Veiled Prophecy about-section art' );
+		if ( $id ) {
+			update_field( 'about_series_image', $id, $vp_page->ID );
+		}
+	}
+
+	$wtf_page_img = get_page_by_path( 'whiskey-tango-foxtrot' );
+	if ( $wtf_page_img ) {
+		$id = $wh_seed_upload_image( 'images/photos/shadowlink.png', $wtf_page_img->ID, 'Whiskey Tango Foxtrot cover photo' );
+		if ( $id ) {
+			update_field( 'series_cover_image', $id, $wtf_page_img->ID );
+		}
+		$id = $wh_seed_upload_image( 'images/photos/map.jpeg', $wtf_page_img->ID, 'Whiskey Tango Foxtrot about-section art' );
+		if ( $id ) {
+			update_field( 'about_series_image', $id, $wtf_page_img->ID );
+		}
+	}
+
+	update_option( 'wh_seeded_page_images', 1 );
+	if ( class_exists( 'WP_CLI' ) ) {
+		WP_CLI::log( '[seed] Seeded home hero image + both series pages\' cover/about images.' );
+	}
+} elseif ( class_exists( 'WP_CLI' ) ) {
+	WP_CLI::log( '[seed] Page images already seeded — skipping.' );
+}
+
 /** Seed the Whiskey Tango Foxtrot team roster once, directly as page postmeta
  * (see inc/inline-repeaters.php) — it's an inline "add row" list on that page
  * itself, not a separate CPT, since it's only ever shown there. */

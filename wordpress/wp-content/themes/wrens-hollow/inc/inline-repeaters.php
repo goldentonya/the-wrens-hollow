@@ -26,8 +26,10 @@ function wrens_hollow_inline_repeaters_config() {
 	return array(
 		'facts'      => array(
 			'template'     => 'page-about.php',
+			'tab_group'    => 'about_lists',
+			'tab_label'    => 'Facts',
+			'title'        => 'About page — Facts & Journey',
 			'meta_key'     => 'about_facts',
-			'title'        => 'Facts ("a few things about me")',
 			'row_label'    => 'fact',
 			'intro_fields' => array(
 				'facts_heading' => array( 'type' => 'text', 'label' => 'Section heading', 'default' => 'A few things about me' ),
@@ -39,8 +41,10 @@ function wrens_hollow_inline_repeaters_config() {
 		),
 		'milestones' => array(
 			'template'     => 'page-about.php',
+			'tab_group'    => 'about_lists',
+			'tab_label'    => 'Journey timeline',
+			'title'        => 'About page — Facts & Journey',
 			'meta_key'     => 'about_milestones',
-			'title'        => 'Journey timeline',
 			'row_label'    => 'milestone',
 			'intro_fields' => array(
 				'journey_eyebrow' => array( 'type' => 'text', 'label' => 'Eyebrow', 'default' => 'My Journey' ),
@@ -53,8 +57,8 @@ function wrens_hollow_inline_repeaters_config() {
 		),
 		'team'       => array(
 			'template'  => 'page-whiskey-tango-foxtrot.php',
-			'meta_key'  => 'wtf_team',
 			'title'     => 'Meet the Team roster',
+			'meta_key'  => 'wtf_team',
 			'row_label' => 'team member',
 			'fields'    => array(
 				'image' => array( 'type' => 'image', 'label' => 'Badge' ),
@@ -65,16 +69,50 @@ function wrens_hollow_inline_repeaters_config() {
 	);
 }
 
+/**
+ * Meta boxes for a template that has more than one repeater sharing a
+ * 'tab_group' are combined into ONE box with a click-to-switch tab bar (e.g.
+ * About's "Facts" and "Journey timeline" are two tabs in one box, rather than
+ * two separate boxes) — closer to how the site's other tabbed field groups
+ * (Books, Home, etc.) present multiple sections. Repeaters without a
+ * 'tab_group' get their own plain box, as before.
+ */
 function wrens_hollow_register_inline_repeater_metaboxes( $post ) {
 	$template = get_page_template_slug( $post );
+	$groups   = array();
+	$solo     = array();
+
 	foreach ( wrens_hollow_inline_repeaters_config() as $id => $cfg ) {
 		if ( $cfg['template'] !== $template ) {
 			continue;
 		}
+		if ( ! empty( $cfg['tab_group'] ) ) {
+			$groups[ $cfg['tab_group'] ][ $id ] = $cfg;
+		} else {
+			$solo[ $id ] = $cfg;
+		}
+	}
+
+	foreach ( $groups as $group_id => $members ) {
+		$title = reset( $members )['title'];
+		add_meta_box(
+			'wh_repeater_group_' . $group_id,
+			$title,
+			function ( $post ) use ( $members ) {
+				wrens_hollow_render_inline_repeater_tabs( $members, $post );
+			},
+			'page',
+			'normal',
+			'default'
+		);
+	}
+
+	foreach ( $solo as $id => $cfg ) {
 		add_meta_box(
 			'wh_repeater_' . $id,
 			$cfg['title'],
 			function ( $post ) use ( $id, $cfg ) {
+				wp_nonce_field( 'wh_save_repeaters', 'wh_repeaters_nonce' );
 				wrens_hollow_render_inline_repeater( $id, $cfg, $post );
 			},
 			'page',
@@ -85,13 +123,36 @@ function wrens_hollow_register_inline_repeater_metaboxes( $post ) {
 }
 add_action( 'add_meta_boxes_page', 'wrens_hollow_register_inline_repeater_metaboxes' );
 
+/**
+ * Renders a tab bar + one pane per repeater in $members (id => cfg), all
+ * inside a single meta box. Only the first pane starts visible; JS
+ * (admin-repeater.js) handles switching.
+ */
+function wrens_hollow_render_inline_repeater_tabs( $members, $post ) {
+	wp_nonce_field( 'wh_save_repeaters', 'wh_repeaters_nonce' );
+	?>
+	<div class="wh-tabs">
+	  <div class="wh-tabs__nav">
+	    <?php foreach ( $members as $id => $cfg ) : ?>
+	      <button type="button" class="wh-tabs__tab" data-wh-tab="<?php echo esc_attr( $id ); ?>"><?php echo esc_html( $cfg['tab_label'] ); ?></button>
+	    <?php endforeach; ?>
+	  </div>
+	  <?php foreach ( $members as $id => $cfg ) : ?>
+	    <div class="wh-tabs__pane" data-wh-pane="<?php echo esc_attr( $id ); ?>">
+	      <?php wrens_hollow_render_inline_repeater( $id, $cfg, $post ); ?>
+	    </div>
+	  <?php endforeach; ?>
+	</div>
+	<?php
+}
+
 function wrens_hollow_render_inline_repeater( $id, $cfg, $post ) {
 	$rows = get_post_meta( $post->ID, $cfg['meta_key'], true );
 	if ( ! is_array( $rows ) ) {
 		$rows = array();
 	}
-	wp_nonce_field( 'wh_save_repeaters', 'wh_repeaters_nonce' );
 	?>
+	<input type="hidden" name="<?php echo esc_attr( 'wh_repeater_present_' . $id ); ?>" value="1">
 	<?php if ( ! empty( $cfg['intro_fields'] ) ) : ?>
 	  <div class="wh-repeater__intro">
 	    <?php foreach ( $cfg['intro_fields'] as $meta_key => $field ) :
@@ -175,6 +236,14 @@ function wrens_hollow_save_inline_repeaters( $post_id ) {
 
 	foreach ( wrens_hollow_inline_repeaters_config() as $id => $cfg ) {
 		if ( $cfg['template'] !== $template ) {
+			continue;
+		}
+		// Safety net: this repeater's own hidden marker (rendered inside its
+		// meta box) must be present, or we skip it entirely rather than risk
+		// writing an empty array over real data — e.g. if a tab pane's inputs
+		// were somehow left out of the submission for any reason, the OTHER
+		// repeater on this same page must not get wiped out as a side effect.
+		if ( ! isset( $_POST[ 'wh_repeater_present_' . $id ] ) ) {
 			continue;
 		}
 
@@ -264,6 +333,9 @@ add_action( 'admin_enqueue_scripts', 'wrens_hollow_enqueue_repeater_admin_assets
 
 function wrens_hollow_repeater_admin_css() {
 	return '
+		.wh-tabs__nav { display:flex; gap:4px; border-bottom:1px solid #dcdcde; margin-bottom:16px; }
+		.wh-tabs__tab { background:#f0f0f1; border:1px solid #dcdcde; border-bottom:none; border-radius:4px 4px 0 0; padding:8px 14px; cursor:pointer; font-weight:600; color:#50575e; position:relative; top:1px; }
+		.wh-tabs__tab.is-active { background:#fff; color:#1d2327; border-bottom:1px solid #fff; }
 		.wh-repeater__intro { display:flex; gap:16px; flex-wrap:wrap; margin-bottom:12px; }
 		.wh-repeater__intro-field { flex:1 1 220px; margin:0; }
 		.wh-repeater__row { display:flex; gap:12px; align-items:flex-start; padding:12px 0; border-bottom:1px solid #dcdcde; }

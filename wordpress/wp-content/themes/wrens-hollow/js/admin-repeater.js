@@ -8,7 +8,34 @@
 (function () {
 	'use strict';
 
+	/* Tab switcher for meta boxes that group more than one repeater (e.g. the
+	   About page's "Facts" / "Journey timeline" tabs) — see .wh-tabs markup in
+	   inc/inline-repeaters.php. Purely visual; every pane's fields still post
+	   normally regardless of which tab is showing. */
+	function activateTab(tabsEl, id) {
+		tabsEl.querySelectorAll('.wh-tabs__tab').forEach(function (btn) {
+			btn.classList.toggle('is-active', btn.dataset.whTab === id);
+		});
+		tabsEl.querySelectorAll('.wh-tabs__pane').forEach(function (pane) {
+			pane.style.display = pane.dataset.whPane === id ? '' : 'none';
+		});
+	}
+
+	document.querySelectorAll('.wh-tabs').forEach(function (tabsEl) {
+		var first = tabsEl.querySelector('.wh-tabs__tab');
+		if (first) {
+			activateTab(tabsEl, first.dataset.whTab);
+		}
+	});
+
 	document.addEventListener('click', function (e) {
+		var tabBtn = e.target.closest('.wh-tabs__tab');
+		if (tabBtn) {
+			e.preventDefault();
+			activateTab(tabBtn.closest('.wh-tabs'), tabBtn.dataset.whTab);
+			return;
+		}
+
 		var addBtn = e.target.closest('.wh-repeater__add');
 		if (addBtn) {
 			e.preventDefault();

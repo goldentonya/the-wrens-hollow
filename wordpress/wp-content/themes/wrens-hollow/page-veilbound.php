@@ -20,7 +20,7 @@ $wh_book_id = $wh_book ? $wh_book->ID : false;
   );
   ?>
   <div class="wrap" style="max-width:560px;">
-    <p class="eyebrow eyebrow--on-dark">The Veiled Prophecy · Book 2</p>
+    <p class="eyebrow eyebrow--on-dark"><?php wh_the( 'header_eyebrow', 'The Veiled Prophecy · Book 2', $wh_book_id ); ?></p>
     <h1 class="h-lg" style="color:#fff;"><?php echo esc_html( $wh_book ? get_the_title( $wh_book ) : 'Veilbound' ); ?></h1>
     <p class="lede" style="margin:14px auto 0;"><?php wh_the( 'hero_lede', 'The fate of the kingdom — and her heart — hangs in the balance.', $wh_book_id ); ?></p>
   </div>

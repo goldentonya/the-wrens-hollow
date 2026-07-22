@@ -294,6 +294,13 @@ function wrens_hollow_register_acf_fields() {
 					'message' => 'These fields appear on this book’s **own page** (e.g. /veilfall/). The title comes from the “Title” box at the top; the cover comes from the “Book cover” box on the right.',
 				),
 				array(
+					'key'          => 'field_wh_book_header_eyebrow',
+					'label'        => 'Dark header — eyebrow',
+					'name'         => 'header_eyebrow',
+					'type'         => 'text',
+					'instructions' => 'The small line above the title in the dark header at the very top, e.g. "The Veiled Prophecy · Book 1".',
+				),
+				array(
 					'key'          => 'field_wh_book_hero_tag',
 					'label'        => 'Hero tag',
 					'name'         => 'hero_tag',
