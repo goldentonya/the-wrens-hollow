@@ -44,6 +44,24 @@ function wh_default( $field_key ) {
 }
 
 /**
+ * Plain-postmeta counterpart to wh_field()/wh_the() for values that are saved
+ * outside of ACF — currently the "intro" fields (section heading/eyebrow) that
+ * live at the top of an inline-repeater meta box (see inc/inline-repeaters.php)
+ * rather than as an ACF field, so they aren't tied to ACF's field registration.
+ */
+function wh_page_field( $key, $fallback = '', $post_id = null ) {
+	if ( null === $post_id ) {
+		$post_id = get_queried_object_id();
+	}
+	$val = get_post_meta( $post_id, $key, true );
+	return ( '' !== $val && null !== $val ) ? $val : $fallback;
+}
+
+function wh_the_page_field( $key, $fallback = '', $post_id = null ) {
+	echo esc_html( wh_page_field( $key, $fallback, $post_id ) );
+}
+
+/**
  * Raw field value, or the fallback when ACF is inactive or the field is empty.
  */
 function wh_field( $name, $fallback = '', $post_id = false ) {

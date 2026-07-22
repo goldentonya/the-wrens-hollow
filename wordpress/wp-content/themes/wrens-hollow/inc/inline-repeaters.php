@@ -25,21 +25,28 @@ if ( ! defined( 'ABSPATH' ) ) {
 function wrens_hollow_inline_repeaters_config() {
 	return array(
 		'facts'      => array(
-			'template'  => 'page-about.php',
-			'meta_key'  => 'about_facts',
-			'title'     => 'A few things about me (facts list)',
-			'row_label' => 'fact',
-			'fields'    => array(
+			'template'     => 'page-about.php',
+			'meta_key'     => 'about_facts',
+			'title'        => 'Facts ("a few things about me")',
+			'row_label'    => 'fact',
+			'intro_fields' => array(
+				'facts_heading' => array( 'type' => 'text', 'label' => 'Section heading', 'default' => 'A few things about me' ),
+			),
+			'fields'       => array(
 				'icon' => array( 'type' => 'text', 'label' => 'Icon', 'width' => '70px', 'placeholder' => '📍' ),
 				'text' => array( 'type' => 'text', 'label' => 'Text', 'width' => '', 'placeholder' => 'Based in Minnesota' ),
 			),
 		),
 		'milestones' => array(
-			'template'  => 'page-about.php',
-			'meta_key'  => 'about_milestones',
-			'title'     => 'Journey timeline',
-			'row_label' => 'milestone',
-			'fields'    => array(
+			'template'     => 'page-about.php',
+			'meta_key'     => 'about_milestones',
+			'title'        => 'Journey timeline',
+			'row_label'    => 'milestone',
+			'intro_fields' => array(
+				'journey_eyebrow' => array( 'type' => 'text', 'label' => 'Eyebrow', 'default' => 'My Journey' ),
+				'journey_heading' => array( 'type' => 'text', 'label' => 'Heading', 'default' => 'The Road So Far' ),
+			),
+			'fields'       => array(
 				'date' => array( 'type' => 'text', 'label' => 'Date', 'width' => '160px', 'placeholder' => 'May 2024' ),
 				'body' => array( 'type' => 'textarea', 'label' => 'Description', 'width' => '', 'placeholder' => 'What happened. Basic HTML like <strong>bold</strong> is allowed.' ),
 			),
@@ -85,6 +92,22 @@ function wrens_hollow_render_inline_repeater( $id, $cfg, $post ) {
 	}
 	wp_nonce_field( 'wh_save_repeaters', 'wh_repeaters_nonce' );
 	?>
+	<?php if ( ! empty( $cfg['intro_fields'] ) ) : ?>
+	  <div class="wh-repeater__intro">
+	    <?php foreach ( $cfg['intro_fields'] as $meta_key => $field ) :
+	      $value = get_post_meta( $post->ID, $meta_key, true );
+	      if ( '' === $value ) {
+	        $value = isset( $field['default'] ) ? $field['default'] : '';
+	      }
+	      ?>
+	      <p class="wh-repeater__intro-field">
+	        <label class="wh-repeater__field-label"><?php echo esc_html( $field['label'] ); ?></label><br>
+	        <input type="text" class="widefat" name="<?php echo esc_attr( 'wh_intro_' . $meta_key ); ?>" value="<?php echo esc_attr( $value ); ?>">
+	      </p>
+	    <?php endforeach; ?>
+	  </div>
+	  <hr>
+	<?php endif; ?>
 	<div class="wh-repeater" data-repeater="<?php echo esc_attr( $id ); ?>">
 	  <div class="wh-repeater__rows">
 	    <?php foreach ( $rows as $row ) : ?>
@@ -189,6 +212,15 @@ function wrens_hollow_save_inline_repeaters( $post_id ) {
 		}
 
 		update_post_meta( $post_id, $cfg['meta_key'], $rows );
+
+		if ( ! empty( $cfg['intro_fields'] ) ) {
+			foreach ( $cfg['intro_fields'] as $meta_key => $field ) {
+				$post_key = 'wh_intro_' . $meta_key;
+				if ( isset( $_POST[ $post_key ] ) ) {
+					update_post_meta( $post_id, $meta_key, sanitize_text_field( wp_unslash( $_POST[ $post_key ] ) ) );
+				}
+			}
+		}
 	}
 }
 add_action( 'save_post_page', 'wrens_hollow_save_inline_repeaters' );
@@ -232,6 +264,8 @@ add_action( 'admin_enqueue_scripts', 'wrens_hollow_enqueue_repeater_admin_assets
 
 function wrens_hollow_repeater_admin_css() {
 	return '
+		.wh-repeater__intro { display:flex; gap:16px; flex-wrap:wrap; margin-bottom:12px; }
+		.wh-repeater__intro-field { flex:1 1 220px; margin:0; }
 		.wh-repeater__row { display:flex; gap:12px; align-items:flex-start; padding:12px 0; border-bottom:1px solid #dcdcde; }
 		.wh-repeater__row:first-child { padding-top:0; }
 		.wh-repeater__row-fields { flex:1; display:flex; gap:12px; flex-wrap:wrap; align-items:flex-start; }

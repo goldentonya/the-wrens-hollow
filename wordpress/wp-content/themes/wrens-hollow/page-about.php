@@ -25,7 +25,7 @@ get_header();
   <div class="wrap about-columns">
     <aside class="about-columns__aside">
       <div class="aside-card">
-        <h3><?php wh_the( 'facts_heading', 'A few things about me' ); ?></h3>
+        <h3><?php wh_the_page_field( 'facts_heading', 'A few things about me' ); ?></h3>
         <div class="aside-card__facts">
           <?php foreach ( wh_facts() as $wh_fact ) { wh_render_fact( $wh_fact ); } ?>
         </div>
@@ -66,8 +66,8 @@ get_header();
 
 <section class="sec sec--cream sec--dashed-top">
   <div class="wrap sec--center">
-    <p class="eyebrow"><?php wh_the( 'journey_eyebrow', 'My Journey' ); ?></p>
-    <h2 class="h-lg"><?php wh_the( 'journey_heading', 'The Road So Far' ); ?></h2>
+    <p class="eyebrow"><?php wh_the_page_field( 'journey_eyebrow', 'My Journey' ); ?></p>
+    <h2 class="h-lg"><?php wh_the_page_field( 'journey_heading', 'The Road So Far' ); ?></h2>
   </div>
   <div class="wrap">
     <div class="timeline">

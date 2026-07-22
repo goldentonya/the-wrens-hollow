@@ -742,26 +742,6 @@ function wrens_hollow_register_page_fields() {
 					'default_value' => 'Indie author · Minnesota · romance & fantasy.',
 				),
 
-				// ---- Tab: A few things about me ----
-				array(
-					'key'       => 'field_wh_ab_tab_facts',
-					'label'     => 'A few things about me',
-					'type'      => 'tab',
-					'placement' => 'top',
-				),
-				array(
-					'key'           => 'field_wh_ab_facts_heading',
-					'label'         => 'Heading',
-					'name'          => 'facts_heading',
-					'type'          => 'text',
-					'default_value' => 'A few things about me',
-				),
-				array(
-					'key'     => 'field_wh_ab_msg_facts',
-					'type'    => 'message',
-					'message' => 'The individual facts are managed in the **Facts** menu (add, remove, or reorder them there) — this is just the section heading above them.',
-				),
-
 				// ---- Tab: Bio ----
 				array(
 					'key'       => 'field_wh_ab_tab_bio',
@@ -794,33 +774,6 @@ function wrens_hollow_register_page_fields() {
 					'media_upload'  => 0,
 					'tabs'          => 'all',
 					'default_value' => "<p>My writing is deeply influenced by my background in anthropology and my fascination with human behavior, why we love the way we do, what drives us, and what we're willing to risk for the people who matter most. Many of my stories are inspired by real-world experiences, from travel and culture to the emotional complexities we carry with us.</p>\n<p>Some of my earliest inspiration came from a trip to Brazil, where I fell in love with the landscape, the energy, and the depth of human connection I witnessed there. That experience, combined with my son's interest in the military and my own love of science, helped shape the stories I tell today—where emotion, danger, and discovery all collide.</p>\n<p>When I'm not writing, I'm answering phones at our family plumbing business, running a support brand for families affected by alopecia, or chasing my kids around, usually with a coffee (or water) in hand. Motherhood continues to be one of my biggest inspirations, reminding me daily what strength, love, and resilience truly look like.</p>\n<p>Welcome to my corner of the internet—where love is fierce, women are brilliant, and there's always more to the story.</p>",
-				),
-
-				// ---- Tab: Journey (timeline) ----
-				array(
-					'key'       => 'field_wh_ab_tab_journey',
-					'label'     => 'Journey timeline',
-					'type'      => 'tab',
-					'placement' => 'top',
-				),
-				array(
-					'key'           => 'field_wh_ab_journey_eyebrow',
-					'label'         => 'Eyebrow',
-					'name'          => 'journey_eyebrow',
-					'type'          => 'text',
-					'default_value' => 'My Journey',
-				),
-				array(
-					'key'           => 'field_wh_ab_journey_heading',
-					'label'         => 'Heading',
-					'name'          => 'journey_heading',
-					'type'          => 'text',
-					'default_value' => 'The Road So Far',
-				),
-				array(
-					'key'     => 'field_wh_ab_msg_journey',
-					'type'    => 'message',
-					'message' => 'The individual milestones are managed in the **Journey** menu (add, remove, or reorder them there) — this is just the section eyebrow/heading above them.',
 				),
 
 				// ---- Tab: Connect ----
