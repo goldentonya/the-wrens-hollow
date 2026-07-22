@@ -8,7 +8,7 @@ get_header();
 
 <!-- Hero -->
 <section class="hero-banner">
-  <img class="hero-banner__img" src="<?php echo esc_url( get_template_directory_uri() . '/images/photos/ali-wren-header.jpg' ); ?>" alt="Ali Wren — Fantasy &amp; Dark Romance" width="1920" height="800">
+  <?php wh_img( 'home_hero_image', 'images/photos/ali-wren-header.jpg', 'Ali Wren — Fantasy & Dark Romance', 'class="hero-banner__img" width="1920" height="800"' ); ?>
   <div class="hero-banner__fade" aria-hidden="true"></div>
 </section>
 <section class="hero-cta">

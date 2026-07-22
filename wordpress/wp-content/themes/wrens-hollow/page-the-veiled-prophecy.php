@@ -16,7 +16,7 @@ get_header();
   	)
   );
   ?>
-  <img class="hero-banner__img hero-banner__img--prophecy" src="<?php echo esc_url( get_template_directory_uri() . '/images/photos/prophecy.png' ); ?>" alt="The Veiled Prophecy series art" width="1536" height="1024">
+  <?php wh_img( 'series_cover_image', 'images/photos/prophecy.png', 'The Veiled Prophecy series art', 'class="hero-banner__img hero-banner__img--prophecy" width="1536" height="1024"' ); ?>
   <div class="hero-banner__fade" aria-hidden="true"></div>
 </section>
 <section class="hero-cta">
@@ -37,7 +37,7 @@ get_header();
         <?php wh_wysiwyg( 'about_series_body', "<p>Hidden deep beyond the veil, Sylvaeris is a land where ancient magic stirs, and fate weaves tighter than any spell.</p><p>At the heart of this world is Veralyn, a girl who grew up believing she was human—until the truth calls her back.</p><p>Beside her stands Caelum, the guarded prince with the power to read auras and a kingdom to protect.</p><p>Dark secrets rise, the Veilbound Order beckons, and not everyone wants the heir's chosen to survive.</p><p>A tale of fate, forbidden magic, and slow-burn romance awaits. Start free, then follow the saga.</p>" ); ?>
       </div>
     </div>
-    <img class="series-about__art" src="<?php echo esc_url( get_template_directory_uri() . '/images/photos/wilderness.png' ); ?>" alt="A moonlit castle deep in the Sylvaeris wilderness">
+    <?php wh_img( 'about_series_image', 'images/photos/wilderness.png', 'A moonlit castle deep in the Sylvaeris wilderness', 'class="series-about__art"' ); ?>
   </div>
 </section>
 

@@ -93,6 +93,15 @@ function wrens_hollow_register_page_fields() {
 					'placement' => 'top',
 				),
 				array(
+					'key'           => 'field_wh_home_hero_image',
+					'label'         => 'Cover photo',
+					'name'          => 'home_hero_image',
+					'type'          => 'image',
+					'instructions'  => 'The large banner photo at the top of the homepage.',
+					'return_format' => 'array',
+					'preview_size'  => 'medium',
+				),
+				array(
 					'key'           => 'field_wh_home_hero_eyebrow',
 					'label'         => 'Hero eyebrow',
 					'name'          => 'home_hero_eyebrow',
@@ -176,15 +185,9 @@ function wrens_hollow_register_page_fields() {
 					'default_value' => 'Author, biological anthropologist, and proud Minnesota mom. I write romantic adventures that blend science, suspense, and heart — stories with fierce heroines, loyal heroes, and love that\'s never quite as simple as it seems.',
 				),
 				array(
-					'key'       => 'field_wh_home_tab_spotlights',
-					'label'     => 'Series spotlights',
-					'type'      => 'tab',
-					'placement' => 'top',
-				),
-				array(
 					'key'     => 'field_wh_home_msg_spot',
 					'type'    => 'message',
-					'message' => 'The two large cards in the "Explore the books" section. Each links to a series page.',
+					'message' => 'The two large cards below the intro line above. Each links to a series page.',
 				),
 				array(
 					'key'           => 'field_wh_home_spot1_cover',
@@ -371,6 +374,15 @@ function wrens_hollow_register_page_fields() {
 					'type'          => 'text',
 					'default_value' => 'Fierce women. Brilliant love. Stories with heart.',
 				),
+				array(
+					'key'           => 'field_wh_books_lede',
+					'label'         => 'Intro line',
+					'name'          => 'books_lede',
+					'type'          => 'textarea',
+					'rows'          => 2,
+					'instructions'  => 'The sentence "…and signed copies are in the shop" stays fixed after this, with its link always working.',
+					'default_value' => 'Every book Ali has written, organized by series. Pick a title below to read more',
+				),
 			),
 			'location' => array(
 				array(
@@ -395,6 +407,15 @@ function wrens_hollow_register_page_fields() {
 			'key'      => 'group_wh_page_vp',
 			'title'    => 'Page copy — The Veiled Prophecy',
 			'fields'   => array(
+				array(
+					'key'           => 'field_wh_vp_cover_image',
+					'label'         => 'Cover photo',
+					'name'          => 'series_cover_image',
+					'type'          => 'image',
+					'instructions'  => 'The banner photo at the top of the page.',
+					'return_format' => 'array',
+					'preview_size'  => 'medium',
+				),
 				array(
 					'key'           => 'field_wh_vp_eyebrow',
 					'label'         => 'Hero eyebrow',
@@ -432,6 +453,15 @@ function wrens_hollow_register_page_fields() {
 					'media_upload'  => 0,
 					'tabs'          => 'all',
 					'default_value' => "<p>Hidden deep beyond the veil, Sylvaeris is a land where ancient magic stirs, and fate weaves tighter than any spell.</p>\n<p>At the heart of this world is Veralyn, a girl who grew up believing she was human—until the truth calls her back.</p>\n<p>Beside her stands Caelum, the guarded prince with the power to read auras and a kingdom to protect.</p>\n<p>Dark secrets rise, the Veilbound Order beckons, and not everyone wants the heir's chosen to survive.</p>\n<p>A tale of fate, forbidden magic, and slow-burn romance awaits. Start free, then follow the saga.</p>",
+				),
+				array(
+					'key'           => 'field_wh_vp_about_image',
+					'label'         => 'About the series — image',
+					'name'          => 'about_series_image',
+					'type'          => 'image',
+					'instructions'  => 'The artwork beside the About-the-series text.',
+					'return_format' => 'array',
+					'preview_size'  => 'medium',
 				),
 				array(
 					'key'     => 'field_wh_vp_msg_reading',
@@ -482,6 +512,15 @@ function wrens_hollow_register_page_fields() {
 			'title'    => 'Page copy — Whiskey Tango Foxtrot',
 			'fields'   => array(
 				array(
+					'key'           => 'field_wh_wtf_cover_image',
+					'label'         => 'Cover photo',
+					'name'          => 'series_cover_image',
+					'type'          => 'image',
+					'instructions'  => 'The banner photo at the top of the page.',
+					'return_format' => 'array',
+					'preview_size'  => 'medium',
+				),
+				array(
 					'key'           => 'field_wh_wtf_eyebrow',
 					'label'         => 'Hero eyebrow',
 					'name'          => 'series_eyebrow',
@@ -518,6 +557,15 @@ function wrens_hollow_register_page_fields() {
 					'media_upload'  => 0,
 					'tabs'          => 'all',
 					'default_value' => "<p>Whiskey Tango Foxtrot is contemporary romance with teeth — the kind of story that makes you laugh on one page and reach for a tissue on the next.</p>\n<p>At its center are women who've been knocked down and refuse to stay there, and the men who are smart enough not to underestimate them.</p>\n<p>Every secret has a cost, every drink has a story, and every ending is earned — not handed out.</p>\n<p>Start with Whiskey &amp; Secrets, free forever, then follow the series as it unfolds.</p>",
+				),
+				array(
+					'key'           => 'field_wh_wtf_about_image',
+					'label'         => 'About the series — image',
+					'name'          => 'about_series_image',
+					'type'          => 'image',
+					'instructions'  => 'The artwork beside the About-the-series text.',
+					'return_format' => 'array',
+					'preview_size'  => 'medium',
 				),
 				array(
 					'key'     => 'field_wh_wtf_msg_reading',

@@ -16,7 +16,7 @@ get_header();
   	)
   );
   ?>
-  <img class="hero-banner__img" src="<?php echo esc_url( get_template_directory_uri() . '/images/photos/shadowlink.png' ); ?>" alt="Whiskey Tango Foxtrot series art" width="1536" height="1024">
+  <?php wh_img( 'series_cover_image', 'images/photos/shadowlink.png', 'Whiskey Tango Foxtrot series art', 'class="hero-banner__img" width="1536" height="1024"' ); ?>
   <div class="hero-banner__fade" aria-hidden="true"></div>
 </section>
 <section class="hero-cta">
@@ -37,7 +37,7 @@ get_header();
         <?php wh_wysiwyg( 'about_series_body', "<p>Whiskey Tango Foxtrot is contemporary romance with teeth — the kind of story that makes you laugh on one page and reach for a tissue on the next.</p><p>At its center are women who've been knocked down and refuse to stay there, and the men who are smart enough not to underestimate them.</p><p>Every secret has a cost, every drink has a story, and every ending is earned — not handed out.</p><p>Start with Whiskey &amp; Secrets, free forever, then follow the series as it unfolds.</p>" ); ?>
       </div>
     </div>
-    <img class="series-about__art" src="<?php echo esc_url( get_template_directory_uri() . '/images/photos/map.jpeg' ); ?>" alt="Whiskey Tango Foxtrot series map art">
+    <?php wh_img( 'about_series_image', 'images/photos/map.jpeg', 'Whiskey Tango Foxtrot series map art', 'class="series-about__art"' ); ?>
   </div>
 
   <div class="wrap" style="margin-top:56px;">

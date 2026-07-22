@@ -14,7 +14,7 @@ get_header();
   <div class="wrap">
     <p class="eyebrow"><?php wh_the( 'books_eyebrow', 'The Books' ); ?></p>
     <h1 class="h-lg"><?php wh_the( 'books_title', 'Fierce women. Brilliant love. Stories with heart.' ); ?></h1>
-    <p class="lede" style="margin-top:12px;">Every book Ali has written, organized by series. Pick a title below to read more — each one has its own page, and signed copies are in the <a href="<?php echo esc_url( function_exists( 'wc_get_page_permalink' ) ? wc_get_page_permalink( 'shop' ) : home_url( '/shop/' ) ); ?>" style="color:var(--plum);font-weight:700;">shop</a>.</p>
+    <p class="lede" style="margin-top:12px;"><?php wh_the( 'books_lede', 'Every book Ali has written, organized by series. Pick a title below to read more' ); ?> — each one has its own page, and signed copies are in the <a href="<?php echo esc_url( function_exists( 'wc_get_page_permalink' ) ? wc_get_page_permalink( 'shop' ) : home_url( '/shop/' ) ); ?>" style="color:var(--plum);font-weight:700;">shop</a>.</p>
   </div>
 </section>
 
