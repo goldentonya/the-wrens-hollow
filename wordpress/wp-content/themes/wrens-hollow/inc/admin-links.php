@@ -72,6 +72,39 @@ function wrens_hollow_page_book_key_map() {
 	);
 }
 
+/**
+ * For the four book pages, the Title box and block-editor content area are
+ * both unused (everything real comes from the matching Book post) — so the
+ * main editor screen looks empty/broken unless something says so loudly. This
+ * prints a large, hard-to-miss notice right below the Title field, on top of
+ * the smaller "Content shown on this page" sidebar box below.
+ */
+function wrens_hollow_book_page_notice( $post ) {
+	if ( 'page' !== get_post_type( $post ) ) {
+		return;
+	}
+	$book_map = wrens_hollow_page_book_key_map();
+	$template = get_page_template_slug( $post );
+	if ( ! isset( $book_map[ $template ] ) || ! function_exists( 'wh_book' ) ) {
+		return;
+	}
+
+	$book = wh_book( $book_map[ $template ] );
+	echo '<div style="margin:20px 0;padding:16px 20px;background:#fff;border-left:4px solid #2271b1;box-shadow:0 1px 1px rgba(0,0,0,.04);">';
+	echo '<p style="margin-top:0;font-size:14px;"><strong>Nothing to edit here on purpose.</strong> This page\'s title, hero text, cover, and "About the book" all come from a <strong>Book</strong> entry, not this page.</p>';
+	if ( $book ) {
+		printf(
+			'<p style="margin-bottom:0;"><a class="button button-primary" href="%s">Edit the "%s" book →</a></p>',
+			esc_url( get_edit_post_link( $book->ID, '' ) ),
+			esc_html( get_the_title( $book ) )
+		);
+	} else {
+		echo '<p style="margin-bottom:0;"><em>No matching Book entry found yet.</em> <a href="' . esc_url( admin_url( 'edit.php?post_type=wh_book' ) ) . '">Go to the Books menu →</a></p>';
+	}
+	echo '</div>';
+}
+add_action( 'edit_form_after_title', 'wrens_hollow_book_page_notice' );
+
 function wrens_hollow_register_admin_links_metabox() {
 	add_meta_box(
 		'wh_page_content_links',

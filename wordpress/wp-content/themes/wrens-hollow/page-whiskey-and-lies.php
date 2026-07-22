@@ -62,8 +62,8 @@ $wh_book_id = $wh_book ? $wh_book->ID : false;
 
 <section class="sec sec--pink sec--dashed-top">
   <div class="wrap sec--center">
-    <h2 class="h-md" style="color:var(--plum-deep);">Read Whiskey &amp; Lies</h2>
-    <p class="txt" style="max-width:440px;margin:0 auto 20px;">Enter your email below to receive the opening chapters instantly.</p>
+    <h2 class="h-md" style="color:var(--plum-deep);"><?php wh_the( 'read_heading', 'Read ' . ( $wh_book ? get_the_title( $wh_book ) : 'Whiskey & Lies' ), $wh_book_id ); ?></h2>
+    <p class="txt" style="max-width:440px;margin:0 auto 20px;"><?php wh_the( 'read_subtext', 'Enter your email below to receive the opening chapters instantly.', $wh_book_id ); ?></p>
     <form class="optin-form" id="optinForm" style="text-align:left;max-width:420px;margin:0 auto;">
       <div class="optin-row">
         <label class="optin-label" for="optinFirst">Name <span class="req">*</span></label>
@@ -102,6 +102,15 @@ $wh_book_id = $wh_book ? $wh_book->ID : false;
   </div>
 </section>
 
-<?php get_template_part( 'template-parts/newsletter-band' ); ?>
+<?php
+get_template_part(
+	'template-parts/newsletter-band',
+	null,
+	array(
+		'eyebrow' => wh_field( 'news_eyebrow', 'Join the Hollow', $wh_book_id ),
+		'heading' => wh_field( 'news_heading', 'Get bonus chapters + first look at new releases', $wh_book_id ),
+	)
+);
+?>
 
 <?php get_footer(); ?>

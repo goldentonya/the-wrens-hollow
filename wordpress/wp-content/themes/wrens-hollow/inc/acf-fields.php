@@ -324,6 +324,41 @@ function wrens_hollow_register_acf_fields() {
 					'media_upload' => 0,
 					'tabs'         => 'all',
 				),
+				array(
+					'key'     => 'field_wh_book_msg_forms',
+					'label'   => '',
+					'name'    => '',
+					'type'    => 'message',
+					'message' => 'The "Read the book" signup section and the "Join the Hollow" band near the bottom of this book\'s page.',
+				),
+				array(
+					'key'          => 'field_wh_book_read_heading',
+					'label'        => '"Read the book" heading',
+					'name'         => 'read_heading',
+					'type'         => 'text',
+					'instructions' => 'Leave empty to use "Read {book title}" automatically.',
+				),
+				array(
+					'key'           => 'field_wh_book_read_subtext',
+					'label'         => '"Read the book" subtext',
+					'name'          => 'read_subtext',
+					'type'          => 'text',
+					'default_value' => 'Enter your email below to receive the opening chapters instantly.',
+				),
+				array(
+					'key'           => 'field_wh_book_news_eyebrow',
+					'label'         => 'Newsletter band — eyebrow',
+					'name'          => 'news_eyebrow',
+					'type'          => 'text',
+					'default_value' => 'Join the Hollow',
+				),
+				array(
+					'key'           => 'field_wh_book_news_heading',
+					'label'         => 'Newsletter band — heading',
+					'name'          => 'news_heading',
+					'type'          => 'text',
+					'default_value' => 'Get bonus chapters + first look at new releases',
+				),
 			),
 			'location' => array(
 				array(
