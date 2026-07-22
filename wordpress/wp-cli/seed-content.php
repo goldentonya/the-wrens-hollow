@@ -722,9 +722,17 @@ if ( ! get_option( 'wh_seeded_page_images' ) ) {
 		}
 	}
 
+	$about_page_img = get_page_by_path( 'about' );
+	if ( $about_page_img ) {
+		$id = $wh_seed_upload_image( 'images/photos/ali-wren-portrait.jpg', $about_page_img->ID, 'Ali Wren portrait photo' );
+		if ( $id ) {
+			update_field( 'about_portrait', $id, $about_page_img->ID );
+		}
+	}
+
 	update_option( 'wh_seeded_page_images', 1 );
 	if ( class_exists( 'WP_CLI' ) ) {
-		WP_CLI::log( '[seed] Seeded home hero image + both series pages\' cover/about images.' );
+		WP_CLI::log( '[seed] Seeded home hero image + series pages\' cover/about images + About portrait.' );
 	}
 } elseif ( class_exists( 'WP_CLI' ) ) {
 	WP_CLI::log( '[seed] Page images already seeded — skipping.' );
