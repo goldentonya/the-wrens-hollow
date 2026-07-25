@@ -57,8 +57,17 @@ function wrens_hollow_nav_item_is_active( $item, $wh_nav_active, $has_children )
 
 class Wrens_Hollow_Walker extends Walker_Nav_Menu {
 
+	/**
+	 * start_lvl() isn't passed the parent $item (core's signature has no such
+	 * param), so start_el() stashes the dropdown's id here right before
+	 * recursing into its children — safe because the walker is depth-first:
+	 * a top-level item's start_lvl()/children always run immediately after
+	 * its own start_el() and before the next top-level item's.
+	 */
+	private $current_dropdown_id = '';
+
 	public function start_lvl( &$output, $depth = 0, $args = null ) {
-		$output .= '<div class="nav__dropdown-menu"><div class="nav__dropdown-menu-inner">';
+		$output .= '<div class="nav__dropdown-menu" id="' . esc_attr( $this->current_dropdown_id ) . '"><div class="nav__dropdown-menu-inner">';
 	}
 
 	public function end_lvl( &$output, $depth = 0, $args = null ) {
@@ -83,11 +92,16 @@ class Wrens_Hollow_Walker extends Walker_Nav_Menu {
 
 		if ( 0 === $depth ) {
 			if ( $has_children ) {
+				// A separate <button>, not the chevron nested inside the <a> —
+				// on mobile (no hover) it needs its own tap target that toggles
+				// the flyout without following the "Books" link, so the two
+				// intents (open submenu vs. go to the Books page) don't collide.
+				$this->current_dropdown_id = 'nav-dropdown-' . (int) $item->ID;
 				$output .= '<div class="nav__dropdown">';
-				$output .= '<a class="nav__link nav__link--has-chevron' . ( $is_active ? ' is-active' : '' ) . '" href="' . esc_url( $url ) . '">';
-				$output .= esc_html( $label );
+				$output .= '<a class="nav__link nav__link--has-chevron' . ( $is_active ? ' is-active' : '' ) . '" href="' . esc_url( $url ) . '">' . esc_html( $label ) . '</a>';
+				$output .= '<button type="button" class="nav__dropdown-toggle" aria-expanded="false" aria-controls="' . esc_attr( $this->current_dropdown_id ) . '" aria-label="' . esc_attr( $label . ' submenu' ) . '">';
 				$output .= '<svg class="nav__dropdown-chevron" viewBox="0 0 10 6" aria-hidden="true"><path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-				$output .= '</a>';
+				$output .= '</button>';
 			} else {
 				$output .= '<a class="nav__link' . ( $is_active ? ' is-active' : '' ) . '" href="' . esc_url( $url ) . '">' . esc_html( $label ) . '</a>';
 			}
@@ -126,11 +140,11 @@ function wrens_hollow_nav_fallback() {
 	?>
 	<a class="<?php echo esc_attr( $cls( 'home' ) ); ?>" href="<?php echo esc_url( home_url( '/' ) ); ?>">Home</a>
 	<div class="nav__dropdown">
-	  <a class="nav__link nav__link--has-chevron<?php echo $books_active ? ' is-active' : ''; ?>" href="<?php echo esc_url( home_url( '/books/' ) ); ?>">
-	    Books
+	  <a class="nav__link nav__link--has-chevron<?php echo $books_active ? ' is-active' : ''; ?>" href="<?php echo esc_url( home_url( '/books/' ) ); ?>">Books</a>
+	  <button type="button" class="nav__dropdown-toggle" aria-expanded="false" aria-controls="nav-dropdown-fallback-books" aria-label="Books submenu">
 	    <svg class="nav__dropdown-chevron" viewBox="0 0 10 6" aria-hidden="true"><path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-	  </a>
-	  <div class="nav__dropdown-menu">
+	  </button>
+	  <div class="nav__dropdown-menu" id="nav-dropdown-fallback-books">
 	    <div class="nav__dropdown-menu-inner">
 	      <a class="nav__dropdown-link<?php echo 'read-free' === $active ? ' is-active' : ''; ?>" href="<?php echo esc_url( home_url( '/the-veiled-prophecy/' ) ); ?>">
 	        <span class="nav__dropdown-link-title">The Veiled Prophecy</span>

@@ -18,6 +18,15 @@ $wh_vf_product = $wh_vf_id ? wc_get_product( $wh_vf_id ) : false;
 
 $wh_wl_id      = function_exists( 'wc_get_product_id_by_sku' ) ? wc_get_product_id_by_sku( 'whiskey-and-lies-signed' ) : 0;
 $wh_wl_product = $wh_wl_id ? wc_get_product( $wh_wl_id ) : false;
+
+// Veilbound isn't purchasable yet, so there's no WooCommerce product for it —
+// but it may still have a Book entry (with its own featured image). Resolve
+// its cover the same way the book detail pages / reading-order cards do
+// (wh_book_cover()), instead of hardcoding the static asset path, so an
+// owner-uploaded cover shows up here too and a missing one degrades to the
+// same styled placeholder as everywhere else.
+$wh_vb_book  = function_exists( 'wh_book' ) ? wh_book( 'veilbound' ) : null;
+$wh_vb_cover = $wh_vb_book ? wh_book_cover( $wh_vb_book ) : get_template_directory_uri() . '/images/covers/veilbound.jpg';
 ?>
 
 <section class="sec sec--pink">
@@ -93,7 +102,7 @@ $wh_wl_product = $wh_wl_id ? wc_get_product( $wh_wl_id ) : false;
       </div>
 
       <div class="card product-card product-card--soon" id="veilbound">
-        <div class="ph-box"><img src="<?php echo esc_url( get_template_directory_uri() . '/images/covers/veilbound.jpg' ); ?>" alt="Veilbound book cover" style="width:100%;height:100%;object-fit:cover;border-radius:6px;"></div>
+        <div class="ph-box"><img src="<?php echo esc_url( $wh_vb_cover ); ?>" alt="Veilbound book cover" style="width:100%;height:100%;object-fit:cover;border-radius:6px;"></div>
         <div class="product-card__body">
           <p class="book-card__tag">Book 2 · The Veiled Prophecy</p>
           <h3>Veilbound</h3>

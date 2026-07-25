@@ -7,6 +7,39 @@ Text Domain: wrens-hollow
 */
 
 /* ============================================================
+   Self-hosted fonts (see /fonts) — replaces the previous remote
+   fonts.googleapis.com request (render-blocking third-party call + a GDPR
+   consideration). Cormorant Garamond and Mulish ship from Google as variable
+   fonts, so one file per family covers every weight the site uses; the
+   font-weight range below just tells the browser which weights that file
+   supports. SiteGround Speed Optimizer (installed in production) can still
+   cache/compress these normally since they're now same-origin.
+   ============================================================ */
+@font-face {
+  font-family: 'Cormorant Garamond';
+  font-style: normal;
+  font-weight: 500 700;
+  font-display: swap;
+  src: url('fonts/cormorant-garamond-v21-latin-variable.woff2') format('woff2-variations'),
+       url('fonts/cormorant-garamond-v21-latin-variable.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Mulish';
+  font-style: normal;
+  font-weight: 400 800;
+  font-display: swap;
+  src: url('fonts/mulish-v18-latin-variable.woff2') format('woff2-variations'),
+       url('fonts/mulish-v18-latin-variable.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Alex Brush';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('fonts/alex-brush-v23-latin.woff2') format('woff2');
+}
+
+/* ============================================================
    The Wren's Hollow — Ali Wren Author Site
    Design tokens
    ============================================================ */
@@ -139,10 +172,18 @@ h1, h2, h3 { margin: 0; font-family: var(--font-display); color: var(--text-head
   grid-template-columns: auto 1fr auto;
   align-items: center;
   gap: 16px;
-  padding: 14px 0;
+  /* padding-top/bottom only — a shorthand `padding: 14px 0` here would win
+     the specificity tie with .wrap's `padding: 0 24px` (same selector
+     weight, declared later) and wipe out its side padding entirely, leaving
+     the logo/hamburger flush against the viewport edges. */
+  padding-top: 14px;
+  padding-bottom: 14px;
 }
 .nav__brand { grid-column: 1; display: flex; align-items: center; }
-.nav__toggle, .nav__links { grid-column: 3; }
+/* .nav__links (the menu) and .nav__actions (cart + hamburger) are both inside
+   .nav__right so the cart stays visible next to the hamburger at every width,
+   instead of collapsing into the drawer .nav__links becomes on mobile. */
+.nav__right { grid-column: 3; display: flex; align-items: center; gap: 20px; }
 .site-header .nav__logo { height: 42px; width: auto; flex: none; }
 .nav__word { grid-column: 2; justify-self: center; display: flex; flex-direction: column; align-items: center; gap: 2px; text-align: center; }
 .nav__title { font: 700 13px/1.1 'Mulish', sans-serif; letter-spacing: .13em; color: var(--plum-tag); }
@@ -157,7 +198,9 @@ h1, h2, h3 { margin: 0; font-family: var(--font-display); color: var(--text-head
 }
 .nav__link:hover, .nav__link.is-active { color: var(--plum); }
 .nav__link--cta { color: var(--plum); font-weight: 700; }
-.nav__cart { font-size: 16px; position: relative; }
+
+.nav__actions { display: flex; align-items: center; gap: 20px; }
+.nav__cart { font-size: 16px; position: relative; color: var(--text-muted); }
 .nav__cart-count {
   position: absolute; top: -7px; right: -10px;
   background: var(--plum); color: #fff;
@@ -179,11 +222,24 @@ h1, h2, h3 { margin: 0; font-family: var(--font-display); color: var(--text-head
 .nav__toggle span { width: 22px; height: 2px; background: var(--text-heading); border-radius: 2px; }
 
 /* ---------- Nav dropdown (Books → series flyout) ---------- */
-.nav__dropdown { position: relative; }
-.nav__link--has-chevron { display: inline-flex; align-items: center; gap: 5px; }
+.nav__dropdown { position: relative; display: inline-flex; align-items: center; }
 .nav__dropdown-chevron { width: 9px; height: 9px; color: var(--text-muted-2); flex: none; }
-.nav__link--has-chevron:hover .nav__dropdown-chevron,
-.nav__link--has-chevron.is-active .nav__dropdown-chevron { color: var(--plum); }
+.nav__dropdown:hover .nav__dropdown-chevron,
+.nav__link--has-chevron.is-active ~ .nav__dropdown-toggle .nav__dropdown-chevron { color: var(--plum); }
+/* The chevron is its own <button> (not nested in the "Books" link) so mobile,
+   which has no hover, can tap it to open the flyout without also following
+   the link — see inc/nav-walker.php. Hidden on desktop, where hovering
+   .nav__dropdown already reveals the flyout below. */
+.nav__dropdown-toggle {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  padding: 4px 6px;
+  cursor: pointer;
+}
+.nav__dropdown-toggle[aria-expanded="true"] .nav__dropdown-chevron { transform: rotate(180deg); }
 .nav__dropdown-menu {
   display: none;
   position: absolute;
@@ -195,9 +251,18 @@ h1, h2, h3 { margin: 0; font-family: var(--font-display); color: var(--text-head
   min-width: 220px;
   z-index: 110;
 }
-.nav__dropdown:hover .nav__dropdown-menu,
-.nav__dropdown:focus-within .nav__dropdown-menu {
-  display: block;
+/* Desktop-only: hovering/focusing the "Books" link reveals the flyout. Scoped
+   above the mobile breakpoint because :focus-within doesn't un-set itself
+   when a click toggles .is-open off — tapping .nav__dropdown-toggle leaves
+   it focused, so on mobile this rule alone kept the menu forced open no
+   matter what the JS below did (it would open on the first tap but never
+   close again). Below 761px, .is-open (js/main.js) is the only thing that
+   controls visibility. */
+@media (min-width: 761px) {
+  .nav__dropdown:hover .nav__dropdown-menu,
+  .nav__dropdown:focus-within .nav__dropdown-menu {
+    display: block;
+  }
 }
 .nav__dropdown-menu-inner {
   background: var(--card-bg);
@@ -215,6 +280,13 @@ h1, h2, h3 { margin: 0; font-family: var(--font-display); color: var(--text-head
 
 @media (max-width: 760px) {
   .nav__toggle { display: flex; }
+  /* The middle grid column is squeezed between the logo and the cart+hamburger
+     group (as little as ~70px on a 320px-wide phone) — "THE WREN'S HOLLOW"
+     was wrapping to 3 lines and the "ALI WREN · AUTHOR" subtitle to 2 more
+     underneath it. Drop the subtitle and trim the title down so the title
+     reliably wraps to 2 clean lines instead. */
+  .nav__sub { display: none; }
+  .nav__title { font-size: 12px; letter-spacing: .08em; }
   .nav__links {
     position: absolute;
     top: 100%; left: 0; right: 0;
@@ -230,21 +302,39 @@ h1, h2, h3 { margin: 0; font-family: var(--font-display); color: var(--text-head
   .nav__links.is-open { max-height: 520px; }
   .nav__links a, .nav__links span { padding: 12px 24px; width: 100%; }
   .nav__link { display: block; }
-  .nav__link--has-chevron { display: flex; justify-content: space-between; }
 
+  .nav__dropdown { display: flex; flex-wrap: wrap; width: 100%; align-items: stretch; }
+  .nav__dropdown .nav__link--has-chevron { flex: 1; }
+  .nav__dropdown-toggle { display: flex; padding: 0 24px; }
+  /* Closed by default — previously forced open (display: block) any time the
+     hamburger drawer was open, so "Books" always showed its two series
+     underneath whether you asked for them or not. Now .nav__dropdown-toggle
+     (js/main.js) toggles the .is-open class instead. flex-basis: 100% forces
+     it onto its own line below the link+toggle row above, rather than
+     rendering as a third item in that same flex row. */
   .nav__dropdown-menu {
-    display: block;
+    display: none;
     position: static;
+    flex-basis: 100%;
     padding-top: 0;
   }
+  .nav__dropdown-menu.is-open { display: block; }
   .nav__dropdown-menu-inner {
-    background: var(--tint-cream);
+    /* Was var(--tint-cream) — a near-white block sitting on top of the
+       drawer's own (darker) background. Transparent blends it in instead. */
+    background: none;
     border: none;
     border-radius: 0;
     box-shadow: none;
     padding: 0;
   }
   .nav__dropdown-link { padding: 10px 24px 10px 36px; }
+}
+/* Smallest phones (e.g. 320px-wide iPhone SE 1st gen) leave the middle grid
+   column only ~70px wide — even the trimmed title above still wraps to 3
+   lines there, so it needs a bit more room taken off. */
+@media (max-width: 340px) {
+  .nav__title { font-size: 10px; letter-spacing: 0; }
 }
 
 /* ============================================================
@@ -541,6 +631,13 @@ h3.h-md { font-size: 22px; line-height: 1.25; }
 .sec:not(.sec--dark):not(.sec--dark2) .form-status { color: var(--plum); }
 .form-note { margin-top: 8px; font-size: 12px; color: var(--text-muted); }
 .sec--dark .form-note, .sec--dark2 .form-note { color: var(--text-on-dark-muted); }
+
+/* Wrapper for a configured newsletter/opt-in/contact-form plugin shortcode or
+   embed (see Customize > Forms). Keeps the same spacing rhythm as the theme's
+   own placeholder forms without imposing layout on the plugin's own markup —
+   width/centering per instance comes from the inline style passed in by the
+   calling template part, same as the placeholder form it replaces. */
+.form-embed { margin-top: 18px; }
 
 /* ============================================================
    Opt-in form (lead-magnet pages, e.g. free-chapters signup)
@@ -1382,6 +1479,15 @@ h3.h-md { font-size: 22px; line-height: 1.25; }
 }
 
 /* Cart + checkout tables/forms */
+/* WooCommerce's default .quantity .qty width (3.631em) is too narrow for the
+   generic .woocommerce input.input-text padding below, cutting off digits —
+   same fix as the single-product buybox's quantity input above. */
+.woocommerce table.cart .quantity input.qty {
+  width: 68px;
+  padding: 12px 10px;
+  text-align: center;
+}
+
 .woocommerce table.shop_table {
   border-collapse: collapse;
   width: 100%;
@@ -1409,6 +1515,27 @@ h3.h-md { font-size: 22px; line-height: 1.25; }
   color: var(--text-heading);
   font-family: var(--font-body);
 }
+.woocommerce #coupon_code { width: 220px; }
+/* Keeps the coupon field and the (now-shortened, see functions.php) "Apply"
+   button on one row instead of core's default float-based layout, which let
+   "Apply coupon" wrap onto its own line below the field once the two no
+   longer fit side by side at mobile widths. */
+.woocommerce-cart .coupon {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+/* WooCommerce's mobile stylesheet (woocommerce-smallscreen.css) puts a
+   float-clearfix ::before/::after on .coupon via a higher-specificity
+   selector (.woocommerce table.cart td.actions .coupon::before) than this
+   one, hence !important; both default to order: 0, so as flex items they
+   sort ahead of the real order: 1/2 children below and each pull in a gap,
+   pushing the input ~16px right of where it should start. The clearfix is
+   meaningless once .coupon is a flex row, so drop it. */
+.woocommerce-cart .coupon::before,
+.woocommerce-cart .coupon::after { content: none !important; display: none !important; }
+.woocommerce-cart .coupon #coupon_code { order: 1; flex: 1; width: auto; min-width: 0; }
+.woocommerce-cart .coupon button[name="apply_coupon"] { order: 2; flex: none; }
 .woocommerce #payment div.payment_box { background: var(--tint-pink); border-radius: 8px; }
 .woocommerce a.button, .woocommerce button.button, .woocommerce input.button, .woocommerce #place_order {
   display: inline-flex;
@@ -1421,12 +1548,26 @@ h3.h-md { font-size: 22px; line-height: 1.25; }
   font: 700 14px 'Mulish', sans-serif;
   border: none;
 }
-.woocommerce a.button:hover, .woocommerce button.button:hover, .woocommerce input.button:hover, .woocommerce #place_order:hover { background: var(--plum-deep); }
+.woocommerce a.button:hover, .woocommerce button.button:not(:disabled):hover, .woocommerce input.button:not(:disabled):hover, .woocommerce #place_order:hover { background: var(--plum-deep); }
+/* WooCommerce disables "Update cart" (button.button) until a quantity
+   actually changes — without :not(:disabled) above, hovering it while
+   disabled still changed the background like it was clickable. WooCommerce's
+   own core CSS has a same-specificity :disabled:hover fallback (its own gray,
+   not our plum-deep) that loads after ours and wins any tie, so this needs
+   !important to actually stick. */
+.woocommerce button.button:disabled, .woocommerce button.button:disabled:hover {
+  background: var(--plum) !important;
+  opacity: .5;
+  cursor: not-allowed;
+}
 .woocommerce-message, .woocommerce-info, .woocommerce-error, .woocommerce-noreviews {
   border-top-color: var(--plum);
   background: var(--tint-pink);
   border-radius: 8px;
-  padding: 14px 18px;
+  /* Left padding leaves room for WooCommerce's absolutely-positioned ::before
+     checkmark/info icon (left: 1.5em) — without it the icon sits on top of
+     the text instead of beside it. */
+  padding: 14px 18px 14px 46px;
 }
 .woocommerce-message::before, .woocommerce-info::before { color: var(--plum); }
 

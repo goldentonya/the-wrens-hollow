@@ -14,6 +14,9 @@
  *   ) );
  *
  * Any arg left out falls back to the values below (the most common variant).
+ * The actual form fields live in template-parts/newsletter-form.php (shared
+ * with the About page's newsletter column) so both pick up a configured
+ * mailing-list provider (Customize > Forms) the same way.
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -31,11 +34,16 @@ $wh_nb_button        = isset( $args['button'] ) ? $args['button'] : 'Notify me';
   <div class="wrap sec--center">
     <p class="<?php echo esc_attr( $wh_nb_eyebrow_class ); ?>"><?php echo esc_html( $wh_nb_eyebrow ); ?></p>
     <h2 class="h-md" style="<?php echo esc_attr( $wh_nb_heading_style ); ?>"><?php echo esc_html( $wh_nb_heading ); ?></h2>
-    <form class="newsletter-form" id="newsletterForm" style="margin-left:auto;margin-right:auto;">
-      <input class="field" type="email" placeholder="your@email.com" required aria-label="Email address">
-      <button class="btn" type="submit"><?php echo esc_html( $wh_nb_button ); ?></button>
-    </form>
-    <p class="form-status" id="newsletterStatus"></p>
+    <?php
+    get_template_part(
+    	'template-parts/newsletter-form',
+    	null,
+    	array(
+    		'button' => $wh_nb_button,
+    		'style'  => 'margin-left:auto;margin-right:auto;',
+    	)
+    );
+    ?>
   </div>
 </section>
 <?php unset( $wh_nb_section, $wh_nb_eyebrow_class, $wh_nb_eyebrow, $wh_nb_heading, $wh_nb_heading_style, $wh_nb_button );

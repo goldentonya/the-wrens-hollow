@@ -87,37 +87,14 @@ get_header();
       <p class="eyebrow"><?php wh_the_page_field( 'connect_eyebrow', 'Join the Hollow' ); ?></p>
       <h2 class="h-lg" style="color:var(--plum-deep);"><?php wh_the_page_field( 'connect_heading', "Let's Stay Connected" ); ?></h2>
       <p class="txt" style="margin-top:14px;"><?php wh_the_page_field( 'connect_body', 'Love strong heroines, slow-burn romance, and a little bit of danger? Sign up for my newsletter and get bonus chapters plus first look at new releases, behind-the-scenes peeks, character deep-dives, and updates straight to your inbox.' ); ?></p>
-      <form class="newsletter-form" id="newsletterForm">
-        <input class="field" type="email" placeholder="your@email.com" required aria-label="Email address">
-        <button class="btn" type="submit">Subscribe</button>
-      </form>
-      <p class="form-status" id="newsletterStatus"></p>
+      <?php get_template_part( 'template-parts/newsletter-form', null, array( 'button' => 'Subscribe' ) ); ?>
       <p class="form-note">Free. No spam. Unsubscribe anytime.</p>
     </div>
     <div>
       <p class="eyebrow"><?php wh_the_page_field( 'hello_eyebrow', 'Say hello' ); ?></p>
       <h2 class="h-lg" style="color:var(--plum-deep);"><?php wh_the_page_field( 'hello_heading', "I'd Love to Hear from You!" ); ?></h2>
       <p class="txt" style="margin-top:14px;"><?php wh_the_page_field( 'hello_body', "Whether you're a fellow reader, a book club, a blogger, or just curious about my writing—drop a note below!" ); ?></p>
-      <form class="optin-form" id="contactForm">
-        <div class="optin-row">
-          <label class="optin-label" for="contactName">Your name</label>
-          <input class="field" id="contactName" name="name" type="text" required autocomplete="name">
-        </div>
-        <div class="optin-row">
-          <label class="optin-label" for="contactEmail">Your email</label>
-          <input class="field" id="contactEmail" name="email" type="email" required autocomplete="email">
-        </div>
-        <div class="optin-row">
-          <label class="optin-label" for="contactSubject">Subject</label>
-          <input class="field" id="contactSubject" name="subject" type="text">
-        </div>
-        <div class="optin-row">
-          <label class="optin-label" for="contactMessage">Your message (optional)</label>
-          <textarea class="field" id="contactMessage" name="message" rows="5"></textarea>
-        </div>
-        <button class="btn" type="submit">Submit</button>
-      </form>
-      <p class="form-status" id="contactStatus"></p>
+      <?php get_template_part( 'template-parts/contact-form' ); ?>
     </div>
   </div>
 </section>

@@ -127,6 +127,19 @@ function wh_img( $name, $theme_fallback = '', $alt = '', $attrs = '', $post_id =
 }
 
 /**
+ * A configured 3rd-party form shortcode/embed for one of the site's
+ * placeholder form slots (Appearance > Customize > "Forms (mailing list &
+ * contact)") — '' until the owner pastes one in, in which case the matching
+ * template part (newsletter-form.php / optin-form.php / contact-form.php)
+ * falls back to the theme's own placeholder form instead.
+ *
+ * $key is one of 'newsletter' | 'optin' | 'contact'.
+ */
+function wh_form_shortcode( $key ) {
+	return trim( (string) get_theme_mod( 'wh_form_' . $key, '' ) );
+}
+
+/**
  * Ordered Event posts. $which = 'upcoming' | 'past'.
  * Upcoming: is_upcoming on, soonest first. Past: is_upcoming off, newest first.
  *

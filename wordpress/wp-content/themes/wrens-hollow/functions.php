@@ -21,6 +21,7 @@ require get_template_directory() . '/inc/nav-walker.php';
 require get_template_directory() . '/inc/admin-links.php';
 require get_template_directory() . '/inc/inline-repeaters.php';
 require get_template_directory() . '/inc/about-page-editor.php';
+require get_template_directory() . '/inc/seo.php';
 
 function wrens_hollow_setup() {
 	add_theme_support( 'title-tag' );
@@ -64,16 +65,29 @@ function wrens_hollow_setup() {
 add_action( 'after_setup_theme', 'wrens_hollow_setup' );
 
 function wrens_hollow_assets() {
-	wp_enqueue_style(
-		'wrens-hollow-fonts',
-		'https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Mulish:wght@400;600;700;800&family=Alex+Brush&display=swap',
-		array(),
-		null
-	);
+	// Cormorant Garamond, Mulish, and Alex Brush are self-hosted (see /fonts
+	// and the @font-face rules at the top of style.css) rather than loaded
+	// from fonts.googleapis.com — avoids a render-blocking third-party
+	// request and the associated GDPR consideration, no separate enqueue
+	// needed since they're declared in the stylesheet itself.
+
 	// filemtime() (not the static theme header Version) so every edit during
 	// development busts browsers' cached copy of these files automatically.
 	wp_enqueue_style( 'wrens-hollow-style', get_stylesheet_uri(), array(), filemtime( get_stylesheet_directory() . '/style.css' ) );
 	wp_enqueue_script( 'wrens-hollow-main', get_template_directory_uri() . '/js/main.js', array(), filemtime( get_template_directory() . '/js/main.js' ), true );
+
+	// "Notify me" release-alert buttons (js/main.js, [data-notify]) inject a
+	// signup form on click. If a real newsletter provider is configured
+	// (Customize > Forms), hand its already-rendered markup to the script so
+	// those buttons reuse the same real form instead of faking one.
+	$wh_notify_html = '';
+	if ( function_exists( 'wh_form_shortcode' ) ) {
+		$wh_notify_shortcode = wh_form_shortcode( 'newsletter' );
+		if ( $wh_notify_shortcode ) {
+			$wh_notify_html = do_shortcode( $wh_notify_shortcode );
+		}
+	}
+	wp_localize_script( 'wrens-hollow-main', 'wrensHollowForms', array( 'notifyFormHtml' => $wh_notify_html ) );
 
 	// The book detail pages and the Shop page use the [add_to_cart] shortcode on
 	// what WordPress considers ordinary pages, where WooCommerce doesn't enqueue
@@ -97,6 +111,21 @@ function wrens_hollow_cart_count_fragment( $fragments ) {
 	return $fragments;
 }
 add_filter( 'woocommerce_add_to_cart_fragments', 'wrens_hollow_cart_count_fragment' );
+
+/**
+ * Shortens the cart page's "Apply coupon" button to just "Apply" — long
+ * enough to force-wrap onto its own line below the coupon field at mobile
+ * widths (see .woocommerce-cart .coupon in style.css, which lays the button
+ * out to the input's left). Scoped to is_cart() so checkout's coupon form
+ * (same core string) keeps the fuller "Apply coupon" label.
+ */
+function wrens_hollow_shorten_apply_coupon_text( $translation, $text, $domain ) {
+	if ( 'woocommerce' === $domain && 'Apply coupon' === $text && function_exists( 'is_cart' ) && is_cart() ) {
+		return 'Apply';
+	}
+	return $translation;
+}
+add_filter( 'gettext', 'wrens_hollow_shorten_apply_coupon_text', 10, 3 );
 
 /**
  * Renders the breadcrumb trail used at the top of subpages (book pages,

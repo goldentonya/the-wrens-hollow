@@ -15,6 +15,12 @@ if ( ! isset( $wh_nav_active ) ) {
 	$wh_nav_active = '';
 }
 
+// header.php and template-parts/site-nav.php are each require()'d inside
+// load_template() (a function), so these need an explicit `global` here too
+// (same reason as $wh_nav_active above) — otherwise site-nav.php's own
+// `global $wh_cart_count, $wh_cart_url;` sees unset variables and the cart
+// icon/badge render as empty/zero regardless of the real cart state.
+global $wh_cart_count, $wh_cart_url;
 $wh_cart_count = ( function_exists( 'WC' ) && WC()->cart ) ? WC()->cart->get_cart_contents_count() : 0;
 $wh_cart_url   = function_exists( 'wc_get_cart_url' ) ? wc_get_cart_url() : home_url( '/' );
 ?>
@@ -38,10 +44,15 @@ $wh_cart_url   = function_exists( 'wc_get_cart_url' ) ? wc_get_cart_url() : home
       <span class="nav__title">THE WREN'S HOLLOW</span>
       <span class="nav__sub">Ali Wren · Author</span>
     </a>
-    <button class="nav__toggle" id="navToggle" aria-expanded="false" aria-controls="navLinks" aria-label="Toggle menu">
-      <span></span><span></span><span></span>
-    </button>
-    <?php get_template_part( 'template-parts/site-nav' ); ?>
+    <div class="nav__right">
+      <?php get_template_part( 'template-parts/site-nav' ); ?>
+      <div class="nav__actions">
+        <a class="nav__link nav__cart" href="<?php echo esc_url( $wh_cart_url ); ?>" aria-label="Cart">🛒<span class="nav__cart-count<?php echo $wh_cart_count > 0 ? '' : ' is-empty'; ?>" id="cartCount"><?php echo intval( $wh_cart_count ); ?></span></a>
+        <button class="nav__toggle" id="navToggle" aria-expanded="false" aria-controls="navLinks" aria-label="Toggle menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
   </div>
 </header>
 

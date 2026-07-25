@@ -64,27 +64,7 @@ $wh_book_id = $wh_book ? $wh_book->ID : false;
   <div class="wrap sec--center">
     <h2 class="h-md" style="color:var(--plum-deep);"><?php wh_the( 'read_heading', 'Read ' . ( $wh_book ? get_the_title( $wh_book ) : 'Whiskey & Lies' ), $wh_book_id ); ?></h2>
     <p class="txt" style="max-width:440px;margin:0 auto 20px;"><?php wh_the( 'read_subtext', 'Enter your email below to receive the opening chapters instantly.', $wh_book_id ); ?></p>
-    <form class="optin-form" id="optinForm" style="text-align:left;max-width:420px;margin:0 auto;">
-      <div class="optin-row">
-        <label class="optin-label" for="optinFirst">Name <span class="req">*</span></label>
-        <div class="optin-row__fields">
-          <div class="optin-field">
-            <input class="field" id="optinFirst" name="firstName" type="text" required autocomplete="given-name">
-            <span class="optin-sublabel">First</span>
-          </div>
-          <div class="optin-field">
-            <input class="field" id="optinLast" name="lastName" type="text" autocomplete="family-name">
-            <span class="optin-sublabel">Last</span>
-          </div>
-        </div>
-      </div>
-      <div class="optin-row">
-        <label class="optin-label" for="optinEmail">Email <span class="req">*</span></label>
-        <input class="field" id="optinEmail" name="email" type="email" required autocomplete="email">
-      </div>
-      <button class="btn" type="submit">Submit</button>
-    </form>
-    <p class="form-status" id="optinStatus"></p>
+    <?php get_template_part( 'template-parts/optin-form' ); ?>
   </div>
 </section>
 

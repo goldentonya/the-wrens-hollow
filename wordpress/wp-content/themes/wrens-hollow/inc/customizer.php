@@ -88,5 +88,58 @@ function wrens_hollow_customize_register( $wp_customize ) {
 			'type'    => 'text',
 		)
 	);
+
+	/**
+	 * Forms — connects the site's four placeholder forms (newsletter band,
+	 * free-chapters opt-in, About page contact form, and "Notify me" buttons,
+	 * which reuse the newsletter one) to a real provider. Paste a shortcode
+	 * (e.g. Contact Form 7's [contact-form-7 id="123"], WPForms'
+	 * [wpforms id="123"], or the Newsletter plugin's signup shortcode) or a
+	 * raw embed snippet (e.g. a Klaviyo form embed <div> + script). Left
+	 * blank, the theme's own placeholder form is used instead — see
+	 * template-parts/newsletter-form.php, optin-form.php, contact-form.php —
+	 * so the site never ships a form that silently submits nowhere.
+	 */
+	$wp_customize->add_section(
+		'wh_forms',
+		array(
+			'title'       => 'Forms (mailing list & contact)',
+			'priority'    => 35,
+			'description' => 'Connect the newsletter, free-chapters, and contact forms to a real provider (e.g. the Newsletter/Klaviyo, Contact Form 7, or WPForms plugins already installed). Leave a field blank to keep the built-in placeholder form there.',
+		)
+	);
+
+	$wh_form_fields = array(
+		'newsletter' => array(
+			'label'       => 'Newsletter signup — shortcode/embed',
+			'description' => 'Used by every "Join the Hollow" band, the About page newsletter form, and "Notify me" release-alert buttons.',
+		),
+		'optin'      => array(
+			'label'       => 'Free-chapters opt-in — shortcode/embed',
+			'description' => 'Used by the "Read the book" form on each book page.',
+		),
+		'contact'    => array(
+			'label'       => 'Contact form — shortcode',
+			'description' => 'Used by the About page "Say hello" contact form, e.g. [contact-form-7 id="123"] or [wpforms id="123"].',
+		),
+	);
+	foreach ( $wh_form_fields as $wh_form_key => $wh_form_meta ) {
+		$wp_customize->add_setting(
+			'wh_form_' . $wh_form_key,
+			array(
+				'default'           => '',
+				'sanitize_callback' => 'wp_kses_post',
+			)
+		);
+		$wp_customize->add_control(
+			'wh_form_' . $wh_form_key,
+			array(
+				'label'       => $wh_form_meta['label'],
+				'description' => $wh_form_meta['description'],
+				'section'     => 'wh_forms',
+				'type'        => 'textarea',
+			)
+		);
+	}
 }
 add_action( 'customize_register', 'wrens_hollow_customize_register' );
