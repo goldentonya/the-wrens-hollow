@@ -638,12 +638,19 @@ h3.h-md { font-size: 22px; line-height: 1.25; }
    width/centering per instance comes from the inline style passed in by the
    calling template part, same as the placeholder form it replaces. */
 .form-embed { margin-top: 18px; }
+/* The band/notify-me callers (template-parts/newsletter-band.php) pass this
+   wrapper an inline "margin-left:auto;margin-right:auto" specifically to
+   center it — which only takes effect once the wrapper also has a max-width
+   to distribute that margin around. The About page's newsletter column
+   passes no such style, so it stays flush-left at this same max-width
+   instead, matching the theme's own placeholder form in both contexts. */
+.form-embed:has(.tnp-subscription) { max-width: 420px; }
 
 /* The Newsletter plugin's own subscription-form markup (Customize > Forms >
    "Newsletter signup"), restyled to match the theme instead of the plugin's
    unstyled defaults. Class names (.tnp-*) come from that plugin's own output,
    not this theme — a plugin update could rename them. */
-.form-embed .tnp-subscription form { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; max-width: 420px; }
+.form-embed .tnp-subscription form { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
 .form-embed .tnp-field { margin: 0; }
 .form-embed .tnp-field-firstname, .form-embed .tnp-field-email { flex: 1; min-width: 160px; order: 1; }
 .form-embed .tnp-field-button { flex: 0 0 auto; order: 2; }
