@@ -643,11 +643,24 @@ h3.h-md { font-size: 22px; line-height: 1.25; }
    "Newsletter signup"), restyled to match the theme instead of the plugin's
    unstyled defaults. Class names (.tnp-*) come from that plugin's own output,
    not this theme — a plugin update could rename them. */
-.form-embed .tnp-subscription form { display: flex; flex-wrap: wrap; gap: 12px; align-items: flex-end; }
+.form-embed .tnp-subscription form { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
 .form-embed .tnp-field { margin: 0; }
-.form-embed .tnp-field-firstname, .form-embed .tnp-field-email { flex: 1; min-width: 160px; }
-.form-embed .tnp-field label { display: block; font: 700 13px 'Mulish', sans-serif; margin-bottom: 6px; color: var(--text-heading); }
-.sec--dark .form-embed .tnp-field label, .sec--dark2 .form-embed .tnp-field label { color: var(--text-on-dark); }
+.form-embed .tnp-field-firstname, .form-embed .tnp-field-email { flex: 1; min-width: 160px; order: 1; }
+.form-embed .tnp-field-button { flex: 0 0 auto; order: 2; }
+/* Visually hidden (not display:none, so it's still announced to screen
+   readers) — matches the theme's own placeholder forms, which use a
+   placeholder-driven single-line layout with no visible label. */
+.form-embed .tnp-field label {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
 .form-embed .tnp-name, .form-embed .tnp-email {
   width: 100%;
   border: 1px solid var(--field-border);
@@ -664,11 +677,10 @@ h3.h-md { font-size: 22px; line-height: 1.25; }
   border-color: rgba(255,255,255,.22);
   color: #fff;
 }
-.form-embed .tnp-privacy-field { flex-basis: 100%; margin-top: 4px; }
-.form-embed .tnp-privacy-field label { display: flex; align-items: center; gap: 8px; font: 400 12px 'Mulish', sans-serif; color: var(--text-muted); cursor: pointer; }
+.form-embed .tnp-privacy-field { flex-basis: 100%; order: 3; margin-top: 2px; }
+.form-embed .tnp-privacy-field label { position: static; width: auto; height: auto; padding: 0; margin: 0; overflow: visible; clip: auto; white-space: normal; display: flex; align-items: center; gap: 8px; font: 400 12px 'Mulish', sans-serif; color: var(--text-muted); cursor: pointer; }
 .sec--dark .form-embed .tnp-privacy-field label, .sec--dark2 .form-embed .tnp-privacy-field label { color: var(--text-on-dark-muted); }
 .form-embed .tnp-privacy { width: auto; margin: 0; }
-.form-embed .tnp-field-button { flex-basis: 100%; }
 .form-embed .tnp-submit {
   font: 700 14px 'Mulish', sans-serif;
   background: var(--plum);
