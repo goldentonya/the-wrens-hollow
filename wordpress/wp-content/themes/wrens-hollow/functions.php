@@ -64,6 +64,27 @@ function wrens_hollow_setup() {
 }
 add_action( 'after_setup_theme', 'wrens_hollow_setup' );
 
+/**
+ * The theme uses native emoji glyphs as inline icons (facts list, event
+ * location pins, cart icon) sized via the surrounding CSS font-size. WP core
+ * silently swaps simple emoji characters for <img class="emoji"> assets for
+ * old-browser compatibility, keeping them small only via an inline <style>
+ * block it injects into wp_head — a block production's speed-optimization
+ * plugin strips when it combines/minifies head output, leaving the swapped
+ * images unconstrained (huge). Disabling the swap keeps them as native text
+ * glyphs, which every current browser renders natively at the correct size.
+ */
+function wrens_hollow_disable_emoji_conversion() {
+	remove_action( 'wp_head', 'print_emoji_detection_script', 7 );
+	remove_action( 'admin_print_scripts', 'print_emoji_detection_script' );
+	remove_action( 'wp_print_styles', 'print_emoji_styles' );
+	remove_action( 'admin_print_styles', 'print_emoji_styles' );
+	remove_filter( 'the_content_feed', 'wp_staticize_emoji' );
+	remove_filter( 'comment_text_rss', 'wp_staticize_emoji' );
+	remove_filter( 'wp_mail', 'wp_staticize_emoji_for_email' );
+}
+add_action( 'init', 'wrens_hollow_disable_emoji_conversion' );
+
 function wrens_hollow_assets() {
 	// Cormorant Garamond, Mulish, and Alex Brush are self-hosted (see /fonts
 	// and the @font-face rules at the top of style.css) rather than loaded
