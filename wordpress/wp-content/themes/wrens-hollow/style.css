@@ -639,6 +639,75 @@ h3.h-md { font-size: 22px; line-height: 1.25; }
    calling template part, same as the placeholder form it replaces. */
 .form-embed { margin-top: 18px; }
 
+/* The Newsletter plugin's own subscription-form markup (Customize > Forms >
+   "Newsletter signup"), restyled to match the theme instead of the plugin's
+   unstyled defaults. Class names (.tnp-*) come from that plugin's own output,
+   not this theme — a plugin update could rename them. */
+.form-embed .tnp-subscription form { display: flex; flex-wrap: wrap; gap: 12px; align-items: flex-end; }
+.form-embed .tnp-field { margin: 0; }
+.form-embed .tnp-field-firstname, .form-embed .tnp-field-email { flex: 1; min-width: 160px; }
+.form-embed .tnp-field label { display: block; font: 700 13px 'Mulish', sans-serif; margin-bottom: 6px; color: var(--text-heading); }
+.sec--dark .form-embed .tnp-field label, .sec--dark2 .form-embed .tnp-field label { color: var(--text-on-dark); }
+.form-embed .tnp-name, .form-embed .tnp-email {
+  width: 100%;
+  border: 1px solid var(--field-border);
+  border-radius: 6px;
+  padding: 13px 14px;
+  font-size: 14px;
+  background: var(--field-bg);
+  color: var(--text-heading);
+  font-family: 'Mulish', sans-serif;
+}
+.sec--dark .form-embed .tnp-name, .sec--dark2 .form-embed .tnp-name,
+.sec--dark .form-embed .tnp-email, .sec--dark2 .form-embed .tnp-email {
+  background: rgba(255,255,255,.06);
+  border-color: rgba(255,255,255,.22);
+  color: #fff;
+}
+.form-embed .tnp-privacy-field { flex-basis: 100%; margin-top: 4px; }
+.form-embed .tnp-privacy-field label { display: flex; align-items: center; gap: 8px; font: 400 12px 'Mulish', sans-serif; color: var(--text-muted); cursor: pointer; }
+.sec--dark .form-embed .tnp-privacy-field label, .sec--dark2 .form-embed .tnp-privacy-field label { color: var(--text-on-dark-muted); }
+.form-embed .tnp-privacy { width: auto; margin: 0; }
+.form-embed .tnp-field-button { flex-basis: 100%; }
+.form-embed .tnp-submit {
+  font: 700 14px 'Mulish', sans-serif;
+  background: var(--plum);
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 13px 24px;
+  cursor: pointer;
+  transition: background .2s var(--ease-standard);
+}
+.form-embed .tnp-submit:hover { background: var(--plum-deep); }
+
+/* The WPForms plugin's own "Modern" form theme (Customize > Forms >
+   "Contact form"), retinted to match the site via WPForms' own CSS custom
+   properties (set on .wpforms-container by the plugin itself) rather than
+   fighting its markup with !important overrides. Property names come from
+   the live site's WPForms version — a plugin update could rename them. */
+.form-embed .wpforms-container {
+  --wpforms-field-border-radius: 6px;
+  --wpforms-field-border-color: var(--field-border);
+  --wpforms-field-background-color: var(--field-bg);
+  --wpforms-field-text-color: var(--text-heading);
+  --wpforms-label-color: var(--text-heading);
+  --wpforms-label-sublabel-color: var(--text-muted);
+  --wpforms-label-error-color: var(--plum);
+  --wpforms-button-border-radius: 6px;
+  --wpforms-button-background-color: var(--plum);
+  --wpforms-button-border-color: var(--plum);
+  --wpforms-button-text-color: #fff;
+}
+.sec--dark .form-embed .wpforms-container, .sec--dark2 .form-embed .wpforms-container {
+  --wpforms-field-background-color: rgba(255,255,255,.06);
+  --wpforms-field-border-color: rgba(255,255,255,.22);
+  --wpforms-field-text-color: #fff;
+  --wpforms-label-color: var(--text-on-dark);
+  --wpforms-label-sublabel-color: var(--text-on-dark-muted);
+}
+.form-embed .wpforms-container .wpforms-submit:hover { background-color: var(--plum-deep); }
+
 /* ============================================================
    Opt-in form (lead-magnet pages, e.g. free-chapters signup)
    ============================================================ */
