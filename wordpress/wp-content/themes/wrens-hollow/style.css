@@ -688,7 +688,7 @@ h3.h-md { font-size: 22px; line-height: 1.25; }
   -webkit-appearance: none;
   appearance: none;
   font: 700 14px 'Mulish', sans-serif;
-  background: var(--plum);
+  background: var(--plum) !important;
   color: #fff;
   border: none;
   border-radius: 6px;
@@ -696,7 +696,12 @@ h3.h-md { font-size: 22px; line-height: 1.25; }
   cursor: pointer;
   transition: background .2s var(--ease-standard);
 }
-.form-embed .tnp-submit:hover { background: var(--plum-deep); }
+/* The Newsletter plugin's own stylesheet sets this via
+   ".tnp-subscription input.tnp-submit { background-color: #444 }" — its
+   selector is marginally more specific than a wrapper class alone can beat
+   (the "input" element type tips it over), hence !important here, same
+   pattern as the WooCommerce button overrides elsewhere in this file. */
+.form-embed .tnp-submit:hover { background: var(--plum-deep) !important; }
 
 /* The WPForms plugin's own "Modern" form theme (Customize > Forms >
    "Contact form"), retinted to match the site via WPForms' own CSS custom
