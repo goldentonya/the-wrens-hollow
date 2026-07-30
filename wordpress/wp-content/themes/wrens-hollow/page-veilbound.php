@@ -56,7 +56,7 @@ $wh_book_id = $wh_book ? $wh_book->ID : false;
   <div class="wrap sec--center">
     <h2 class="h-md" style="color:var(--plum-deep);"><?php wh_the( 'read_heading', 'Read ' . ( $wh_book ? get_the_title( $wh_book ) : 'Veilbound' ), $wh_book_id ); ?></h2>
     <p class="txt" style="max-width:440px;margin:0 auto 20px;"><?php wh_the( 'read_subtext', 'Enter your email below to receive the opening chapters instantly.', $wh_book_id ); ?></p>
-    <?php get_template_part( 'template-parts/optin-form' ); ?>
+    <?php get_template_part( 'template-parts/optin-form', null, array( 'book' => 'veilbound' ) ); ?>
   </div>
 </section>
 

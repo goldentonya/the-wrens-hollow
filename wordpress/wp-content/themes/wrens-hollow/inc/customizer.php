@@ -133,15 +133,31 @@ function wrens_hollow_customize_register( $wp_customize ) {
 	);
 
 	$wh_form_fields = array(
-		'newsletter' => array(
+		'newsletter'                  => array(
 			'label'       => 'Newsletter signup — shortcode/embed',
 			'description' => 'Used by every "Join the Hollow" band, the About page newsletter form, and "Notify me" release-alert buttons.',
 		),
-		'optin'      => array(
-			'label'       => 'Free-chapters opt-in — shortcode/embed',
-			'description' => 'Used by the "Read the book" form on each book page.',
+		'optin'                       => array(
+			'label'       => 'Free-chapters opt-in (default) — shortcode/embed',
+			'description' => 'Fallback used on any book page below left blank. Each book can also have its own opt-in form — see the four fields below.',
 		),
-		'contact'    => array(
+		'optin_veilfall'              => array(
+			'label'       => 'Free-chapters opt-in — Veilfall',
+			'description' => 'Overrides the default above on the Veilfall book page only. Leave blank to use the default.',
+		),
+		'optin_veilbound'             => array(
+			'label'       => 'Free-chapters opt-in — Veilbound',
+			'description' => 'Overrides the default above on the Veilbound book page only. Leave blank to use the default.',
+		),
+		'optin_whiskey-and-secrets'   => array(
+			'label'       => 'Free-chapters opt-in — Whiskey & Secrets',
+			'description' => 'Overrides the default above on the Whiskey & Secrets book page only. Leave blank to use the default.',
+		),
+		'optin_whiskey-and-lies'      => array(
+			'label'       => 'Free-chapters opt-in — Whiskey & Lies',
+			'description' => 'Overrides the default above on the Whiskey & Lies book page only. Leave blank to use the default.',
+		),
+		'contact'                     => array(
 			'label'       => 'Contact form — shortcode',
 			'description' => 'Used by the About page "Say hello" contact form, e.g. [contact-form-7 id="123"] or [wpforms id="123"].',
 		),
