@@ -643,7 +643,7 @@ h3.h-md { font-size: 22px; line-height: 1.25; }
    "Newsletter signup"), restyled to match the theme instead of the plugin's
    unstyled defaults. Class names (.tnp-*) come from that plugin's own output,
    not this theme — a plugin update could rename them. */
-.form-embed .tnp-subscription form { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+.form-embed .tnp-subscription form { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; max-width: 420px; }
 .form-embed .tnp-field { margin: 0; }
 .form-embed .tnp-field-firstname, .form-embed .tnp-field-email { flex: 1; min-width: 160px; order: 1; }
 .form-embed .tnp-field-button { flex: 0 0 auto; order: 2; }
@@ -682,6 +682,11 @@ h3.h-md { font-size: 22px; line-height: 1.25; }
 .sec--dark .form-embed .tnp-privacy-field label, .sec--dark2 .form-embed .tnp-privacy-field label { color: var(--text-on-dark-muted); }
 .form-embed .tnp-privacy { width: auto; margin: 0; }
 .form-embed .tnp-submit {
+  /* type="submit" inputs get native OS/browser button chrome by default,
+     which can silently override background/border unless appearance is
+     explicitly turned off first. */
+  -webkit-appearance: none;
+  appearance: none;
   font: 700 14px 'Mulish', sans-serif;
   background: var(--plum);
   color: #fff;
@@ -747,7 +752,7 @@ h3.h-md { font-size: 22px; line-height: 1.25; }
 /* ============================================================
    Contact section (About page "Let's stay connected")
    ============================================================ */
-.contact-grid { gap: 72px; align-items: start; }
+.contact-grid { gap: 100px; align-items: start; }
 @media (max-width: 700px) { .contact-grid { gap: 44px; } }
 .soc--light a { color: var(--plum-deep); border-color: var(--card-border); }
 .soc--light a:hover { border-color: var(--plum); color: var(--plum); }
