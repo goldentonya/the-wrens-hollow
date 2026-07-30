@@ -719,6 +719,16 @@ h3.h-md { font-size: 22px; line-height: 1.25; }
   --wpforms-label-sublabel-color: var(--text-on-dark-muted);
 }
 .form-embed .wpforms-container .wpforms-submit:hover { background-color: var(--plum-deep); }
+/* WPForms caps every "medium" field (the default size — Name/Email/Subject/
+   Message all use it here) at max-width: 60% via a selector more specific
+   than a wrapper class alone can beat (e.g. ".wp-core-ui div.wpforms-container
+   input.wpforms-field-medium"), so Name/Email/Subject/Message would otherwise
+   render at inconsistent widths. !important matches the same pattern already
+   used above for the WooCommerce button overrides in this file. */
+.form-embed .wpforms-container .wpforms-field-medium {
+  max-width: 100% !important;
+  width: 100% !important;
+}
 
 /* ============================================================
    Opt-in form (lead-magnet pages, e.g. free-chapters signup)
@@ -737,8 +747,8 @@ h3.h-md { font-size: 22px; line-height: 1.25; }
 /* ============================================================
    Contact section (About page "Let's stay connected")
    ============================================================ */
-.contact-grid { gap: 48px; align-items: start; }
-@media (max-width: 700px) { .contact-grid { gap: 36px; } }
+.contact-grid { gap: 72px; align-items: start; }
+@media (max-width: 700px) { .contact-grid { gap: 44px; } }
 .soc--light a { color: var(--plum-deep); border-color: var(--card-border); }
 .soc--light a:hover { border-color: var(--plum); color: var(--plum); }
 
