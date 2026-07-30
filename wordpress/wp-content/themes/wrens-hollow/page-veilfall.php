@@ -5,7 +5,7 @@
 $wh_nav_active = 'read-free';
 get_header();
 
-$wh_product_id = function_exists( 'wc_get_product_id_by_sku' ) ? wc_get_product_id_by_sku( 'veilfall-paperback' ) : 0;
+$wh_product_id = function_exists( 'wc_get_product_id_by_sku' ) ? wc_get_product_id_by_sku( wh_shop_sku( 'veilfall' ) ) : 0;
 $wh_product    = $wh_product_id ? wc_get_product( $wh_product_id ) : false;
 
 $wh_book    = function_exists( 'wh_book' ) ? wh_book( 'veilfall' ) : null;

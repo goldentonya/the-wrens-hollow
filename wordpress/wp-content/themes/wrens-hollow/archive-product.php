@@ -6,17 +6,26 @@
  * Veilbound is shown dimmed with a "notify me" button, since it isn't
  * purchasable yet. This is separate from the "Books" page (page-books.php),
  * which is a browsing-only library with no prices or cart.
+ *
+ * Any other published product (merch, bundles, anything not one of the three
+ * books above) is appended after Veilbound via a normal WooCommerce query —
+ * otherwise a non-book product would never appear here at all, since the
+ * cards above are matched by SKU rather than a real product loop.
+ *
+ * The SKU each book is matched against is owner-editable (Customize > Shop
+ * (product SKUs)) via wh_shop_sku(), rather than requiring her WooCommerce
+ * product to match a SKU hardcoded in the theme — see inc/customizer.php.
  */
 $wh_nav_active = 'shop';
 get_header();
 
-$wh_ws_id      = function_exists( 'wc_get_product_id_by_sku' ) ? wc_get_product_id_by_sku( 'whiskey-and-secrets-signed' ) : 0;
+$wh_ws_id      = function_exists( 'wc_get_product_id_by_sku' ) ? wc_get_product_id_by_sku( wh_shop_sku( 'whiskey-and-secrets' ) ) : 0;
 $wh_ws_product = $wh_ws_id ? wc_get_product( $wh_ws_id ) : false;
 
-$wh_vf_id      = function_exists( 'wc_get_product_id_by_sku' ) ? wc_get_product_id_by_sku( 'veilfall-paperback' ) : 0;
+$wh_vf_id      = function_exists( 'wc_get_product_id_by_sku' ) ? wc_get_product_id_by_sku( wh_shop_sku( 'veilfall' ) ) : 0;
 $wh_vf_product = $wh_vf_id ? wc_get_product( $wh_vf_id ) : false;
 
-$wh_wl_id      = function_exists( 'wc_get_product_id_by_sku' ) ? wc_get_product_id_by_sku( 'whiskey-and-lies-signed' ) : 0;
+$wh_wl_id      = function_exists( 'wc_get_product_id_by_sku' ) ? wc_get_product_id_by_sku( wh_shop_sku( 'whiskey-and-lies' ) ) : 0;
 $wh_wl_product = $wh_wl_id ? wc_get_product( $wh_wl_id ) : false;
 
 // Veilbound isn't purchasable yet, so there's no WooCommerce product for it —
@@ -113,6 +122,33 @@ $wh_vb_cover = $wh_vb_book ? wh_book_cover( $wh_vb_book ) : get_template_directo
           <button class="btn btn--outline btn--sm" type="button" data-notify="Veilbound">Notify me</button>
         </div>
       </div>
+
+      <?php
+      $wh_shop_known_ids     = array_filter( array( $wh_ws_id, $wh_vf_id, $wh_wl_id ) );
+      $wh_shop_extra_products = function_exists( 'wc_get_products' ) ? wc_get_products(
+        array(
+          'status'  => 'publish',
+          'limit'   => -1,
+          'orderby' => 'menu_order title',
+          'exclude' => $wh_shop_known_ids,
+        )
+      ) : array();
+      foreach ( $wh_shop_extra_products as $wh_extra_product ) :
+        $wh_extra_id = $wh_extra_product->get_id();
+        ?>
+        <div class="card product-card" id="product-<?php echo esc_attr( $wh_extra_id ); ?>">
+          <a href="<?php echo esc_url( get_permalink( $wh_extra_id ) ); ?>">
+            <div class="ph-box"><?php echo wp_kses_post( $wh_extra_product->get_image( 'woocommerce_thumbnail', array( 'style' => 'width:100%;height:100%;object-fit:cover;border-radius:6px;' ) ) ); ?></div>
+          </a>
+          <div class="product-card__body">
+            <h3><a href="<?php echo esc_url( get_permalink( $wh_extra_id ) ); ?>"><?php echo esc_html( $wh_extra_product->get_name() ); ?></a></h3>
+          </div>
+          <div class="product-card__row">
+            <span class="product-card__price"><?php echo wp_kses_post( $wh_extra_product->get_price_html() ); ?></span>
+            <?php echo do_shortcode( '[add_to_cart id="' . $wh_extra_id . '" show_price="false" style=""]' ); ?>
+          </div>
+        </div>
+      <?php endforeach; ?>
 
     </div>
   </div>

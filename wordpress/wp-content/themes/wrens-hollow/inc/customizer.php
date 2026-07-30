@@ -24,6 +24,29 @@ function wrens_hollow_social_defaults() {
 }
 
 /**
+ * Default product SKUs the Shop page looks up (also the fallback when a
+ * setting is empty). These must match the SKU actually set on the
+ * corresponding WooCommerce product's Inventory tab, else that book falls
+ * back to the "Notify me" placeholder card — see archive-product.php.
+ */
+function wrens_hollow_shop_sku_defaults() {
+	return array(
+		'whiskey-and-secrets' => 'whiskey-and-secrets-signed',
+		'whiskey-and-lies'    => 'whiskey-and-lies-signed',
+		'veilfall'            => 'veilfall-paperback',
+	);
+}
+
+/**
+ * A shop product's SKU: the Customizer value, else the default.
+ */
+function wh_shop_sku( $key ) {
+	$defaults = wrens_hollow_shop_sku_defaults();
+	$default  = isset( $defaults[ $key ] ) ? $defaults[ $key ] : '';
+	return get_theme_mod( 'wh_sku_' . $key, $default );
+}
+
+/**
  * A social profile URL: the Customizer value, else the default.
  */
 function wh_social( $key ) {
@@ -138,6 +161,44 @@ function wrens_hollow_customize_register( $wp_customize ) {
 				'description' => $wh_form_meta['description'],
 				'section'     => 'wh_forms',
 				'type'        => 'textarea',
+			)
+		);
+	}
+
+	/**
+	 * Shop product SKUs — lets the owner point each book at whatever SKU she
+	 * actually used on the real WooCommerce product, instead of the Shop page
+	 * requiring her products to match a SKU hardcoded in the theme.
+	 */
+	$wp_customize->add_section(
+		'wh_shop_skus',
+		array(
+			'title'       => 'Shop (product SKUs)',
+			'priority'    => 36,
+			'description' => "Match each book to its real product by SKU (Products → [book] → Inventory tab → SKU in wp-admin). Leave a field as-is to keep the theme's default SKU.",
+		)
+	);
+
+	$wh_sku_defaults = wrens_hollow_shop_sku_defaults();
+	$wh_sku_labels   = array(
+		'whiskey-and-secrets' => 'Whiskey & Secrets — SKU',
+		'whiskey-and-lies'    => 'Whiskey & Lies — SKU',
+		'veilfall'            => 'Veilfall — SKU',
+	);
+	foreach ( $wh_sku_labels as $wh_sku_key => $wh_sku_label ) {
+		$wp_customize->add_setting(
+			'wh_sku_' . $wh_sku_key,
+			array(
+				'default'           => $wh_sku_defaults[ $wh_sku_key ],
+				'sanitize_callback' => 'sanitize_text_field',
+			)
+		);
+		$wp_customize->add_control(
+			'wh_sku_' . $wh_sku_key,
+			array(
+				'label'   => $wh_sku_label,
+				'section' => 'wh_shop_skus',
+				'type'    => 'text',
 			)
 		);
 	}
